@@ -1,0 +1,934 @@
+================================================================================
+VALUALLIANCE ASSET MANAGEMENT LIMITED
+TECHNICAL PROPOSAL — COMPLETE SUMMARY
+Vendor: Qucoon Limited | Date: 13th February, 2026 | Version: 1.0
+================================================================================
+
+DOCUMENT CONTROL
+────────────────
+Author:   Tomiwa Olu-Ajayi (Tomiwa.Olu-Ajayi@qucoon.com)
+Approved: Tope Olakunle (Tope.olakunle@qucoon.com)
+Signed:   Yinka Daramola — CEO, Qucoon Limited
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1: THE PROBLEM — WHY THIS PROJECT EXISTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ValuAlliance Asset Management Limited is a licensed asset management firm
+operating under Nigeria's Securities and Exchange Commission (SEC). They provide:
+  • Portfolio management
+  • Investment advisory
+  • Fund management services
+
+…to both institutional and retail clients in Nigeria's capital market ecosystem.
+
+CURRENT STATE (The Pain):
+ValuAlliance currently relies on a combination of:
+  - Manual processes
+  - Spreadsheets
+  - Disconnected, siloed tools
+
+This creates serious business problems:
+  1. Operational Risk    — manual errors in trade entry, pricing, reconciliation
+  2. Data Integrity      — no single source of truth for positions and valuations
+  3. Compliance Exposure — difficulty producing timely, accurate SEC filings
+  4. Governance Gaps     — no enforced maker-checker, no immutable audit trail
+  5. Scalability Limits  — cannot grow AUM or product range without re-engineering
+
+WHAT IS NEEDED:
+A single, integrated platform serving as the operational backbone for:
+  → Investment management
+  → Financial reporting
+  → Regulatory compliance
+  → Client analytics
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2: EXECUTIVE SUMMARY OF THE PROPOSAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Qucoon Limited proposes to design, build, implement, and support a purpose-built,
+cloud-native Asset Management Application for ValuAlliance.
+
+THE SIX CORE AREAS ADDRESSED:
+┌───┬─────────────────────────────┬─────────────────────────────────────────────────────────────────┐
+│ # │ Area                        │ What It Covers                                                  │
+├───┼─────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+│ 1 │ Investment Operations       │ Portfolio setup, trade capture, transaction lifecycle, valuation │
+│ 2 │ Financial Management        │ Fund accounting, GL integration, fee calculation, reconciliation │
+│ 3 │ Valuation & Performance     │ NAV computation, securities pricing, performance attribution     │
+│ 4 │ Regulatory Compliance       │ SEC returns, AML/CFT monitoring, NDPR, audit-ready reporting    │
+│ 5 │ Client Reporting & Analytics│ Performance reports, AUM tracking, customisable dashboards      │
+│ 6 │ Management Intelligence     │ Revenue metrics, profitability analysis, growth KPIs            │
+└───┴─────────────────────────────┴─────────────────────────────────────────────────────────────────┘
+
+WHY QUCOON:
+  • Built Global Custody Solution for FSDH Merchant Bank (trade capture, settlement,
+    reconciliation, CSCS/FMDQ integration — directly equivalent to this project)
+  • Built Trade Register Automation for Stanbic IBTC
+  • Understand both the operational workflows AND the regulatory landscape
+    ValuAlliance operates within
+  • Technology choices (Java, React, MsSQL on AWS) prioritise performance,
+    security, and zero licensing costs on the database layer
+
+DELIVERY: 16 weeks, phased. Working software demonstrated every 2 weeks.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3: UNDERSTANDING OF REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3A. KEY BUSINESS DRIVERS
+┌───┬───────────────────────┬──────────────────────────────────────────────────────────────────────┐
+│ 1 │ Operational Efficiency│ Automate trade capture, settlement, reconciliation, reporting         │
+│ 2 │ Regulatory Compliance │ Timely SEC returns, AML/CFT controls embedded into daily operations  │
+│ 3 │ Data Accuracy         │ Single source of truth for positions, valuations, client data        │
+│ 4 │ Governance & Control  │ Segregation of duties, maker-checker workflows, comprehensive audit  │
+│ 5 │ Scalability           │ Support AUM growth, new products, evolving regulations               │
+│ 6 │ Client Service        │ Timely, accurate performance reporting and portfolio analytics        │
+└───┴───────────────────────┴──────────────────────────────────────────────────────────────────────┘
+
+3B. FUNCTIONAL REQUIREMENTS (5 AREAS)
+
+1. INVESTMENT OPERATIONS:
+   - Portfolio setup across equities, fixed income, money market, mutual funds
+   - Full trade lifecycle: order → settlement
+   - Daily valuation and pricing with live market data integration
+   - Position monitoring with exception management (failed trades, pricing anomalies, limit breaches)
+
+2. FINANCIAL MANAGEMENT:
+   - Automated GL journal postings from all investment events
+   - Fund and portfolio accounting with accrual processing
+   - Financial statement generation (trial balance, income statement, balance sheet)
+   - Configurable fee calculation (management fees, performance fees, custody fees)
+   - Daily reconciliation of positions and cash against custodians and counterparties
+
+3. BUSINESS DEVELOPMENT & REPORTING:
+   - Client performance reports with benchmark comparison
+   - AUM tracking with trend analysis
+   - Revenue and profitability dashboards
+   - Customisable KPIs by role
+
+4. REGULATORY & COMPLIANCE:
+   - SEC statutory returns (quarterly and annual)
+   - AML/CFT monitoring and reporting
+   - NDPR compliance (consent tracking, data access controls)
+   - Audit-ready reports with full traceability and immutable logs
+
+5. REPORTING PLATFORM:
+   - Full report lifecycle: create → edit → approve → submit → export
+   - PDF, Excel, CSV export
+   - Report versioning with audit trail
+   - Role-based dashboards with filters, drill-down, and global search
+
+3C. TECHNICAL & REGULATORY REQUIREMENTS
+┌───┬─────────────────────┬────────────────────────────────────────────────────────────────────┐
+│ 1 │ Architecture        │ Cloud-native, API-first design with documented technology stack     │
+│ 2 │ Deployment          │ Cloud hosting with NDPR-compliant data residency                   │
+│ 3 │ Integration         │ REST APIs primary, file-based exchange for legacy systems           │
+│ 4 │ Security            │ TLS 1.3 in transit, AES-256 at rest, MFA, RBAC, audit logging      │
+│ 5 │ Business Continuity │ Automated backups, defined RPO/RTO targets, quarterly DR testing   │
+│ 6 │ Compliance          │ SEC reporting, NDPR protection, configurable rules engine           │
+└───┴─────────────────────┴────────────────────────────────────────────────────────────────────┘
+
+3D. KEY ASSUMPTIONS
+┌───┬────────────────────────┬───────────────────────────────────────────────────────────────────┐
+│ 1 │ Phased Delivery        │ ValuAlliance agrees MVP within 16 weeks per agreed roadmap        │
+│ 2 │ Stakeholder Access     │ Business SMEs available for requirements validation, UAT          │
+│ 3 │ Data Availability      │ Existing data in Excel/CSV/database formats with reasonable quality│
+│ 4 │ Infrastructure         │ ValuAlliance provisions or approves AWS account in agreed timelines│
+│ 5 │ Third-Party Access     │ Custodians, market data providers, SEC portal provide API docs    │
+│ 6 │ Regulatory Stability   │ SEC rules and NDPR remain materially stable during implementation │
+└───┴────────────────────────┴───────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4: PROPOSED SOLUTION — THE PLATFORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NAME: ValuAlliance Asset Management Portal
+
+FIVE DESIGN PRINCIPLES:
+  1. Single Source of Truth    — One investment book of record for all portfolios,
+                                  positions, and valuations
+  2. Compliance by Design      — SEC, NDPR, AML/CFT controls embedded in every workflow
+  3. API-First                 — Every capability exposed as a RESTful API
+  4. Cloud-Native              — Containerised microservices on AWS with auto-scaling
+  5. Role-Based Governance     — Maker-checker workflows and granular permissions at every layer
+
+4A. SOLUTION ARCHITECTURE — 4 LAYERS
+
+Layer 1 — PRESENTATION (User Interface):
+  • React 18, role-based dashboards, report viewer, global search
+
+Layer 2 — APPLICATION (Business Logic):
+  • Java microservices, one per domain:
+    - Portfolio service
+    - Trade service
+    - Accounting service
+    - Valuation service
+    - Compliance service
+    - Reporting service
+  • Plus: workflow engine, rules engine, notification dispatcher
+
+Layer 3 — INTEGRATION (External Connectivity):
+  • Amazon API Gateway
+  • Amazon MQ (RabbitMQ) for async operations
+
+Layer 4 — DATA (Persistence & Analytics):
+  • Amazon RDS (MsSQL)
+  • Amazon S3
+  • OpenSearch
+
+4B. TECHNOLOGY STACK
+┌───┬────────────────┬────────────────────────────────┬───────────────────────────────────────────┐
+│ # │ Component      │ Technology                     │ Why                                       │
+├───┼────────────────┼────────────────────────────────┼───────────────────────────────────────────┤
+│ 1 │ Frontend       │ React 18, TypeScript,          │ Component-based, strong typing,           │
+│   │                │ Tailwind CSS                   │ large talent pool                         │
+│ 2 │ Backend        │ Java, Kotlin                   │ Enterprise performance, mature ORM        │
+│ 3 │ Database       │ MsSQL 16 (Amazon RDS)          │ Open-source, ACID-compliant, JSON support │
+│ 4 │ Message Broker │ RabbitMQ (Amazon MQ)           │ Async: GL postings, notifications,        │
+│   │                │                                │ report generation                         │
+│ 5 │ Search         │ OpenSearch                     │ Full-text search across all entities      │
+│ 6 │ Storage        │ Amazon S3                      │ Documents, reports, audit archives        │
+│ 7 │ Containers     │ Docker on Amazon ECS           │ Auto-scaling, rolling updates, HA         │
+│ 8 │ CI/CD          │ AWS CodePipeline, Terraform    │ Infrastructure-as-Code, automated deploys │
+│ 9 │ Monitoring     │ AWS CloudWatch                 │ Distributed tracing, health dashboards    │
+└───┴────────────────┴────────────────────────────────┴───────────────────────────────────────────┘
+
+4C. DEPLOYMENT ARCHITECTURE (AWS Cloud)
+  • Two isolated AWS accounts: Development and Production
+  • VPC with private subnets for all backend services
+  • Public access ONLY through API Gateway
+  • Network Firewall → API Gateway → ALB → ECS → RDS
+  • Secrets: AWS Secrets Manager (credentials, API keys) + KMS (encryption keys)
+  • Backup: RDS automated backups (35-day retention), S3 cross-region replication
+  • RPO ≤ 30 minutes | RTO ≤ 4 hours
+
+4D. INTEGRATION ARCHITECTURE
+  All external integrations route through Amazon API Gateway for:
+  → Centralised authentication
+  → Rate limiting
+  → Logging
+  Async operations (GL postings, notifications, report generation) flow through
+  RabbitMQ to prevent blocking user workflows.
+
+  Integration Map:
+  ┌──────────────────────────────┬───────────────┬──────────────────┬────────────────────┐
+  │ System                       │ Direction     │ Method           │ Frequency          │
+  ├──────────────────────────────┼───────────────┼──────────────────┼────────────────────┤
+  │ CSCS (Central Securities)    │ Bidirectional │ REST API / SFTP  │ Daily + on-demand  │
+  │ NSE / FMDQ (Market Data)     │ Inbound       │ REST API / File  │ Real-time + EOD    │
+  │ General Ledger / ERP         │ Outbound      │ REST API / File  │ EOD batch          │
+  │ SEC Reporting Portal         │ Outbound      │ File (XML/Excel) │ Monthly/quarterly  │
+  │ Payment / Banking            │ Bidirectional │ REST API         │ On-demand          │
+  │ Bloomberg / Reuters          │ Inbound       │ API / File       │ Real-time + EOD    │
+  │ Email (Amazon SES)           │ Outbound      │ API              │ Event-driven       │
+  │ SMS Gateway                  │ Outbound      │ API              │ Event-driven       │
+  └──────────────────────────────┴───────────────┴──────────────────┴────────────────────┘
+
+4E. SECURITY ARCHITECTURE — 4 LAYERS (Defence in Depth)
+  Layer 1 — Perimeter:
+    • AWS WAF (Web Application Firewall)
+    • AWS Shield (DDoS protection)
+    • TLS 1.3 termination at the load balancer
+
+  Layer 2 — Network:
+    • VPC with private subnets
+    • Security Groups and NACLs restricting inter-tier traffic
+    • Database accessible only within private subnets
+
+  Layer 3 — Application:
+    • Amazon Cognito for identity management
+    • MANDATORY MFA (OTP via email / SMS / authenticator app)
+    • RBAC with granular permissions per module and action
+    • Maker-checker enforced on ALL critical operations
+    • JWT tokens with short TTL
+    • Configurable session timeout (default 15 minutes)
+
+  Layer 4 — Data:
+    • AES-256 encryption at rest (RDS, S3, backups via AWS KMS)
+    • TLS 1.3 for all data in transit
+    • Secrets Manager for credential rotation
+    • Immutable audit logs stored in S3 with Object Lock (7-year minimum retention)
+    • Amazon GuardDuty for continuous threat detection
+
+4F. DATA ARCHITECTURE
+  Database:
+    • MsSQL 16 — normalised relational schema
+    • Core entities: Client, Portfolio, Fund, Security, Trade, Position, Valuation,
+      JournalEntry, FeeSchedule, AuditLog
+    • Transaction and audit tables partitioned MONTHLY for query performance
+      on large historical datasets
+
+  Search: OpenSearch powers the global search function
+
+  Object Storage: Amazon S3 stores:
+    • Generated documents and reports
+    • Regulatory submissions
+    • Archived audit logs
+    • Glacier used for cold storage after configurable retention period
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5: THE 18 MODULES — FULL DETAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOTAL: 12 Core Business Modules + 6 Cross-Cutting Components = 18 Modules
+
+═══════════════════════════════════════
+CORE BUSINESS MODULES (12)
+═══════════════════════════════════════
+
+MODULE 1: PORTFOLIO MANAGEMENT
+  Starting point for all investment activity.
+  Features:
+  1. Portfolio Setup        — Create/configure portfolios by client, fund, or mandate;
+                              define investment policy, benchmark, asset class limits, currency
+  2. Asset Allocation       — Track target vs. actual allocation; configurable drift thresholds;
+    Tracking                  automated drift alerts
+  3. Rebalancing            — Automated rebalancing recommendations when allocation drifts
+    Recommendations           beyond defined tolerances
+  4. Position Tracking      — Real-time position tracking with aggregate and drill-down views
+                              by portfolio, asset class, and security
+  5. Multi-Asset Class      — Supports equities, government and corporate bonds, T-Bills,
+    Support                   commercial paper, mutual funds, alternative investments
+  6. Portfolio Cloning      — Clone existing portfolio configurations to accelerate setup
+                              for similar mandates
+
+MODULE 2: TRADE CAPTURE & LIFECYCLE
+  Manages the full trade lifecycle from order entry to closure.
+  Trade Lifecycle: Draft → Submitted → Approved → Executed → Settled → Closed
+  Features:
+  1. Trade Entry            — Structured forms with field validation for buy, sell, switch,
+                              subscription, and redemption orders across all asset classes
+  2. Trade ID Generation    — Automatic unique Trade ID for each entry
+  3. Trade Lifecycle        — Every trade follows defined lifecycle with each transition logged
+  4. Maker-Checker Approval — Enforced on ALL trades; configurable approval thresholds
+                              by value or asset class
+  5. Pre-Trade Validation   — Automated checks against investment policy limits (asset class,
+                              issuer, concentration) before trade submission
+  6. Exception Handling     — Automatic exceptions for failed settlements, pricing anomalies,
+                              limit breaches; with assignment and escalation
+  7. Trade Confirmation     — Downloadable trade confirmation reports generated on execution
+  8. Trade Amendment &      — Controlled amendment/cancellation workflow with full audit trail
+    Cancellation
+
+MODULE 3: SETTLEMENT PROCESSING
+  Post-trade settlement with CSD integration and exception management.
+  Settlement Lifecycle: Pending → Matched → Settled
+  Features:
+  1. CSD Integration        — Settlement integration with CSCS for trade confirmation
+                              and delivery-versus-payment (DvP)
+  2. Settlement Status      — Real-time tracking with full audit trail
+    Tracking
+  3. Failed Settlement      — Exception management for failed/partially settled trades;
+    Handling                  automatic flagging, assignment, and escalation
+  4. Settlement             — Event-driven email and SMS notifications on completion,
+    Notifications             failure, or pending actions
+  5. Settlement Reporting   — Settlement activity reports by date range, portfolio,
+                              asset class, and status
+
+MODULE 4: VALUATION & PRICING ENGINE
+  Ensures accurate, timely valuation through automated market data feeds.
+  Features:
+  1. Automated Price Feeds  — Ingest from NSE, FMDQ, and optionally Bloomberg/Reuters
+  2. Manual Price Entry     — For illiquid/unlisted securities; approval workflow required
+                              before prices are applied
+  3. Tolerance Checks       — Price movements exceeding configurable threshold trigger
+                              review before acceptance
+  4. Stale/Missing Price    — Detect and automatically flag stale or missing prices
+    Detection
+  5. Mark-to-Market (MTM)   — Daily MTM valuation of all positions; unrealised P&L
+                              at both position and portfolio levels
+  6. Price History          — Full historical price records for backdated valuations,
+                              audits, and historical performance analysis
+  7. NAV Computation        — Daily NAV for pooled funds; per-unit NAV for creation and
+                              redemption; NAVs require approval prior to publication
+
+MODULE 5: FUND ACCOUNTING & FINANCIAL MANAGEMENT
+  Centralised investment book of record.
+  Features:
+  1. GL Integration         — Automated journal entries for all investment events (trades,
+                              income, expenses, fees, valuations); configurable account mapping;
+                              posted to external General Ledger via API or file upload
+  2. Accrual Accounting     — Daily accruals for bond interest, management fees, expenses
+                              with month-end crystallisation; dividend and coupon income
+                              recognition including withholding tax computation
+  3. Financial Statements   — Auto-produce trial balance, income statement, balance sheet,
+                              and cash flow statement at both fund level and firm level
+  4. Multi-Fund Accounting  — Separate accounting books per fund; consolidated views
+                              across all funds at firm level
+  5. Period Management      — Configurable accounting periods with period-end close
+                              workflows, adjustment handling, and period lock controls
+
+MODULE 6: FEE CALCULATION & BILLING
+  Automates calculation, accrual, and billing of all client and fund fees.
+  Features:
+  1. Configurable Fee       — Management fees (% of AUM), performance fees (hurdle rate,
+    Structures                high-water mark), custody fees, transaction fees;
+                              fee rules configurable per fund or client
+  2. Daily Accrual          — Fees accrued daily with periodic crystallisation aligned
+                              to defined billing cycles
+  3. Invoice Generation     — Automatically generate invoices based on configured billing
+                              schedules, including detailed fee breakdowns
+  4. Fee Override & Waiver  — Controlled workflows for fee overrides/waivers enforced
+                              through maker-checker approval with full audit trails
+  5. Fee Revenue Reporting  — Produce fee revenue reports with breakdowns by fund, client,
+                              and fee type
+
+MODULE 7: RECONCILIATION ENGINE
+  Automated reconciliation across internal records, custodians, and banking.
+  Features:
+  1. Cash Reconciliation    — Automated daily matching of cash balances between internal
+                              records and bank statements
+  2. Position Reconciliation— Automated daily matching of security positions between
+                              internal records and custodian statements
+  3. Break Classification   — Automatically classify unreconciled items by type:
+                              quantity breaks, price breaks, missing trades, timing differences
+  4. Assignment &           — Assign reconciliation breaks to responsible officers with
+    Escalation                SLA tracking and automatic escalation when SLAs breached
+  5. Reconciliation         — Daily reconciliation summaries with historical trend analysis
+    Reporting                 and ageing reports for open breaks
+
+MODULE 8: RISK & COMPLIANCE
+  Embeds regulatory and investment policy controls into daily operations.
+  Features:
+  1. Pre-Trade Compliance   — Enforce investment policy limits (asset class, issuer, sector,
+                              concentration) before trade approval
+  2. Post-Trade Monitoring  — Continuous monitoring with real-time breach alerts and
+                              automated escalation
+  3. AML/CFT Controls       — Client risk scoring, suspicious transaction monitoring,
+                              threshold-based reporting, KYC compliance tracking
+  4. Regulatory Calendar    — Track SEC, NFIU, and NDPR submission deadlines with
+                              automated reminders and status dashboards
+  5. Compliance Reporting   — Generate compliance breach reports, AML alert summaries,
+                              regulatory submission status reports
+  6. Rules Engine           — Configurable compliance rules engine allowing regulatory
+                              updates via rule changes WITHOUT code deployment
+
+MODULE 9: PERFORMANCE MEASUREMENT
+  Calculates and attributes investment performance across multiple dimensions.
+  Features:
+  1. Return Calculation     — Time-weighted (TWR) and money-weighted (MWR) return
+                              calculations at portfolio, asset class, and security level
+  2. Return Periods         — Daily, monthly, quarterly, annual, and since-inception
+  3. Benchmark Comparison   — Configurable benchmarks per portfolio with relative
+                              performance tracking
+  4. Performance Attribution— Brinson-Fachler attribution for equity portfolios covering
+                              allocation, selection, and interaction effects
+  5. Client Performance     — Automatically generated performance reports with charts,
+    Reports                   tables, and commentary sections
+
+MODULE 10: CLIENT REPORTING & ANALYTICS
+  Full reporting lifecycle from creation through approval to distribution.
+  Features:
+  1. Periodic Client        — Automated monthly/quarterly statements showing holdings,
+    Statements                transactions, performance, and fee summaries
+  2. Report Builder         — Configurable report templates with drag-and-drop field
+                              selection for ad hoc reporting
+  3. Report Lifecycle       — Create → Review → Approve → Publish (with versioning and audit)
+  4. Export Formats         — Branded PDF, Excel, and CSV
+  5. Scheduled Reports      — Automated generation on daily, weekly, monthly, or quarterly schedules
+  6. AUM Tracking           — AUM tracking with trend analysis, net inflow/outflow tracking,
+                              and growth metrics
+
+MODULE 11: REGULATORY RETURNS
+  Configuration-driven regulatory reporting adapting to evolving SEC/NFIU requirements.
+  Features:
+  1. SEC Quarterly Returns  — Portfolio composition, AUM, performance, client count,
+                              transaction volume reporting
+  2. SEC Annual Returns     — Financial statements, compliance attestations,
+                              annual fund performance
+  3. AML/CFT Reports        — STRs, CTRs, and threshold reports submitted to NFIU
+  4. NDPR Compliance Log    — Data processing logs, consent records, data subject
+                              request tracking
+  5. Audit Reports          — Exportable user activity logs, transaction trails,
+                              access reports for auditors
+  6. Template Engine        — Configuration-driven templates with regulator-driven
+                              updates delivered under SLA
+
+MODULE 12: MANAGEMENT DASHBOARDS
+  Five role-based dashboards with real-time visibility and drill-down.
+  ┌───┬──────────────────┬─────────────────────────────────────────────────────────┐
+  │ 1 │ Executive        │ Total AUM, growth trends, revenue, net inflows/outflows, │
+  │   │                  │ fund count, client count                                 │
+  │ 2 │ Portfolio Manager│ Performance vs. benchmark, asset allocation, top/bottom  │
+  │   │                  │ contributors, rebalancing alerts                         │
+  │ 3 │ Operations       │ Pending trades, settlement status, reconciliation breaks,│
+  │   │                  │ exception queues                                         │
+  │ 4 │ Compliance       │ Regulatory calendar, policy breaches, AML alerts,        │
+  │   │                  │ audit findings                                           │
+  │ 5 │ Finance          │ Fee revenue by fund/client, accruals, receivables,       │
+  │   │                  │ expense tracking                                         │
+  └───┴──────────────────┴─────────────────────────────────────────────────────────┘
+  All dashboards support configurable date ranges, filters, and drill-down from
+  summary metrics to individual transactions.
+
+═══════════════════════════════════════
+CROSS-CUTTING COMPONENTS (6)
+Shared services embedded across all core modules.
+═══════════════════════════════════════
+
+COMPONENT 1: USER MANAGEMENT & ACCESS CONTROL (RBAC)
+  1. Role-Based Access      — Granular permissions per module and action
+    Control                   (view, create, edit, approve, delete)
+  2. Mandatory MFA          — Email OTP, SMS OTP, or authenticator app
+  3. Maker-Checker Controls — Enforced for user creation, role assignment, status changes
+  4. Session Management     — Configurable session timeout (default 15 min) using JWT with short TTL
+  5. Identity Provider      — Centralised identity management; future SSO/Active Directory support
+
+COMPONENT 2: AUDIT & LOGGING
+  1. Comprehensive Logging  — All system actions logged with: timestamp, user, role, IP
+                              address, before/after values
+  2. Immutability           — Append-only audit logs stored with S3 Object Lock
+  3. Searchability          — Search logs by user, date range, module, or event type
+  4. Export                 — CSV and PDF formats for regulators and auditors
+  5. Retention              — Minimum 7-year retention with automated archival to cold storage
+
+COMPONENT 3: NOTIFICATION ENGINE
+  1. Email Notifications    — Event-driven alerts for trades, approvals, settlements,
+                              compliance events, and deadlines (Amazon SES)
+  2. SMS Notifications      — For time-critical events: limit breaches, settlement failures
+  3. In-App Notifications   — Real-time in-app notification centre with read/unread tracking
+  4. Configurable Rules     — Triggers and recipients configurable by event type and user role
+
+COMPONENT 4: DOCUMENT MANAGEMENT
+  1. Upload & Storage       — Secure storage of trade confirmations, mandates, regulatory
+                              correspondence, and documents
+  2. Versioning             — Full version history with ability to retrieve prior versions
+  3. Tagging & Retrieval    — Tag by client, portfolio, transaction, or document type
+  4. Access Control         — Document access governed by RBAC aligned to parent module
+
+COMPONENT 5: GLOBAL SEARCH
+  1. Full-Text Search       — Search across portfolios, clients, transactions, securities,
+                              and documents
+  2. Faceted Results        — Filter by entity type, date range, status, and portfolio
+  3. Real-Time Indexing     — Near real-time indexing of new and updated records (OpenSearch)
+
+COMPONENT 6: CORPORATE ACTIONS
+  1. Dividend Processing    — Capture and process cash/stock dividends with automatic
+                              position and cash updates
+  2. Coupon Payments        — Process bond coupon payments with accrual adjustments
+  3. Stock Splits &         — Handle splits, rights issues, bonus shares with automatic
+    Rights Issues             position updates
+  4. Corporate Action       — Notify portfolio managers and operations teams
+    Notifications             of upcoming and completed actions
+  5. Audit Trail            — Full before/after position snapshots for all corporate actions
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6: NON-FUNCTIONAL REQUIREMENTS (PERFORMANCE TARGETS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌────┬──────────────────────┬───────────────────────────────────────────────────┐
+│  1 │ Page Load Time       │ ≤ 3 seconds                                       │
+│  2 │ Transaction Process  │ ≤ 2 seconds per trade                             │
+│  3 │ Report Generation    │ ≤ 30 seconds (standard); ≤ 5 minutes (batch 10K+) │
+│  4 │ System Uptime        │ ≥ 99.5% monthly                                   │
+│  5 │ Concurrent Users     │ 50+ without degradation                           │
+│  6 │ Data Volume          │ 5+ years of history without performance impact     │
+│  7 │ Encryption           │ TLS 1.3 in transit; AES-256 at rest               │
+│  8 │ Audit Retention      │ Minimum 7 years                                   │
+│  9 │ RPO / RTO            │ ≤ 30 minutes / ≤ 4 hours                          │
+│ 10 │ Data Residency       │ AWS Africa (af-south-1, Cape Town)                │
+│ 11 │ Browser Support      │ Chrome, Edge, Firefox, Safari (latest 2 versions) │
+└────┴──────────────────────┴───────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7: PROJECT PLAN & TIMELINE (16 WEEKS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DELIVERY METHODOLOGY: Hybrid — PRINCE2 governance + Agile (Scrum) execution
+  • PRINCE2 provides: structured oversight, stage-gate approvals, documentation
+  • Scrum provides: iterative 2-week sprints (ValuAlliance sees working software every fortnight)
+  • All scope changes: formally logged, impact-assessed (cost + time), approved by Project Board
+
+THREE PHASES:
+  Phase 1: FOUNDATION & CORE OPERATIONS    Weeks 1–6     (MVP target)
+  Phase 2: FINANCIAL MANAGEMENT & COMPLIANCE Weeks 7–11  (60% functionality)
+  Phase 3: ANALYTICS, REPORTING & GO-LIVE   Weeks 12–16  (100% functionality)
+
+  Note: Phases overlap by 1–2 weeks to allow design of next phase while current phase
+  completes testing.
+
+PHASE 1 DETAIL (Weeks 1–6):
+  Objective: Deliver the operational backbone so investment team can begin working immediately.
+  Core Modules (4):     Portfolio Management, Trade Capture & Lifecycle,
+                        Settlement Processing, Valuation & Pricing Engine
+  Cross-Cutting (4):    User Management & Access Control, Audit & Logging,
+                        Notification Engine, Corporate Actions
+  Integrations:         CSCS (bidirectional), NSE/FMDQ market data feeds, Email
+  Deliverables:
+    1. Working portfolio management, trade capture, settlement, valuation in staging
+    2. User acceptance testing on Phase 1 scope
+    3. Phase 1 deployment to production (early go-live)
+
+PHASE 2 DETAIL (Weeks 7–11):
+  Objective: Layer financial accuracy and regulatory controls onto Phase 1 foundation.
+  Core Modules (4):     Fund Accounting & Financial Management, Fee Calculation & Billing,
+                        Reconciliation Engine, Risk & Compliance
+  Cross-Cutting (2):    Document Management, Global Search
+  Integrations:         General Ledger / ERP (outbound), Payment/banking systems (bidirectional)
+  Deliverables:
+    1. Working fund accounting, fee calculation, reconciliation, compliance in staging
+    2. User acceptance testing on Phase 2 scope
+    3. Phase 2 deployment to production
+
+PHASE 3 DETAIL (Weeks 12–16):
+  Objective: Complete the platform. Full data migration. Training. Production go-live.
+  Core Modules (4):     Performance Measurement, Client Reporting & Analytics,
+                        Regulatory Returns, Management Dashboards
+  Cross-Cutting (0):    All cross-cutting delivered in Phases 1 and 2
+  Integrations:         SEC Reporting Portal (outbound, file), Bloomberg/Reuters (optional)
+  Deliverables:
+    1. All 18 modules complete and tested
+    2. Full data migration executed and reconciled
+    3. End-user and administrator training completed
+    4. Production go-live
+
+KEY MILESTONES:
+┌────┬──────────────────────────────────────────┬────────┬───────────────────────────┐
+│  1 │ Project Kickoff & Requirements Baseline  │ Week 1 │ Project Board sign-off    │
+│  2 │ Phase 1 Design Complete                  │ Week 2 │ Design review approval    │
+│  3 │ Phase 1 UAT Complete                     │ Week 5 │ Business sign-off         │
+│  4 │ Phase 1 Release to Production            │ Week 6 │ Go/no-go decision         │
+│  5 │ Phase 2 Design Complete                  │ Week 7 │ Design review approval    │
+│  6 │ Phase 2 UAT Complete                     │ Week 10│ Business sign-off         │
+│  7 │ Phase 2 Release to Production            │ Week 11│ Go/no-go decision         │
+│  8 │ Data Migration Trial Run                 │ Week 12│ Reconciliation sign-off   │
+│  9 │ Training Complete                        │ Week 13│ Competency assessment     │
+│ 10 │ Full UAT & Performance Testing Complete  │ Week 14│ Business sign-off         │
+│ 11 │ Production Data Migration & Go-Live      │ Week 15│ Steering Committee go/no-go│
+│ 12 │ Hypercare Complete & Handover            │ Week 16│ Formal acceptance         │
+└────┴──────────────────────────────────────────┴────────┴───────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8: DATA MIGRATION STRATEGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCOPE: Client master data, security master, portfolio and position data,
+       transaction history (up to 5 years), financial records (current state),
+       documents (to S3).
+
+FOUR STAGES:
+  Stage 1 — Assessment (Weeks 1–2):
+    • Inventory existing data sources
+    • Assess data quality
+    • Define migration scope (which data, how far back)
+    • Identify cleansing needs
+    Deliverable: Data inventory and scope agreement
+
+  Stage 2 — Design (Weeks 3–5):
+    • Define source-to-target mapping
+    • Define transformation rules and validation checks
+    • Develop migration scripts and test data sets
+    Deliverable: Data mapping specification and migration scripts
+
+  Stage 3 — Trial Execution (Weeks 10–12):
+    • Trial migration in staging environment
+    • Validate against source
+    • Resolve discrepancies
+    Deliverable: Trial migration report
+
+  Stage 4 — Production Migration & Validation (Weeks 14–16):
+    • Production migration during planned cutover window
+    • Minimum 2-week parallel run
+    • Reconcile record counts, balances, and positions
+    • User verification and formal sign-off
+    Deliverable: Production migration report + Reconciliation sign-off
+
+CONTROLS:
+  • Record/balance reconciliation after every migration run
+  • Minimum 2-week parallel run (old and new systems running simultaneously)
+  • Full rollback procedure tested during trial migration
+  • Migration not considered complete until ValuAlliance business sign-off
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 9: QUALITY ASSURANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Quality is built into every sprint — not added at the end:
+  1. Code reviews on every pull request with automated linting
+  2. Unit tests in CI pipeline — 80% code coverage target
+  3. Integration tests on every staging deployment
+  4. Dedicated system, performance & security testing phase (Weeks 10–11)
+  5. UAT by ValuAlliance business users (Weeks 12–13) using real workflow scenarios
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 10: PROJECT GOVERNANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌───┬────────────────────────────────────────────┬────────────┬─────────────────────────────────────────┐
+│ 1 │ Steering Committee                         │ Monthly    │ Strategic oversight, escalations,       │
+│   │ (ValuAlliance MD + Qucoon CEO)             │            │ go/no-go decisions                      │
+│ 2 │ Project Board                              │ Bi-weekly  │ Progress review, risk review,           │
+│   │ (Sponsors from both sides + PM)            │            │ milestone approvals                     │
+│ 3 │ Sprint Review                              │ Bi-weekly  │ Demo completed work, gather feedback,   │
+│   │ (Delivery team + ValuAlliance SMEs)        │            │ plan next sprint                        │
+│ 4 │ Daily Standup                              │ Daily      │ Progress, blockers, coordination        │
+│   │ (Qucoon team only)                         │            │                                         │
+└───┴────────────────────────────────────────────┴────────────┴─────────────────────────────────────────┘
+
+REPORTING: Bi-weekly sprint reports and project status reports (RAG status, milestones,
+           budget, risks). Weekly test progress reports during Phases 3–4.
+
+ROLES & RESPONSIBILITIES:
+┌───┬────────────────────────────────────────┬──────────────┬─────────────────┐
+│ # │ Activity                               │ Qucoon       │ ValuAlliance    │
+├───┼────────────────────────────────────────┼──────────────┼─────────────────┤
+│ 1 │ Project management & delivery          │ Lead         │ Informed        │
+│ 2 │ Requirements validation                │ Lead         │ Sign-off        │
+│ 3 │ Solution design & development          │ Lead         │ Consulted       │
+│ 4 │ Data provision & cleansing             │ Consulted    │ Lead            │
+│ 5 │ System & integration testing           │ Lead         │ Informed        │
+│ 6 │ User acceptance testing                │ Support      │ Lead            │
+│ 7 │ Training delivery                      │ Lead         │ Nominate trainees│
+│ 8 │ Cloud infrastructure provisioning      │ Lead         │ Consulted       │
+│ 9 │ Go-live decision                       │ Recommend    │ Sign-off        │
+└───┴────────────────────────────────────────┴──────────────┴─────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 11: TEAM STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUCOON DELIVERY TEAM (13 People):
+┌───┬────────────────────┬───────┬─────────────────────────────────────────────────────┐
+│ 1 │ Project Manager    │   1   │ Delivery, governance, stakeholder management         │
+│ 2 │ Solutions Architect│   1   │ Architecture, technology decisions, integration design│
+│ 3 │ Business Analysts  │   2   │ Requirements, user stories, UAT coordination         │
+│ 4 │ Software Engineers │   3   │ Backend (Java/Kotlin), APIs, database, core modules  │
+│ 5 │ Frontend Engineers │   2   │ React UI, dashboards, responsive design              │
+│ 6 │ QA Engineers       │   2   │ Test planning, functional/integration/performance     │
+│ 7 │ DevOps Engineer    │   1   │ CI/CD, AWS infrastructure (Terraform), ECS, monitoring│
+│ 8 │ Database Engineer  │   1   │ MsSQL schema, migration scripts, query optimisation  │
+└───┴────────────────────┴───────┴─────────────────────────────────────────────────────┘
+
+VALUALLIANCE TEAM REQUIREMENTS:
+┌───┬──────────────────────────────────────────────┬───────────────────────────────────────────┐
+│ 1 │ Executive Sponsor                            │ 2 hours/month (Steering Committee)        │
+│ 2 │ Project Coordinator                          │ Day-to-day liaison, internal coordination │
+│ 3 │ Business SMEs (Operations, Finance,          │ Phases 1 & 4; Phases 2 & 3               │
+│   │ Compliance)                                  │                                           │
+│ 4 │ IT Lead                                      │ Infra provisioning, network/security,     │
+│   │                                              │ internal system access                    │
+│ 5 │ UAT Testers (2–3 users)                      │ During Phase 4 (UAT)                      │
+└───┴──────────────────────────────────────────────┴───────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 12: VENDOR INFORMATION — QUCOON LIMITED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COMPANY SUMMARY:
+  Name:                 QuCoon Limited
+  Year of Incorporation: 2016
+  Employees:            60
+  Office:               10th Floor, Churchgate Towers, Victoria Island, Lagos
+  RC Number:            1382173
+  TIN:                  20189301-0001
+  Contact:              Aliu Muibi-Hammed (Head, Consulting) | +234 812 110 3989
+
+FOUR ARMS:
+  1. Technology  — Cloud software engineering, digital transformation, mission-critical systems
+  2. Strategy    — Digital strategy, competitive positioning, technology-business intersection
+  3. Digital     — Digital businesses, digital banking, wallet systems, payments, lending
+  4. Operations  — Business process optimisation, supply chain, operational flexibility
+
+Countries Active: Nigeria, Ghana, Sierra Leone, Kenya, Ethiopia, UK, Canada, USA
+Industries:       Financial Services, Banking, Insurance, Capital Market, FinTech
+
+PAST RELEVANT PROJECTS:
+
+1. FSDH MERCHANT BANK — Global Custody Solution (Most Relevant):
+   Scope: Design and implementation of a Global Custody Solution for client financial assets
+   Delivered:
+   • Trade capture & settlement automation
+   • Reconciliation engine (daily matching with CSCS, NGX, core banking)
+   • Corporate actions management
+   • Billing and invoicing, income and tax processing
+   • Exception management
+   • Client account management (hierarchical: Client → Portfolio → Sub-account)
+   • Secure client self-service portal (portfolio dashboard, statements, reports, analytics)
+   Integrations: SWIFT (MT5xx/MX/ISO20022), CSCS (equities/bonds), FMDQ (fixed income),
+                 NGX (equities), AFEX (commodities), Flexcube (core banking),
+                 Internet Banking, Process Maker (onboarding)
+   Security:     MFA, RBAC, AES-256 at rest, TLS 1.3 in transit, maker-checker,
+                 immutable audit logs (7-year retention), NDPR compliance
+   Performance:  99.9% uptime, ≤2s transaction processing, RPO ≤30 min, RTO ≤4 hours
+   Reference:    Osamuede Fadaka | ofadaka@fsdhgroup.com | Global Custody Dept
+
+2. STANBIC IBTC — Ascent Trade Register Automation:
+   Scope: Design and Implementation of Ascent Trade Register Solution (2 months)
+   Delivered:
+   • Integration with Calypso, Finacle, TRMS, and Exim Bills
+   • Management and regulatory reporting engine
+   • Trade product registers (Form M, LC, Concession, BFC, Maturing Obligations)
+   • Nostro reconciliation registers
+   • Full UX/systems/architecture design, wireframes, user journey documents,
+     software design, data architecture, deployment architecture
+   Reference:    Omolola Brown-Odigie | omolola.brown-odigie@stanbicibtc.com | Head, Trade Services
+
+3. NIBSS — Industry Core Banking Solution (NCUBE) (6 months):
+   Scope: Design and implementation of NCUBE Industry Core Banking Solution
+   Delivered: Mobile applications (iOS/Android), API Gateway, core banking solution,
+              admin portal. Full design and architecture stack — UX, data architecture,
+              deployment architecture, software design, InfoSec, technical specifications
+   Reference:  Oluwatoyin Odutola | oodutola@nibss-plc.com.ng | Product Owner
+
+4. KEYSTONE BANK — Digital Banking Omnichannel (KeyDigital) (5 months):
+   Scope: Design and implementation of digital banking omnichannel platform
+   Delivered: Mobile applications (iOS/Android), API Gateway, core banking solution,
+              admin portal. Full design and architecture stack across all channels
+   Reference:  Edafe | Chief Information Officer | Keystone Avenue, Victoria Island, Lagos
+
+MANAGEMENT ASSESSMENT EXPERIENCE:
+  • CEVA (Agent Banking System) — First Bank Nigeria — Stability & scalability evaluation
+  • Channels Platform — First Bank Nigeria — Omnichannel stability evaluation
+  • Finacle (Core Banking) — First Bank Nigeria — Validation & implementation management
+  • T24 (Core Banking) — Rand Merchant Bank — Systems requirements management
+
+EXPERIENCE MAPPED TO VALUALLIANCE REQUIREMENTS:
+┌────┬────────────────────────────────┬─────────────────────────────────────────────────────────┐
+│  1 │ Portfolio & position management│ FSDH (client portfolios, positions, multiple asset classes)│
+│  2 │ Trade capture & lifecycle      │ Stanbic IBTC, FSDH (end-to-end trade processing)        │
+│  3 │ Fund accounting & GL           │ FSDH (Flexcube integration)                             │
+│  4 │ Reconciliation                 │ FSDH (CSCS/NGX), Stanbic IBTC (Nostro reconciliation)  │
+│  5 │ Fee calculation & billing      │ FSDH (configurable fee templates, automated invoicing)  │
+│  6 │ Regulatory compliance          │ Stanbic IBTC (regulatory reports), FSDH (compliance logs)│
+│  7 │ Market data integration        │ FSDH (CSCS, FMDQ, NGX, AFEX price feeds)               │
+│  8 │ Security & audit controls      │ All engagements (MFA, RBAC, encryption, audit trails)  │
+│  9 │ Client-facing portals          │ FSDH (custody portal), Keystone (digital banking)       │
+│ 10 │ Cloud-native architecture      │ NIBSS NCUBE, Keystone KeyDigital                        │
+└────┴────────────────────────────────┴─────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 13: TRAINING & KNOWLEDGE TRANSFER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+THREE TRAINING TRACKS:
+  Track 1 — End-User:     Portfolio managers, operations, compliance, finance
+  Track 2 — Administrator:IT team, system administrators
+  Track 3 — Technical:    IT team, developers
+
+All training conducted in staging environment using realistic data.
+Each group learns only their relevant modules (role-based).
+Competency assessment on completion.
+Knowledge transfer is CONTINUOUS throughout the project (not a one-time handover).
+ValuAlliance IT staff participate in design workshops, architecture reviews, sprint reviews.
+
+TRAINING SCHEDULE:
+┌───┬────────────────────────────────────┬──────────────────────────────┬──────────┬─────────┐
+│ 1 │ Portfolio Management & Trade       │ Portfolio managers, operations│  1 day   │ Week 12 │
+│ 2 │ Fund Accounting & Financial Mgmt  │ Finance, operations           │  1 day   │ Week 12 │
+│ 3 │ Valuation, Performance & Reporting│ Portfolio managers, finance,  │  0.5 day │ Week 12 │
+│   │                                   │ client service                │          │         │
+│ 4 │ Compliance & Regulatory Reporting │ Compliance, risk              │  0.5 day │ Week 12 │
+│ 5 │ Management Dashboards             │ Senior management             │  0.5 day │ Week 13 │
+│ 6 │ System Administration             │ IT team                       │  1 day   │ Week 13 │
+│ 7 │ Technical Architecture & Support  │ IT team                       │  1 day   │ Week 13 │
+└───┴────────────────────────────────────┴──────────────────────────────┴──────────┴─────────┘
+Total: ~5.5 days of structured training
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 14: COMMERCIAL PROPOSAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRICING (All amounts in Nigerian Naira — NGN):
+┌───┬───────────────────────────────────────────┬──────────────────────────┐
+│ 1 │ One-Time Implementation Fee               │ ₦ 325,000,000.00         │
+│ 2 │ Annual Support & Maintenance — Year 1     │ ₦  48,750,000.00         │
+│ 3 │ Annual Support & Maintenance — Year 2     │ ₦  48,750,000.00         │
+│ 4 │ Annual Support & Maintenance — Year 3     │ ₦  48,750,000.00         │
+├───┼───────────────────────────────────────────┼──────────────────────────┤
+│   │ TOTAL COST OF OWNERSHIP (3 YEARS)         │ ₦ 471,250,000.00         │
+└───┴───────────────────────────────────────────┴──────────────────────────┘
+Note: All prices exclusive of VAT (7.5%).
+      AWS infrastructure costs billed DIRECTLY by AWS based on actual consumption.
+      Qucoon to provide estimated monthly AWS costs during design phase.
+
+PAYMENT SCHEDULE (Milestone-Based):
+┌───┬──────────────────────────┬──────┬───────────────────────────────────────────────────┐
+│ 1 │ Project Kickoff          │  30% │ On signed contract                                │
+│ 2 │ Design Sign-off          │  20% │ Requirements and design approved (end of Phase 1)  │
+│ 3 │ UAT Commencement         │  30% │ Core modules in staging, UAT begins (end of Phase 3)│
+│ 4 │ Go-Live & Acceptance     │  20% │ Production go-live and formal acceptance           │
+└───┴──────────────────────────┴──────┴─────────────────────────────────────────────���─────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 15: RISKS & MITIGATIONS (FULL RISK REGISTER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌────┬────────────────────────────────────────┬───────────┬──────────┬────────────────────────────────────────────────────────────────────┐
+│  # │ Risk                                   │ Prob.     │ Impact   │ Mitigation                                                         │
+├────┼────────────────────────────────────────┼───────────┼──────────┼────────────────────────────────────────────────────────────────────┤
+│  1 │ Third-party API delays (CSCS, FMDQ, GL)│ Medium    │ High     │ Mock APIs for development. Phase 2 integrations can be deferred.   │
+│    │                                        │           │          │ Early escalation through ValuAlliance IT.                          │
+│  2 │ Data quality issues (errors, gaps)     │ Medium    │ High     │ Early quality assessment Weeks 1–2. Collaborative cleansing rules. │
+│    │                                        │           │          │ Buffer in migration timeline. Parallel run validates data.         │
+│  3 │ Stakeholder unavailability             │ Medium    │ High     │ Named participants and calendar blocks agreed at kickoff.          │
+│    │                                        │           │          │ Decisions not made within 2 days escalated to Steering Committee. │
+│  4 │ Scope creep during development         │ Medium    │ Medium   │ Formal change control. MVP scope locked after Phase 1 sign-off.   │
+│    │                                        │           │          │ New requests assessed for impact before approval.                  │
+│  5 │ Regulatory change (SEC or NDPR)        │ Low       │ High     │ Compliance rules engine is config-driven, most changes need no    │
+│    │                                        │           │          │ code. If code required, managed via change control.               │
+│  6 │ Integration complexity (external APIs) │ Medium    │ Medium   │ Comprehensive staging tests. Circuit-breaker patterns.            │
+│    │ behave differently in production       │           │          │ File-based fallback for unstable APIs.                            │
+│  7 │ Production data migration failure      │ Low       │ Critical │ Minimum 2 trial migrations. Full reconciliation after each.       │
+│    │                                        │           │          │ Tested rollback procedure. Go/no-go gate before cutover.          │
+│  8 │ Performance under load                 │ Low       │ High     │ Performance testing with realistic volumes in Phase 3.            │
+│    │                                        │           │          │ Auto-scaling on ECS handles traffic spikes.                       │
+│  9 │ Key personnel turnover                 │ Low       │ Medium   │ Knowledge distributed (no single-person dependencies).            │
+│    │                                        │           │          │ All designs documented. Qucoon bench replacement within 1 week.  │
+│ 10 │ User adoption resistance               │ Low       │ Medium   │ Early engagement from Phase 1. Quick wins in Weeks 5–9.          │
+│    │                                        │           │          │ Hands-on training. Management sponsorship.                        │
+└────┴────────────────────────────────────────┴───────────┴──────────┴────────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 16: SUMMARY — THE BIG PICTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHO:     Qucoon Limited (Technology. Consulting. Strategy) building for
+         ValuAlliance Asset Management Limited
+
+WHAT:    A purpose-built, cloud-native, fully integrated Asset Management Portal
+         replacing manual spreadsheet-based operations with a professional, SEC-compliant
+         platform covering every aspect of Nigerian investment management
+
+HOW MUCH:₦325,000,000 (implementation) + ₦48,750,000/year (support x 3 years)
+         = ₦471,250,000 total cost of ownership over 3 years
+         (+ AWS infrastructure costs billed separately by AWS)
+         (+ 7.5% VAT on all amounts)
+
+HOW LONG: 16 weeks, phased delivery. Working software every 2 weeks.
+
+18 MODULES: 12 core business + 6 cross-cutting
+  Core: Portfolio Mgmt, Trade Capture, Settlement, Valuation, Fund Accounting,
+        Fee Billing, Reconciliation, Risk & Compliance, Performance, Client Reporting,
+        Regulatory Returns, Management Dashboards
+  Cross-Cutting: User Management (RBAC), Audit & Logging, Notifications,
+                 Document Management, Global Search, Corporate Actions
+
+TECH: React 18 + Java/Kotlin + MsSQL on AWS (Cape Town region)
+      Fully NDPR-compliant data residency in Africa
+
+SECURITY: MFA mandatory, AES-256 encryption, TLS 1.3, immutable 7-year audit logs,
+          maker-checker on all critical operations, RBAC with granular permissions
+
+PROVEN: Qucoon has done this before — FSDH Merchant Bank's Global Custody Solution
+        is essentially the same problem, already solved and live.
+
+================================================================================
+END OF COMPLETE PROPOSAL SUMMARY
+================================================================================
