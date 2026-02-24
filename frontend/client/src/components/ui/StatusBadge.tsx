@@ -7,19 +7,25 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
-  let colorClass = "bg-gray-200 text-gray-600";
-  
+  let colorClass = "bg-gray-100 text-gray-600";
+
   const s = status.toLowerCase();
-  if (s.includes('active') || s.includes('settled') || s.includes('approved') || s.includes('success')) {
-    colorClass = "bg-success-bg text-success border border-success/20";
-  } else if (s.includes('pending') || s.includes('draft') || s.includes('submitted') || s.includes('progress') || s.includes('warning')) {
-    colorClass = "bg-warning-bg text-warning border border-warning/20";
-  } else if (s.includes('fail') || s.includes('reject') || s.includes('breach') || s.includes('danger') || s.includes('high')) {
-    colorClass = "bg-danger-bg text-danger border border-danger/20";
+  if (s.includes('active') || s.includes('settled') || s.includes('approved') || s.includes('success') || s.includes('resolved') || s.includes('matched') || s.includes('verified') || s.includes('published') || s.includes('processed') || s.includes('within') || s.includes('distributed')) {
+    colorClass = "bg-success-bg text-success";
+  } else if (s.includes('pending') || s.includes('draft') || s.includes('submitted') || s.includes('progress') || s.includes('warning') || s.includes('upcoming') || s.includes('awaiting') || s.includes('invoiced') || s.includes('calculated') || s.includes('under')) {
+    colorClass = "bg-warning-bg text-warning";
+  } else if (s.includes('fail') || s.includes('reject') || s.includes('breach') || s.includes('danger') || s.includes('high') || s.includes('escalated') || s.includes('reported')) {
+    colorClass = "bg-danger-bg text-danger";
+  } else if (s.includes('not started') || s.includes('archived') || s.includes('disabled') || s.includes('low')) {
+    colorClass = "bg-gray-100 text-gray-500";
+  } else if (s.includes('medium')) {
+    colorClass = "bg-warning-bg text-warning";
+  } else if (s.includes('executed')) {
+    colorClass = "bg-navy-100 text-navy-700";
   }
 
   return (
-    <span className={cn("px-2.5 py-1 rounded-full text-xs font-medium inline-flex items-center whitespace-nowrap", colorClass, className)}>
+    <span className={cn("px-2 py-0.5 rounded text-xs font-medium inline-flex items-center whitespace-nowrap", colorClass, className)}>
       {status}
     </span>
   );

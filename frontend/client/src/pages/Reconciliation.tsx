@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { MetricCard } from '../components/ui/MetricCard';
 import { StatusBadge } from '../components/ui/StatusBadge';
@@ -7,9 +7,13 @@ import { ReconciliationIcon, CheckCircleIcon, AlertIcon, RefreshIcon, cn } from 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export default function Reconciliation() {
+    const [filterStatus, setFilterStatus] = useState('All');
     const open = mockReconciliationBreaks.filter(b => b.status === 'Open').length;
     const investigating = mockReconciliationBreaks.filter(b => b.status === 'Under Investigation').length;
     const resolved = mockReconciliationBreaks.filter(b => b.status === 'Resolved').length;
+
+    const statuses = ['All', 'Open', 'Under Investigation', 'Resolved'];
+    const filteredBreaks = filterStatus === 'All' ? mockReconciliationBreaks : mockReconciliationBreaks.filter(b => b.status === filterStatus);
 
     return (
         <AppShell>
@@ -32,13 +36,19 @@ export default function Reconciliation() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                         <h3 className="font-semibold text-navy-900 text-sm">Reconciliation Breaks</h3>
+                        <div className="flex space-x-1">
+                            {statuses.map(s => (
+                                <button key={s} onClick={() => setFilterStatus(s)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterStatus === s ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{s}</button>
+                            ))}
+                        </div>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">Break ID</th>
                                     <th className="p-4 font-medium">Date</th>
                                     <th className="p-4 font-medium">Portfolio</th>
@@ -52,8 +62,9 @@ export default function Reconciliation() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockReconciliationBreaks.map(b => (
+                                {filteredBreaks.map((b, idx) => (
                                     <tr key={b.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{b.id}</td>
                                         <td className="p-4 font-mono text-gray-600">{b.date}</td>
                                         <td className="p-4 text-gray-700">{b.portfolioId}</td>
@@ -63,9 +74,9 @@ export default function Reconciliation() {
                                         <td className="p-4 text-gray-700">{b.assignedTo}</td>
                                         <td className="p-4 text-right font-mono">{b.ageDays}d</td>
                                         <td className="p-4">
-                                            <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full",
-                                                b.priority === 'High' ? 'bg-danger-bg text-danger border border-danger/20' :
-                                                    b.priority === 'Medium' ? 'bg-warning-bg text-warning border border-warning/20' :
+                                            <span className={cn("text-xs font-medium px-2 py-0.5 rounded",
+                                                b.priority === 'High' ? 'bg-danger-bg text-danger' :
+                                                    b.priority === 'Medium' ? 'bg-warning-bg text-warning' :
                                                         'bg-gray-100 text-gray-500'
                                             )}>{b.priority}</span>
                                         </td>
@@ -89,7 +100,7 @@ export default function Reconciliation() {
                                 <Legend />
                                 <Bar dataKey="matched" name="Matched" fill="#059669" radius={[4, 4, 0, 0]} />
                                 <Bar dataKey="open" name="Open" fill="#D97706" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="resolved" name="Resolved" fill="#0C1E35" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="resolved" name="Resolved" fill="#0E4535" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
-import { mockJournalEntries, mockTrialBalance } from '../data/mockData';
-import { cn } from '../components/icons/Icons';
+import { mockJournalEntries, mockTrialBalance, mockFunds } from '../data/mockData';
+import { PlusIcon, DownloadIcon, cn } from '../components/icons/Icons';
 
 export default function FundAccounting() {
     const [activeTab, setActiveTab] = useState('Journal Entries');
+    const [isPostJournalOpen, setIsPostJournalOpen] = useState(false);
+    const [isPeriodCloseOpen, setIsPeriodCloseOpen] = useState(false);
+    const [isGenStatementsOpen, setIsGenStatementsOpen] = useState(false);
     const tabs = ['Journal Entries', 'Trial Balance', 'Income Statement', 'Cash Flow'];
 
     const totalDebit = mockTrialBalance.reduce((s, r) => s + r.debit, 0);
@@ -16,9 +19,13 @@ export default function FundAccounting() {
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-navy-900">Fund Accounting & Financial Management</h1>
                     <div className="flex space-x-3">
-                        <button className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 shadow-sm">Post Journal</button>
-                        <button className="px-4 py-2 bg-white border border-gray-200 rounded text-gray-600 text-sm font-medium hover:bg-gray-50 shadow-sm">Period Close</button>
-                        <button className="px-4 py-2 bg-white border border-gray-200 rounded text-gray-600 text-sm font-medium hover:bg-gray-50 shadow-sm">Generate Statements</button>
+                        <button onClick={() => setIsPostJournalOpen(true)} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 shadow-sm flex items-center">
+                            <PlusIcon className="w-4 h-4 mr-2" /> Post Journal
+                        </button>
+                        <button onClick={() => setIsPeriodCloseOpen(true)} className="px-4 py-2 bg-white border border-gray-200 rounded text-gray-600 text-sm font-medium hover:bg-gray-50 shadow-sm">Period Close</button>
+                        <button onClick={() => setIsGenStatementsOpen(true)} className="px-4 py-2 bg-white border border-gray-200 rounded text-gray-600 text-sm font-medium hover:bg-gray-50 shadow-sm flex items-center">
+                            <DownloadIcon className="w-4 h-4 mr-2" /> Generate Statements
+                        </button>
                     </div>
                 </div>
 
@@ -34,6 +41,7 @@ export default function FundAccounting() {
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                     <tr>
+                                        <th className="p-4 font-medium w-12">S/N</th>
                                         <th className="p-4 font-medium">Journal ID</th>
                                         <th className="p-4 font-medium">Date</th>
                                         <th className="p-4 font-medium">Fund</th>
@@ -45,8 +53,9 @@ export default function FundAccounting() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                    {mockJournalEntries.map(je => (
+                                    {mockJournalEntries.map((je, idx) => (
                                         <tr key={je.id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                             <td className="p-4 font-mono text-xs font-semibold text-navy-700">{je.id}</td>
                                             <td className="p-4 font-mono text-gray-600">{je.date}</td>
                                             <td className="p-4 text-gray-700">{je.fund}</td>
@@ -72,6 +81,7 @@ export default function FundAccounting() {
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                     <tr>
+                                        <th className="p-4 font-medium w-12">S/N</th>
                                         <th className="p-4 font-medium">Account</th>
                                         <th className="p-4 font-medium">Group</th>
                                         <th className="p-4 font-medium text-right">Debit (₦)</th>
@@ -81,6 +91,7 @@ export default function FundAccounting() {
                                 <tbody className="divide-y divide-gray-100">
                                     {mockTrialBalance.map((row, i) => (
                                         <tr key={i} className="hover:bg-gray-50 transition-colors">
+                                            <td className="p-4 text-gray-400 text-xs font-mono">{i + 1}</td>
                                             <td className="p-4 font-medium text-navy-900">{row.account}</td>
                                             <td className="p-4"><span className={cn("text-xs font-medium px-2 py-0.5 rounded",
                                                 row.group === 'Assets' ? 'bg-navy-100 text-navy-700' :
@@ -95,7 +106,7 @@ export default function FundAccounting() {
                                 </tbody>
                                 <tfoot className="bg-navy-900 text-white">
                                     <tr>
-                                        <td className="p-4 font-bold" colSpan={2}>TOTALS</td>
+                                        <td className="p-4 font-bold" colSpan={3}>TOTALS</td>
                                         <td className="p-4 text-right font-mono font-bold">{totalDebit.toLocaleString()}</td>
                                         <td className="p-4 text-right font-mono font-bold">{totalCredit.toLocaleString()}</td>
                                     </tr>
@@ -162,6 +173,135 @@ export default function FundAccounting() {
                     </div>
                 )}
             </div>
+
+            {/* Post Journal Modal */}
+            {isPostJournalOpen && (
+                <div className="fixed inset-0 bg-navy-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                            <h3 className="text-lg font-bold text-navy-900">Post Journal Entry</h3>
+                            <button onClick={() => setIsPostJournalOpen(false)} className="text-gray-400 hover:text-gray-600 font-bold">&times;</button>
+                        </div>
+                        <div className="p-6 overflow-y-auto flex-1">
+                            <div className="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Fund *</label>
+                                    <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                        <option>Select Fund...</option>
+                                        {mockFunds.map(f => <option key={f.id}>{f.name}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                                    <input type="date" className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" defaultValue="2026-02-24" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Debit Account *</label>
+                                    <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                        <option>Select Account...</option>
+                                        <option>Cash & Bank Balances</option><option>Equity Portfolio</option><option>Fixed Income Portfolio</option><option>Accrued Income</option><option>Management Fee Receivable</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Credit Account *</label>
+                                    <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                        <option>Select Account...</option>
+                                        <option>Management Fee Income</option><option>Interest Income</option><option>Dividend Income</option><option>Subscriptions Payable</option><option>Brokerage Expense</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Amount (₦) *</label>
+                                    <input type="number" className="w-full border border-gray-300 rounded p-2 text-sm font-mono focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0.00" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Source Module</label>
+                                    <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                        <option>Manual</option><option>Trades</option><option>Fees</option><option>Settlements</option><option>Valuation</option>
+                                    </select>
+                                </div>
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                                    <textarea className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" rows={2} placeholder="Journal entry description..." />
+                                </div>
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Upload Supporting Document</label>
+                                    <div className="border-2 border-dashed border-gray-300 rounded p-3 text-center hover:border-gold-500 transition-colors cursor-pointer">
+                                        <p className="text-sm text-gray-500">Drag & drop or <span className="text-gold-600 font-medium">browse</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
+                            <button onClick={() => setIsPostJournalOpen(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
+                            <button onClick={() => { setIsPostJournalOpen(false); alert('Journal entry submitted for approval!'); }} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium shadow hover:bg-navy-800">Submit for Approval</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Period Close Modal */}
+            {isPeriodCloseOpen && (
+                <div className="fixed inset-0 bg-navy-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+                        <h3 className="text-lg font-bold text-navy-900 mb-4">Period Close</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Period *</label>
+                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                    <option>February 2026</option><option>January 2026</option><option>December 2025</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Funds</label>
+                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                    <option>All Funds</option>
+                                    {mockFunds.map(f => <option key={f.id}>{f.name}</option>)}
+                                </select>
+                            </div>
+                            <div className="bg-warning-bg border border-warning/20 rounded p-3 text-xs text-warning font-medium">⚠️ This will lock all transactions for the selected period. This action requires checker approval.</div>
+                        </div>
+                        <div className="flex justify-end space-x-3 mt-6">
+                            <button onClick={() => setIsPeriodCloseOpen(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
+                            <button onClick={() => { setIsPeriodCloseOpen(false); alert('Period close submitted for approval!'); }} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium shadow hover:bg-navy-800">Submit for Approval</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Generate Statements Modal */}
+            {isGenStatementsOpen && (
+                <div className="fixed inset-0 bg-navy-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+                        <h3 className="text-lg font-bold text-navy-900 mb-4">Generate Financial Statements</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Statement Type</label>
+                                <div className="space-y-2">
+                                    {['Income Statement', 'Balance Sheet', 'Cash Flow Statement', 'Trial Balance', 'All Statements'].map(s => (
+                                        <label key={s} className="flex items-center text-sm text-gray-700"><input type="checkbox" className="mr-2 rounded border-gray-300 text-gold-500 focus:ring-gold-500" defaultChecked={s === 'All Statements'} />{s}</label>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Period</label>
+                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                    <option>YTD Feb 2026</option><option>January 2026</option><option>Q4 2025</option><option>FY 2025</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Format</label>
+                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                    <option>PDF</option><option>Excel</option><option>CSV</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="flex justify-end space-x-3 mt-6">
+                            <button onClick={() => setIsGenStatementsOpen(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
+                            <button onClick={() => { setIsGenStatementsOpen(false); alert('Statements generated successfully!'); }} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium shadow hover:bg-navy-800">Generate</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppShell>
     );
 }

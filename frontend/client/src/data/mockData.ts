@@ -14,9 +14,9 @@ export const mockUsers = [
 ];
 
 export const mockClients = [
-  { id: "C001", name: "ARM Pension Managers Ltd", type: "Institutional", category: "Pension Fund Administrator", aum: 18200000000, relationship: "Active", riskRating: "Low", kyc: "Verified", contactPerson: "Tunde Olanrewaju", email: "tolanrewaju@arm.com.ng", phone: "+234 1 462 3400", city: "Lagos", state: "Lagos", portfolios: ["P001","P002"], onboardedDate: "2019-03-15" },
+  { id: "C001", name: "ARM Pension Managers Ltd", type: "Institutional", category: "Pension Fund Administrator", aum: 18200000000, relationship: "Active", riskRating: "Low", kyc: "Verified", contactPerson: "Tunde Olanrewaju", email: "tolanrewaju@arm.com.ng", phone: "+234 1 462 3400", city: "Lagos", state: "Lagos", portfolios: ["P001", "P002"], onboardedDate: "2019-03-15" },
   { id: "C002", name: "Stanbic IBTC Asset Management Ltd", type: "Institutional", category: "Asset Manager", aum: 22400000000, relationship: "Active", riskRating: "Low", kyc: "Verified", contactPerson: "Chinwe Okoro", email: "c.okoro@stanbicibtc.com", phone: "+234 1 422 3003", city: "Lagos", state: "Lagos", portfolios: ["P003"], onboardedDate: "2018-07-22" },
-  { id: "C003", name: "NLPC Pension Fund Administrators", type: "Institutional", category: "Pension Fund Administrator", aum: 12500000000, relationship: "Active", riskRating: "Low", kyc: "Verified", contactPerson: "Dr Emeka Eze", email: "emeka.eze@nlpcpension.com.ng", phone: "+234 1 280 0500", city: "Abuja", state: "FCT", portfolios: ["P004","P005"], onboardedDate: "2020-01-10" },
+  { id: "C003", name: "NLPC Pension Fund Administrators", type: "Institutional", category: "Pension Fund Administrator", aum: 12500000000, relationship: "Active", riskRating: "Low", kyc: "Verified", contactPerson: "Dr Emeka Eze", email: "emeka.eze@nlpcpension.com.ng", phone: "+234 1 280 0500", city: "Abuja", state: "FCT", portfolios: ["P004", "P005"], onboardedDate: "2020-01-10" },
   { id: "C004", name: "Zenith Life Assurance Ltd", type: "Institutional", category: "Insurance", aum: 9800000000, relationship: "Active", riskRating: "Low-Medium", kyc: "Verified", contactPerson: "Mrs Bola Adenike", email: "b.adenike@zenithlife.com.ng", phone: "+234 1 292 5800", city: "Lagos", state: "Lagos", portfolios: ["P006"], onboardedDate: "2021-04-05" },
   { id: "C005", name: "FBNQuest Trustees Ltd", type: "Institutional", category: "Trust & Fiduciary", aum: 8900000000, relationship: "Active", riskRating: "Low", kyc: "Verified", contactPerson: "Chidi Anyanwu", email: "canyanwu@fbnquest.com", phone: "+234 1 285 9800", city: "Lagos", state: "Lagos", portfolios: ["P007"], onboardedDate: "2019-11-20" },
   { id: "C006", name: "Coronation Asset Management Ltd", type: "Institutional", category: "Asset Manager", aum: 5300000000, relationship: "Active", riskRating: "Low-Medium", kyc: "Verified", contactPerson: "Kemi Lawal", email: "k.lawal@coronationam.com", phone: "+234 1 631 4000", city: "Lagos", state: "Lagos", portfolios: ["P008"], onboardedDate: "2022-06-01" },
@@ -197,9 +197,9 @@ export const mockDocuments = [
 ];
 
 export const mockCorporateActions = [
-  { id: "CA-2026-007", ticker: "DANGCEM", securityId: "S001", type: "Final Dividend", exDate: "2026-02-28", payDate: "2026-03-14", amount: 20.00, currency: "NGN", perUnit: "₦20.00 per share", status: "Upcoming", affectedPortfolios: ["P001","P003"] },
+  { id: "CA-2026-007", ticker: "DANGCEM", securityId: "S001", type: "Final Dividend", exDate: "2026-02-28", payDate: "2026-03-14", amount: 20.00, currency: "NGN", perUnit: "₦20.00 per share", status: "Upcoming", affectedPortfolios: ["P001", "P003"] },
   { id: "CA-2026-006", ticker: "GTCO", securityId: "S002", type: "Interim Dividend", exDate: "2026-02-10", payDate: "2026-02-20", amount: 3.00, currency: "NGN", perUnit: "₦3.00 per share", status: "Processed", affectedPortfolios: ["P003"] },
-  { id: "CA-2026-005", ticker: "MTNN", securityId: "S004", type: "Bonus Issue", exDate: "2026-01-20", payDate: "2026-01-20", ratio: "1 for 10", currency: "NGN", status: "Processed", affectedPortfolios: ["P001","P003"] },
+  { id: "CA-2026-005", ticker: "MTNN", securityId: "S004", type: "Bonus Issue", exDate: "2026-01-20", payDate: "2026-01-20", ratio: "1 for 10", currency: "NGN", status: "Processed", affectedPortfolios: ["P001", "P003"] },
   { id: "CA-2026-004", ticker: "FGN-APR-27", securityId: "S011", type: "Coupon Payment", couponDate: "2026-04-23", payDate: "2026-04-23", rate: 13.98, currency: "NGN", status: "Upcoming", affectedPortfolios: ["P002"] },
 ];
 
@@ -247,3 +247,92 @@ export const mockReconSummary = [
   { date: "22 Feb", matched: 46, open: 3, resolved: 2 },
   { date: "23 Feb", matched: 45, open: 3, resolved: 1 },
 ];
+
+// ============================================================
+// CLIENT DETAIL DATA
+// ============================================================
+
+export const mockClientContacts: Record<string, { name: string; role: string; email: string; phone: string; primary: boolean }[]> = {
+  C001: [
+    { name: "Tunde Olanrewaju", role: "Head of Investments", email: "tolanrewaju@arm.com.ng", phone: "+234 1 462 3400", primary: true },
+    { name: "Bukola Adedeji", role: "Portfolio Analyst", email: "badedeji@arm.com.ng", phone: "+234 1 462 3421", primary: false },
+    { name: "Segun Adeniyi", role: "Compliance Manager", email: "sadeniyi@arm.com.ng", phone: "+234 1 462 3450", primary: false },
+  ],
+  C002: [
+    { name: "Chinwe Okoro", role: "Chief Investment Officer", email: "c.okoro@stanbicibtc.com", phone: "+234 1 422 3003", primary: true },
+    { name: "Femi Olarewaju", role: "Fund Manager", email: "f.olarewaju@stanbicibtc.com", phone: "+234 1 422 3010", primary: false },
+  ],
+  C003: [
+    { name: "Dr Emeka Eze", role: "Managing Director", email: "emeka.eze@nlpcpension.com.ng", phone: "+234 1 280 0500", primary: true },
+    { name: "Halima Bello", role: "Investment Analyst", email: "h.bello@nlpcpension.com.ng", phone: "+234 1 280 0520", primary: false },
+  ],
+  C004: [
+    { name: "Mrs Bola Adenike", role: "Head of Investment Operations", email: "b.adenike@zenithlife.com.ng", phone: "+234 1 292 5800", primary: true },
+  ],
+  C005: [
+    { name: "Chidi Anyanwu", role: "Head Trustee Services", email: "canyanwu@fbnquest.com", phone: "+234 1 285 9800", primary: true },
+  ],
+  C006: [
+    { name: "Kemi Lawal", role: "Director, Investment Management", email: "k.lawal@coronationam.com", phone: "+234 1 631 4000", primary: true },
+  ],
+  C007: [
+    { name: "Alhaji Musa Dangiwa", role: "Account Holder", email: "m.dangiwa@privatemail.com", phone: "+234 803 456 7890", primary: true },
+  ],
+  C008: [
+    { name: "Dr. Ngozi Iweala-Obi", role: "Account Holder", email: "n.ob@privatemail.com", phone: "+234 805 234 5678", primary: true },
+  ],
+  C009: [
+    { name: "Biodun Oladele", role: "HR Director", email: "b.oladele@channelstv.com", phone: "+234 1 261 0905", primary: true },
+    { name: "Tayo Akindele", role: "Finance Manager", email: "t.akindele@channelstv.com", phone: "+234 1 261 0910", primary: false },
+  ],
+  C010: [
+    { name: "Amaka Ofoegbu", role: "Fund Administrator", email: "a.ofoegbu@heritagefund.ng", phone: "+234 1 279 4000", primary: true },
+  ],
+};
+
+export const mockClientMandates: Record<string, { id: string; name: string; assetClass: string; benchmark: string; restrictions: string; inceptionDate: string; managementFee: string; performanceFee: string }[]> = {
+  C001: [
+    { id: "MAN-001", name: "Equity Growth Mandate", assetClass: "Equity", benchmark: "NSE All-Share Index", restrictions: "Max 10% single issuer, max 40% sector", inceptionDate: "2019-03-15", managementFee: "1.50%", performanceFee: "20% above hurdle" },
+    { id: "MAN-002", name: "Fixed Income Conservative", assetClass: "Fixed Income", benchmark: "FMDQ Bond Index", restrictions: "Min 60% FGN bonds, max 20% corporate", inceptionDate: "2019-06-01", managementFee: "1.00%", performanceFee: "None" },
+  ],
+  C002: [
+    { id: "MAN-003", name: "Multi-Asset Growth", assetClass: "Mixed", benchmark: "NSE All-Share Index", restrictions: "Max 70% equities, min 20% fixed income", inceptionDate: "2018-07-22", managementFee: "1.50%", performanceFee: "20% above hurdle" },
+  ],
+  C003: [
+    { id: "MAN-004", name: "Conservative Fixed Income", assetClass: "Fixed Income", benchmark: "FMDQ Bond Index", restrictions: "Max 10% equities, min 70% FGN bonds", inceptionDate: "2020-01-10", managementFee: "1.00%", performanceFee: "None" },
+    { id: "MAN-005", name: "Short-Term Liquidity", assetClass: "Money Market", benchmark: "CBN Overnight Rate", restrictions: "T-Bills and money market only", inceptionDate: "2021-03-01", managementFee: "0.50%", performanceFee: "None" },
+  ],
+};
+
+export const mockClientAumHistory: Record<string, { month: string; aum: number }[]> = {
+  C001: [
+    { month: "Aug 25", aum: 16.2 }, { month: "Sep 25", aum: 16.8 }, { month: "Oct 25", aum: 17.1 },
+    { month: "Nov 25", aum: 17.5 }, { month: "Dec 25", aum: 17.0 }, { month: "Jan 26", aum: 17.8 }, { month: "Feb 26", aum: 18.2 },
+  ],
+  C002: [
+    { month: "Aug 25", aum: 19.5 }, { month: "Sep 25", aum: 20.1 }, { month: "Oct 25", aum: 20.8 },
+    { month: "Nov 25", aum: 21.2 }, { month: "Dec 25", aum: 20.5 }, { month: "Jan 26", aum: 21.8 }, { month: "Feb 26", aum: 22.4 },
+  ],
+  C003: [
+    { month: "Aug 25", aum: 10.8 }, { month: "Sep 25", aum: 11.2 }, { month: "Oct 25", aum: 11.5 },
+    { month: "Nov 25", aum: 11.8 }, { month: "Dec 25", aum: 11.4 }, { month: "Jan 26", aum: 12.1 }, { month: "Feb 26", aum: 12.5 },
+  ],
+};
+
+// Utility functions for client lookups
+export function getClientPortfolios(clientId: string) {
+  return mockPortfolios.filter(p => p.clientId === clientId);
+}
+export function getClientTrades(clientId: string) {
+  return mockTrades.filter(t => t.clientId === clientId);
+}
+export function getClientPositions(clientId: string) {
+  const portfolioIds = mockPortfolios.filter(p => p.clientId === clientId).map(p => p.id);
+  return mockPositions.filter(p => portfolioIds.includes(p.portfolioId));
+}
+export function getClientFees(clientId: string) {
+  return mockFees.filter(f => f.clientId === clientId);
+}
+export function getClientDocuments(clientId: string) {
+  return mockDocuments.filter(d => d.clientId === clientId);
+}

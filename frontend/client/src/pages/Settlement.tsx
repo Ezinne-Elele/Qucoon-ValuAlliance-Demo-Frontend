@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { MetricCard } from '../components/ui/MetricCard';
 import { StatusBadge } from '../components/ui/StatusBadge';
@@ -6,9 +6,13 @@ import { mockSettlements } from '../data/mockData';
 import { SettlementIcon, AlertIcon, CheckCircleIcon, RefreshIcon, CSCSLogo, cn } from '../components/icons/Icons';
 
 export default function Settlement() {
+    const [filterStatus, setFilterStatus] = useState('All');
     const settled = mockSettlements.filter(s => s.status === 'Settled').length;
     const pending = mockSettlements.filter(s => s.status === 'Pending').length;
     const failed = mockSettlements.filter(s => s.status === 'Failed').length;
+
+    const statuses = ['All', 'Settled', 'Pending', 'Failed'];
+    const filteredSettlements = filterStatus === 'All' ? mockSettlements : mockSettlements.filter(s => s.status === filterStatus);
 
     return (
         <AppShell>
@@ -32,13 +36,21 @@ export default function Settlement() {
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 className="font-semibold text-navy-900 text-sm">Settlement Queue</h3>
+                        <div className="flex items-center gap-4">
+                            <h3 className="font-semibold text-navy-900 text-sm">Settlement Queue</h3>
+                            <div className="flex space-x-1">
+                                {statuses.map(s => (
+                                    <button key={s} onClick={() => setFilterStatus(s)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterStatus === s ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{s}</button>
+                                ))}
+                            </div>
+                        </div>
                         <div className="flex items-center gap-2"><CSCSLogo /><span className="text-xs text-gray-500">Custodian Integration Active</span></div>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">Settlement ID</th>
                                     <th className="p-4 font-medium">Trade ID</th>
                                     <th className="p-4 font-medium">Security</th>
@@ -51,8 +63,9 @@ export default function Settlement() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockSettlements.map(s => (
+                                {filteredSettlements.map((s, idx) => (
                                     <tr key={s.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{s.id}</td>
                                         <td className="p-4 font-mono text-xs text-gray-600">{s.tradeId}</td>
                                         <td className="p-4 font-medium text-navy-900">{s.ticker}</td>

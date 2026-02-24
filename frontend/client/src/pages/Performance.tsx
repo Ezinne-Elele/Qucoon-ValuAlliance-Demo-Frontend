@@ -29,6 +29,7 @@ export default function Performance() {
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12" rowSpan={2}>S/N</th>
                                     <th className="p-4 font-medium" rowSpan={2}>Portfolio</th>
                                     <th className="p-4 font-medium text-center border-l border-gray-200" colSpan={2}>MTD</th>
                                     <th className="p-4 font-medium text-center border-l border-gray-200" colSpan={2}>QTD</th>
@@ -46,8 +47,9 @@ export default function Performance() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockPerformance.map(p => (
+                                {mockPerformance.map((p, idx) => (
                                     <tr key={p.portfolioId} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4 font-medium text-navy-900">{p.portfolioName}</td>
                                         {Object.values(p.returns).map((ret, i) => (
                                             <React.Fragment key={i}>
@@ -78,8 +80,8 @@ export default function Performance() {
                                     <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} tickFormatter={v => `${v}%`} />
                                     <Tooltip formatter={(v: number) => `${v.toFixed(2)}%`} />
                                     <Legend />
-                                    <Bar dataKey="Portfolio YTD" fill="#0C1E35" radius={[4, 4, 0, 0]} />
-                                    <Bar dataKey="Benchmark YTD" fill="#C9A84C" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="Portfolio YTD" fill="#0E4535" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="Benchmark YTD" fill="#DFA223" radius={[4, 4, 0, 0]} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
@@ -89,9 +91,9 @@ export default function Performance() {
                     <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
                         <h3 className="text-base font-semibold text-navy-900 mb-4">Performance Attribution</h3>
                         <div className="space-y-6">
-                            {mockPerformance.map(p => (
+                            {mockPerformance.map((p, idx) => (
                                 <div key={p.portfolioId} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
-                                    <h4 className="font-semibold text-navy-900 text-sm mb-3">{p.portfolioName}</h4>
+                                    <h4 className="font-semibold text-navy-900 text-sm mb-3"><span className="text-gray-400 font-mono mr-2">{idx + 1}.</span>{p.portfolioName}</h4>
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="bg-gray-50 rounded p-3 text-center">
                                             <p className="text-xs text-gray-500 mb-1">Allocation Effect</p>

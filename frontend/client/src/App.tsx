@@ -11,12 +11,13 @@ import Reconciliation from "./pages/Reconciliation";
 import RiskCompliance from "./pages/RiskCompliance";
 import RegulatoryReturns from "./pages/RegulatoryReturns";
 import Performance from "./pages/Performance";
-import ClientReports from "./pages/ClientReports";
+import ClientManagement from "./pages/ClientManagement";
 import UserManagement from "./pages/UserManagement";
 import AuditLog from "./pages/AuditLog";
 import Notifications from "./pages/Notifications";
 import Documents from "./pages/Documents";
 import CorporateActions from "./pages/CorporateActions";
+import AuthorizationQueue from "./pages/AuthorizationQueue";
 import { Toaster } from "@/components/ui/toaster";
 
 function Router() {
@@ -35,12 +36,14 @@ function Router() {
       <Route path="/risk-compliance" component={RiskCompliance} />
       <Route path="/regulatory-returns" component={RegulatoryReturns} />
       <Route path="/performance" component={Performance} />
-      <Route path="/client-reports" component={ClientReports} />
+      <Route path="/client-management" component={ClientManagement} />
+      <Route path="/client-reports" component={() => <Redirect to="/client-management" />} />
       <Route path="/users" component={UserManagement} />
       <Route path="/audit-log" component={AuditLog} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/documents" component={Documents} />
       <Route path="/corporate-actions" component={CorporateActions} />
+      <Route path="/authorization-queue" component={AuthorizationQueue} />
 
       {/* Fallback */}
       <Route>

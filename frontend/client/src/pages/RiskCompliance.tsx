@@ -36,6 +36,7 @@ export default function RiskCompliance() {
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">ID</th>
                                     <th className="p-4 font-medium">Date</th>
                                     <th className="p-4 font-medium">Portfolio</th>
@@ -48,8 +49,9 @@ export default function RiskCompliance() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {breaches.map(b => (
+                                {breaches.map((b, idx) => (
                                     <tr key={b.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{b.id}</td>
                                         <td className="p-4 font-mono text-gray-600">{b.date}</td>
                                         <td className="p-4 text-gray-700">{b.portfolioId}</td>
@@ -68,10 +70,11 @@ export default function RiskCompliance() {
 
                 {activeTab === 'AML Alerts' && (
                     <div className="space-y-4">
-                        {amlAlerts.length > 0 ? amlAlerts.map(alert => (
+                        {amlAlerts.length > 0 ? amlAlerts.map((alert, idx) => (
                             <div key={alert.id} className="bg-white rounded-lg border border-danger/20 shadow-sm p-6">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center">
+                                        <span className="text-xs font-mono text-gray-400 mr-3">{idx + 1}.</span>
                                         <div className="w-10 h-10 bg-danger-bg rounded-full flex items-center justify-center mr-4">
                                             <AlertIcon className="w-5 h-5 text-danger" />
                                         </div>
@@ -94,9 +97,10 @@ export default function RiskCompliance() {
 
                 {activeTab === 'Regulatory Calendar' && (
                     <div className="space-y-4">
-                        {deadlines.map(d => (
+                        {deadlines.map((d, idx) => (
                             <div key={d.id} className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 flex items-center justify-between">
                                 <div className="flex items-center">
+                                    <span className="text-xs font-mono text-gray-400 mr-3">{idx + 1}.</span>
                                     <div className="w-14 h-14 bg-danger text-white rounded flex flex-col items-center justify-center mr-4 shrink-0">
                                         <span className="text-lg font-bold leading-none">{d.dueDate?.split('-')[2]}</span>
                                         <span className="text-[10px] uppercase">FEB</span>
@@ -120,6 +124,7 @@ export default function RiskCompliance() {
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">Rule</th>
                                     <th className="p-4 font-medium">Scope</th>
                                     <th className="p-4 font-medium text-right">Limit</th>
@@ -137,6 +142,7 @@ export default function RiskCompliance() {
                                     { rule: 'Government Bond Minimum', scope: 'Fixed Income Fund', limit: '60.00%', current: '72.00%', util: 83, status: 'Within Limit' },
                                 ].map((r, i) => (
                                     <tr key={i} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{i + 1}</td>
                                         <td className="p-4 font-medium text-navy-900">{r.rule}</td>
                                         <td className="p-4 text-gray-600">{r.scope}</td>
                                         <td className="p-4 text-right font-mono">{r.limit}</td>

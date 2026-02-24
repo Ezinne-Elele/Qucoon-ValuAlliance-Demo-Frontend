@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockAuditLogs } from '../data/mockData';
-import { DownloadIcon, FilterIcon } from '../components/icons/Icons';
+import { DownloadIcon, FilterIcon, cn } from '../components/icons/Icons';
 
 export default function AuditLog() {
+    const [filterModule, setFilterModule] = useState('All');
+    const modules = ['All', ...new Set(mockAuditLogs.map(l => l.module))];
+    const filteredLogs = filterModule === 'All' ? mockAuditLogs : mockAuditLogs.filter(l => l.module === filterModule);
+
     return (
         <AppShell>
             <div className="space-y-6">
@@ -15,19 +19,25 @@ export default function AuditLog() {
                     </div>
                     <div className="flex space-x-3">
                         <button className="px-3 py-2 bg-white border border-gray-200 rounded text-gray-600 hover:bg-gray-50 flex items-center text-sm shadow-sm">
-                            <FilterIcon className="w-4 h-4 mr-2" /> Filter
-                        </button>
-                        <button className="px-3 py-2 bg-white border border-gray-200 rounded text-gray-600 hover:bg-gray-50 flex items-center text-sm shadow-sm">
                             <DownloadIcon className="w-4 h-4 mr-2" /> Export CSV
                         </button>
                     </div>
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <h3 className="font-semibold text-navy-900 text-sm">Audit Trail</h3>
+                        <div className="flex space-x-1 overflow-x-auto">
+                            {modules.map(m => (
+                                <button key={m} onClick={() => setFilterModule(m)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors whitespace-nowrap", filterModule === m ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{m}</button>
+                            ))}
+                        </div>
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">Log ID</th>
                                     <th className="p-4 font-medium">Timestamp</th>
                                     <th className="p-4 font-medium">User</th>
@@ -42,8 +52,9 @@ export default function AuditLog() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockAuditLogs.map(log => (
+                                {filteredLogs.map((log, idx) => (
                                     <tr key={log.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{log.id}</td>
                                         <td className="p-4 font-mono text-xs text-gray-600 whitespace-nowrap">{log.timestamp}</td>
                                         <td className="p-4 font-medium text-navy-900 whitespace-nowrap">{log.userName}</td>

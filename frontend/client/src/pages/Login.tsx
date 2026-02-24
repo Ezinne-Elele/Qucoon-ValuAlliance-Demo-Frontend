@@ -9,7 +9,6 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Frontend-only: bypass auth directly to dashboard
     setLocation('/dashboard');
   };
 
@@ -18,10 +17,12 @@ export default function Login() {
       {/* Left Panel */}
       <div className="w-[40%] bg-navy-900 flex flex-col justify-between p-12 text-white">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-1">ValuAlliance</h1>
+          <div className="mb-8">
+            <img src="/logo.png" alt="ValuAlliance" className="h-12 brightness-0 invert mb-4" />
+          </div>
           <p className="text-gold-400 text-sm tracking-wide uppercase">Enterprise Asset Management Platform</p>
           <div className="h-1 w-10 bg-gold-500 mt-6 mb-12 rounded-full"></div>
-          
+
           <div className="space-y-6">
             {[
               "Regulatory-Grade Compliance & Audit Trails",
@@ -58,22 +59,22 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all"
                 required
               />
             </div>
-            
+
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-sm font-medium text-gray-700">Password</label>
                 <a href="#" className="text-xs text-gold-600 hover:underline">Forgot password?</a>
               </div>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all font-mono tracking-wider"
@@ -88,7 +89,7 @@ export default function Login() {
               </label>
             </div>
 
-            <button 
+            <button
               type="submit"
               className="w-full py-3 px-4 bg-navy-900 hover:bg-navy-800 text-white font-medium rounded-md shadow hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-900"
             >
