@@ -4,9 +4,11 @@ import { MetricCard } from '../components/ui/MetricCard';
 import { mockClients, mockAumTrend } from '../data/mockData';
 import { ReportingIcon, UsersIcon, NairaIcon, DownloadIcon, cn } from '../components/icons/Icons';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { TableToolbar, useTableControls } from '../components/ui/TableControls';
 
 export default function ClientReports() {
     const totalAum = mockClients.reduce((s, c) => s + c.aum, 0);
+    const { search, setSearch, paged } = useTableControls(mockClients, 10, ['name', 'id']);
 
     return (
         <AppShell>
@@ -51,8 +53,9 @@ export default function ClientReports() {
 
                 {/* Client Directory */}
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                         <h3 className="font-semibold text-navy-900 text-sm">Client Directory</h3>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={mockClients} exportFilename="client_directory" />
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -68,7 +71,7 @@ export default function ClientReports() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockClients.map(c => (
+                                {paged.map(c => (
                                     <tr key={c.id} className="hover:bg-gray-50 transition-colors cursor-pointer">
                                         <td className="p-4">
                                             <div className="flex items-center">

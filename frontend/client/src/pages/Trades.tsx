@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockTrades, mockPortfolios, mockSecurities } from '../data/mockData';
-import { PlusIcon, FilterIcon, DownloadIcon, AlertIcon } from '../components/icons/Icons';
+import { PlusIcon, AlertIcon } from '../components/icons/Icons';
 import { cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function Trades() {
   const [activeTab, setActiveTab] = useState('All');
@@ -16,9 +17,17 @@ export default function Trades() {
   const [selectedSecurity, setSelectedSecurity] = useState('');
 
   const tabs = ['All', 'Draft', 'Submitted', 'Approved', 'Executed', 'Settled', 'Failed'];
-  const filteredTrades = activeTab === 'All' ? mockTrades : mockTrades.filter(t => t.status === activeTab);
+  const baseFiltered = activeTab === 'All' ? mockTrades : mockTrades.filter(t => t.status === activeTab);
+
+  const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
 
   const grossValue = (parseFloat(tradeQty) || 0) * (parseFloat(tradePrice) || 0);
+
+  const exportData = baseFiltered.map(t => ({
+    'Trade ID': t.id, Date: t.tradeDate, Security: t.ticker, Portfolio: t.portfolioId,
+    Side: t.side, Quantity: t.quantity, 'Price (₦)': t.price,
+    'Gross Value (₦)': t.grossValue, 'Net Value (₦)': t.netValue, Status: t.status,
+  }));
 
   const handleSubmitTrade = () => {
     if (!selectedPortfolio || !selectedSecurity || !tradeQty || !tradePrice) {
@@ -36,9 +45,6 @@ export default function Trades() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-navy-900">Trade Capture & Lifecycle</h1>
           <div className="flex space-x-3">
-            <button className="px-3 py-2 bg-white border border-gray-200 rounded-md text-gray-600 hover:bg-gray-50 flex items-center text-sm font-medium shadow-sm transition-all">
-              <DownloadIcon className="w-4 h-4 mr-2" /> Export
-            </button>
             <button
               onClick={() => setIsModalOpen(true)}
               className="px-4 py-2 bg-navy-900 text-white rounded-md hover:bg-navy-800 flex items-center text-sm font-medium shadow-md shadow-navy-900/20 transition-all"
@@ -71,6 +77,10 @@ export default function Trades() {
 
         {/* Table Area */}
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm flex-1 overflow-hidden flex flex-col">
+          <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+            <h3 className="font-semibold text-navy-900 text-sm">Trade Blotter</h3>
+            <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="trades" />
+          </div>
           <div className="overflow-x-auto flex-1">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50 text-gray-500 border-b border-gray-200 sticky top-0 z-10">
@@ -88,13 +98,13 @@ export default function Trades() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filteredTrades.map((trade, idx) => (
+                {paged.map((trade, idx) => (
                   <tr
                     key={trade.id}
                     onClick={() => setSelectedTrade(trade)}
                     className="hover:bg-navy-50/50 transition-colors cursor-pointer"
                   >
-                    <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                    <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                     <td className="p-4 font-mono text-xs font-semibold text-navy-700">{trade.id}</td>
                     <td className="p-4 font-mono text-gray-600">{trade.tradeDate}</td>
                     <td className="p-4 font-medium text-navy-900">{trade.ticker}</td>
@@ -113,6 +123,7 @@ export default function Trades() {
               </tbody>
             </table>
           </div>
+          <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
         </div>
 
         {/* Modal for New Trade */}

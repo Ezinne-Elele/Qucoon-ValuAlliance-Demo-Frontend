@@ -4,6 +4,7 @@ import { MetricCard } from '../components/ui/MetricCard';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockSettlements } from '../data/mockData';
 import { SettlementIcon, AlertIcon, CheckCircleIcon, RefreshIcon, CSCSLogo, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function Settlement() {
     const [filterStatus, setFilterStatus] = useState('All');
@@ -12,7 +13,15 @@ export default function Settlement() {
     const failed = mockSettlements.filter(s => s.status === 'Failed').length;
 
     const statuses = ['All', 'Settled', 'Pending', 'Failed'];
-    const filteredSettlements = filterStatus === 'All' ? mockSettlements : mockSettlements.filter(s => s.status === filterStatus);
+    const baseFiltered = filterStatus === 'All' ? mockSettlements : mockSettlements.filter(s => s.status === filterStatus);
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+
+    const exportData = baseFiltered.map(s => ({
+        'Settlement ID': s.id, 'Trade ID': s.tradeId, Security: s.ticker,
+        Client: s.clientName, Side: s.side, 'Net Value': s.netValue,
+        'Settlement Date': s.settlementDate, 'DvP Status': s.dvpStatus, Status: s.status,
+    }));
 
     return (
         <AppShell>
@@ -22,9 +31,6 @@ export default function Settlement() {
                         <h1 className="text-2xl font-bold text-navy-900">Settlement Processing</h1>
                         <p className="text-sm text-gray-500 mt-1">Post-trade settlement with CSD integration and exception management</p>
                     </div>
-                    <button className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 flex items-center shadow-sm">
-                        <RefreshIcon className="w-4 h-4 mr-2" /> Refresh Status
-                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -35,7 +41,7 @@ export default function Settlement() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                         <div className="flex items-center gap-4">
                             <h3 className="font-semibold text-navy-900 text-sm">Settlement Queue</h3>
                             <div className="flex space-x-1">
@@ -44,7 +50,10 @@ export default function Settlement() {
                                 ))}
                             </div>
                         </div>
-                        <div className="flex items-center gap-2"><CSCSLogo /><span className="text-xs text-gray-500">Custodian Integration Active</span></div>
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2"><CSCSLogo /><span className="text-xs text-gray-500">Custodian Active</span></div>
+                            <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="settlements" />
+                        </div>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -63,9 +72,9 @@ export default function Settlement() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filteredSettlements.map((s, idx) => (
+                                {paged.map((s, idx) => (
                                     <tr key={s.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{s.id}</td>
                                         <td className="p-4 font-mono text-xs text-gray-600">{s.tradeId}</td>
                                         <td className="p-4 font-medium text-navy-900">{s.ticker}</td>
@@ -88,6 +97,7 @@ export default function Settlement() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
 
                 {failed > 0 && (

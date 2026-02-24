@@ -6,6 +6,7 @@ import { formatNaira, formatPercent } from '../lib/format';
 import { mockDashboardMetrics, mockAumTrend, mockFunds, mockTrades } from '../data/mockData';
 import { PortfolioIcon, UsersIcon, NairaIcon, FundAccountingIcon, AlertIcon, ArrowUpIcon, cn } from '../components/icons/Icons';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { TableToolbar } from '../components/ui/TableControls';
 
 export default function Dashboard() {
   const PIE_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A'];
@@ -162,9 +163,12 @@ export default function Dashboard() {
 
           {/* Panel 2 */}
           <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden lg:col-span-2">
-            <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-              <h3 className="font-semibold text-navy-900 text-sm">Recent Trade Activity</h3>
-              <a href="/trades" className="text-xs text-gold-600 hover:underline font-medium">View All Trades &rarr;</a>
+            <div className="p-4 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              <div className="flex items-center gap-3">
+                <h3 className="font-semibold text-navy-900 text-sm">Recent Trade Activity</h3>
+                <a href="/trades" className="text-xs text-gold-600 hover:underline font-medium whitespace-nowrap">View All &rarr;</a>
+              </div>
+              <TableToolbar searchValue="" onSearchChange={() => { }} onRefresh={() => { }} exportData={mockTrades.slice(0, 5)} exportFilename="recent_trades" />
             </div>
             <div className="p-0 overflow-x-auto">
               <table className="w-full text-sm">

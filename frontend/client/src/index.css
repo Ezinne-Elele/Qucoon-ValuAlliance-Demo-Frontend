@@ -11,47 +11,80 @@
 
   /* ───── ValuAlliance Brand Palette ───── */
   /* Primary: Teal Green (from logo) */
-  --teal-950: 167 70% 10%;     /* #052B22 */
-  --teal-900: 166 65% 16%;     /* #0E4535 */
-  --teal-800: 165 60% 22%;     /* #165C48 */
-  --teal-700: 163 55% 30%;     /* #22795F */
-  --teal-600: 162 50% 38%;     /* #2E9676 */
-  --teal-500: 161 55% 42%;     /* #30A67F */
-  --teal-400: 160 45% 55%;     /* #5BBD9A */
-  --teal-300: 158 40% 70%;     /* #8FD4BC */
-  --teal-200: 156 35% 85%;     /* #C1E8DA */
-  --teal-100: 155 40% 94%;     /* #E8F6F0 */
-  --teal-50:  155 30% 97%;     /* #F2FAF6 */
+  --teal-950: 167 70% 10%;
+  /* #052B22 */
+  --teal-900: 166 65% 16%;
+  /* #0E4535 */
+  --teal-800: 165 60% 22%;
+  /* #165C48 */
+  --teal-700: 163 55% 30%;
+  /* #22795F */
+  --teal-600: 162 50% 38%;
+  /* #2E9676 */
+  --teal-500: 161 55% 42%;
+  /* #30A67F */
+  --teal-400: 160 45% 55%;
+  /* #5BBD9A */
+  --teal-300: 158 40% 70%;
+  /* #8FD4BC */
+  --teal-200: 156 35% 85%;
+  /* #C1E8DA */
+  --teal-100: 155 40% 94%;
+  /* #E8F6F0 */
+  --teal-50: 155 30% 97%;
+  /* #F2FAF6 */
 
   /* Accent: Amber Gold (from logo mark) */
-  --amber-600: 38 80% 40%;    /* #B87B14 */
-  --amber-500: 40 75% 50%;    /* #DFA223 */
-  --amber-400: 42 70% 60%;    /* #E6BC4F */
-  --amber-300: 44 65% 72%;    /* #EDD07C */
-  --amber-200: 44 60% 84%;    /* #F3E3AB */
-  --amber-100: 46 70% 93%;    /* #FAF3DC */
+  --amber-600: 38 80% 40%;
+  /* #B87B14 */
+  --amber-500: 40 75% 50%;
+  /* #DFA223 */
+  --amber-400: 42 70% 60%;
+  /* #E6BC4F */
+  --amber-300: 44 65% 72%;
+  /* #EDD07C */
+  --amber-200: 44 60% 84%;
+  /* #F3E3AB */
+  --amber-100: 46 70% 93%;
+  /* #FAF3DC */
 
   /* Semantic Colors */
-  --success: 161 94% 30%;     /* #059669 */
-  --success-bg: 152 69% 95%;  /* #ECFDF5 */
+  --success: 161 94% 30%;
+  /* #059669 */
+  --success-bg: 152 69% 95%;
+  /* #ECFDF5 */
 
-  --warning: 38 92% 44%;      /* #D97706 */
-  --warning-bg: 48 100% 96%;  /* #FFFBEB */
+  --warning: 38 92% 44%;
+  /* #D97706 */
+  --warning-bg: 48 100% 96%;
+  /* #FFFBEB */
 
-  --danger: 0 72% 51%;        /* #DC2626 */
-  --danger-bg: 0 86% 97%;     /* #FEF2F2 */
+  --danger: 0 72% 51%;
+  /* #DC2626 */
+  --danger-bg: 0 86% 97%;
+  /* #FEF2F2 */
 
   /* Neutrals */
-  --gray-50: 210 20% 98%;     /* #F8F9FB */
-  --gray-100: 210 18% 96%;    /* #F1F3F5 */
-  --gray-200: 214 14% 90%;    /* #E1E5EA */
-  --gray-300: 216 12% 84%;    /* #CDD2DA */
-  --gray-400: 218 11% 65%;    /* #9AA1AE */
-  --gray-500: 220 9% 46%;     /* #6B7280 */
-  --gray-600: 215 14% 34%;    /* #4B5563 */
-  --gray-700: 217 19% 27%;    /* #374151 */
-  --gray-800: 219 25% 18%;    /* #1F2937 */
-  --gray-900: 221 39% 11%;    /* #111827 */
+  --gray-50: 210 20% 98%;
+  /* #F8F9FB */
+  --gray-100: 210 18% 96%;
+  /* #F1F3F5 */
+  --gray-200: 214 14% 90%;
+  /* #E1E5EA */
+  --gray-300: 216 12% 84%;
+  /* #CDD2DA */
+  --gray-400: 218 11% 65%;
+  /* #9AA1AE */
+  --gray-500: 220 9% 46%;
+  /* #6B7280 */
+  --gray-600: 215 14% 34%;
+  /* #4B5563 */
+  --gray-700: 217 19% 27%;
+  /* #374151 */
+  --gray-800: 219 25% 18%;
+  /* #1F2937 */
+  --gray-900: 221 39% 11%;
+  /* #111827 */
 
   /* ───── Semantic Mapping ───── */
   --background: var(--gray-50);
@@ -63,7 +96,7 @@
   --popover: 0 0% 100%;
   --popover-foreground: var(--gray-900);
 
-  --primary: var(--teal-800);
+  --primary: 165 60% 22%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: var(--gray-200);
@@ -100,6 +133,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
@@ -112,48 +146,127 @@
 }
 
 @layer utilities {
+
   /* ── Teal backgrounds ── */
-  .bg-navy-950 { background-color: hsl(var(--teal-950)); }
-  .bg-navy-900 { background-color: hsl(var(--teal-900)); }
-  .bg-navy-800 { background-color: hsl(var(--teal-800)); }
-  .bg-navy-700 { background-color: hsl(var(--teal-700)); }
-  .bg-navy-600 { background-color: hsl(var(--teal-600)); }
-  .bg-navy-100 { background-color: hsl(var(--teal-100)); }
-  .bg-navy-50  { background-color: hsl(var(--teal-50)); }
+  .bg-navy-950 {
+    background-color: hsl(var(--teal-950));
+  }
 
-  .bg-gold-500 { background-color: hsl(var(--amber-500)); }
-  .bg-gold-100 { background-color: hsl(var(--amber-100)); }
+  .bg-navy-900 {
+    background-color: hsl(var(--teal-900));
+  }
 
-  .bg-gray-50 { background-color: hsl(var(--gray-50)); }
+  .bg-navy-800 {
+    background-color: hsl(var(--teal-800));
+  }
+
+  .bg-navy-700 {
+    background-color: hsl(var(--teal-700));
+  }
+
+  .bg-navy-600 {
+    background-color: hsl(var(--teal-600));
+  }
+
+  .bg-navy-100 {
+    background-color: hsl(var(--teal-100));
+  }
+
+  .bg-navy-50 {
+    background-color: hsl(var(--teal-50));
+  }
+
+  .bg-gold-500 {
+    background-color: hsl(var(--amber-500));
+  }
+
+  .bg-gold-100 {
+    background-color: hsl(var(--amber-100));
+  }
+
+  .bg-gray-50 {
+    background-color: hsl(var(--gray-50));
+  }
 
   /* Semantic */
-  .bg-success-bg { background-color: hsl(var(--success-bg)); }
-  .bg-danger-bg  { background-color: hsl(var(--danger-bg)); }
-  .bg-warning-bg { background-color: hsl(var(--warning-bg)); }
-  .bg-success    { background-color: hsl(var(--success)); }
-  .bg-danger     { background-color: hsl(var(--danger)); }
+  .bg-success-bg {
+    background-color: hsl(var(--success-bg));
+  }
+
+  .bg-danger-bg {
+    background-color: hsl(var(--danger-bg));
+  }
+
+  .bg-warning-bg {
+    background-color: hsl(var(--warning-bg));
+  }
+
+  .bg-success {
+    background-color: hsl(var(--success));
+  }
+
+  .bg-danger {
+    background-color: hsl(var(--danger));
+  }
 
   /* ── Teal text ── */
-  .text-navy-900 { color: hsl(var(--teal-900)); }
-  .text-navy-700 { color: hsl(var(--teal-700)); }
-  .text-gold-500 { color: hsl(var(--amber-500)); }
-  .text-gold-400 { color: hsl(var(--amber-400)); }
-  .text-gold-600 { color: hsl(var(--amber-600)); }
+  .text-navy-900 {
+    color: hsl(var(--teal-900));
+  }
 
-  .text-success { color: hsl(var(--success)); }
-  .text-danger  { color: hsl(var(--danger)); }
-  .text-warning { color: hsl(var(--warning)); }
+  .text-navy-700 {
+    color: hsl(var(--teal-700));
+  }
+
+  .text-gold-500 {
+    color: hsl(var(--amber-500));
+  }
+
+  .text-gold-400 {
+    color: hsl(var(--amber-400));
+  }
+
+  .text-gold-600 {
+    color: hsl(var(--amber-600));
+  }
+
+  .text-success {
+    color: hsl(var(--success));
+  }
+
+  .text-danger {
+    color: hsl(var(--danger));
+  }
+
+  .text-warning {
+    color: hsl(var(--warning));
+  }
 
   /* ── Borders ── */
-  .border-gold-500 { border-color: hsl(var(--amber-500)); }
-  .border-navy-700 { border-color: hsl(var(--teal-700)); }
+  .border-gold-500 {
+    border-color: hsl(var(--amber-500));
+  }
 
-  .border-warning { border-color: hsl(var(--warning)); }
-  .border-danger  { border-color: hsl(var(--danger)); }
+  .border-navy-700 {
+    border-color: hsl(var(--teal-700));
+  }
+
+  .border-warning {
+    border-color: hsl(var(--warning));
+  }
+
+  .border-danger {
+    border-color: hsl(var(--danger));
+  }
 
   /* ── Interactive States ── */
-  .hover-bg-navy-800:hover { background-color: hsl(var(--teal-800)); }
-  .hover-bg-gray-50:hover  { background-color: hsl(var(--gray-50)); }
+  .hover-bg-navy-800:hover {
+    background-color: hsl(var(--teal-800));
+  }
+
+  .hover-bg-gray-50:hover {
+    background-color: hsl(var(--gray-50));
+  }
 }
 
 /* Custom Scrollbar for Enterprise Feel */
@@ -161,13 +274,16 @@
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--gray-300));
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--gray-400));
 }

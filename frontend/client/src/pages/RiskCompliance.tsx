@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockComplianceEvents } from '../data/mockData';
-import { RiskIcon, AlertIcon, cn } from '../components/icons/Icons';
+import { AlertIcon, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function RiskCompliance() {
     const [activeTab, setActiveTab] = useState('Compliance Breaches');
@@ -11,6 +12,26 @@ export default function RiskCompliance() {
     const breaches = mockComplianceEvents.filter(e => e.type.includes('Breach'));
     const amlAlerts = mockComplianceEvents.filter(e => e.type === 'AML Alert');
     const deadlines = mockComplianceEvents.filter(e => e.type === 'Regulatory Deadline');
+
+    const breachCtrl = useTableControls(breaches, 10);
+    const breachExport = breaches.map(b => ({
+        ID: b.id, Date: b.date, Portfolio: b.portfolioId, Security: b.ticker,
+        Rule: b.rule, 'Limit (%)': b.limit, 'Actual (%)': b.actual,
+        Severity: b.severity, Status: b.status,
+    }));
+
+    const policyLimits = [
+        { rule: 'Single Issuer Concentration', scope: 'All Portfolios', limit: '10.00%', current: '8.20%', util: 82, status: 'Within Limit' },
+        { rule: 'Sector Concentration — Financial Services', scope: 'Growth Fund', limit: '40.00%', current: '38.50%', util: 96, status: 'Warning' },
+        { rule: 'Single Counterparty Exposure', scope: 'All Funds', limit: '15.00%', current: '11.40%', util: 76, status: 'Within Limit' },
+        { rule: 'Cash Floor', scope: 'All Funds', limit: '2.00%', current: '4.80%', util: 42, status: 'Within Limit' },
+        { rule: 'Government Bond Minimum', scope: 'Fixed Income Fund', limit: '60.00%', current: '72.00%', util: 83, status: 'Within Limit' },
+    ];
+    const limitsCtrl = useTableControls(policyLimits, 10);
+    const limitsExport = policyLimits.map(r => ({
+        Rule: r.rule, Scope: r.scope, Limit: r.limit, Current: r.current,
+        'Utilisation (%)': r.util, Status: r.status,
+    }));
 
     return (
         <AppShell>
@@ -33,6 +54,10 @@ export default function RiskCompliance() {
 
                 {activeTab === 'Compliance Breaches' && (
                     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h3 className="font-semibold text-navy-900 text-sm">Compliance Breaches</h3>
+                            <TableToolbar searchValue={breachCtrl.search} onSearchChange={breachCtrl.setSearch} onRefresh={() => { }} exportData={breachExport} exportFilename="compliance_breaches" />
+                        </div>
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
@@ -49,9 +74,9 @@ export default function RiskCompliance() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {breaches.map((b, idx) => (
+                                {breachCtrl.paged.map((b, idx) => (
                                     <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(breachCtrl.page - 1) * breachCtrl.pageSize + idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{b.id}</td>
                                         <td className="p-4 font-mono text-gray-600">{b.date}</td>
                                         <td className="p-4 text-gray-700">{b.portfolioId}</td>
@@ -65,6 +90,7 @@ export default function RiskCompliance() {
                                 ))}
                             </tbody>
                         </table>
+                        <TablePagination currentPage={breachCtrl.page} totalItems={breachCtrl.totalItems} pageSize={breachCtrl.pageSize} onPageChange={breachCtrl.setPage} />
                     </div>
                 )}
 
@@ -121,6 +147,10 @@ export default function RiskCompliance() {
 
                 {activeTab === 'Policy Limits' && (
                     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h3 className="font-semibold text-navy-900 text-sm">Policy Limits</h3>
+                            <TableToolbar searchValue={limitsCtrl.search} onSearchChange={limitsCtrl.setSearch} onRefresh={() => { }} exportData={limitsExport} exportFilename="policy_limits" />
+                        </div>
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
@@ -134,15 +164,9 @@ export default function RiskCompliance() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {[
-                                    { rule: 'Single Issuer Concentration', scope: 'All Portfolios', limit: '10.00%', current: '8.20%', util: 82, status: 'Within Limit' },
-                                    { rule: 'Sector Concentration — Financial Services', scope: 'Growth Fund', limit: '40.00%', current: '38.50%', util: 96, status: 'Warning' },
-                                    { rule: 'Single Counterparty Exposure', scope: 'All Funds', limit: '15.00%', current: '11.40%', util: 76, status: 'Within Limit' },
-                                    { rule: 'Cash Floor', scope: 'All Funds', limit: '2.00%', current: '4.80%', util: 42, status: 'Within Limit' },
-                                    { rule: 'Government Bond Minimum', scope: 'Fixed Income Fund', limit: '60.00%', current: '72.00%', util: 83, status: 'Within Limit' },
-                                ].map((r, i) => (
+                                {limitsCtrl.paged.map((r, i) => (
                                     <tr key={i} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{i + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(limitsCtrl.page - 1) * limitsCtrl.pageSize + i + 1}</td>
                                         <td className="p-4 font-medium text-navy-900">{r.rule}</td>
                                         <td className="p-4 text-gray-600">{r.scope}</td>
                                         <td className="p-4 text-right font-mono">{r.limit}</td>
@@ -160,6 +184,7 @@ export default function RiskCompliance() {
                                 ))}
                             </tbody>
                         </table>
+                        <TablePagination currentPage={limitsCtrl.page} totalItems={limitsCtrl.totalItems} pageSize={limitsCtrl.pageSize} onPageChange={limitsCtrl.setPage} />
                     </div>
                 )}
             </div>

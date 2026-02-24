@@ -4,6 +4,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockFunds, mockSecurities, mockNavHistory } from '../data/mockData';
 import { DownloadIcon, CheckCircleIcon, NairaIcon, NGXLogo, FMDQLogo, CBNLogo, AlertIcon, cn } from '../components/icons/Icons';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 const FUND_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A'];
 
@@ -28,6 +29,12 @@ export default function Valuation() {
     const toggleNavFund = (id: string) => {
         setSelectedFundsForNav(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
     };
+
+    const secCtrl = useTableControls(mockSecurities, 10);
+    const secExport = mockSecurities.map(s => ({
+        Ticker: s.ticker, Security: s.name, Source: s.exchange,
+        'Price (₦)': s.price, 'Change %': s.changePct, 'Last Updated': s.priceDate,
+    }));
 
     return (
         <AppShell>
@@ -69,8 +76,9 @@ export default function Valuation() {
 
                 {/* Securities Pricing Table */}
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                         <h3 className="font-semibold text-navy-900 text-sm">Securities Pricing</h3>
+                        <TableToolbar searchValue={secCtrl.search} onSearchChange={secCtrl.setSearch} onRefresh={() => { }} exportData={secExport} exportFilename="securities_pricing" />
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -87,9 +95,9 @@ export default function Valuation() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockSecurities.map((s, idx) => (
+                                {secCtrl.paged.map((s, idx) => (
                                     <tr key={s.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(secCtrl.page - 1) * secCtrl.pageSize + idx + 1}</td>
                                         <td className="p-4 font-bold text-navy-900">{s.ticker}</td>
                                         <td className="p-4 text-gray-700">{s.name}</td>
                                         <td className="p-4">
@@ -114,6 +122,7 @@ export default function Valuation() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={secCtrl.page} totalItems={secCtrl.totalItems} pageSize={secCtrl.pageSize} onPageChange={secCtrl.setPage} />
                 </div>
 
                 {/* NAV History Chart */}

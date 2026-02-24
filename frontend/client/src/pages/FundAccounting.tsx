@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { mockJournalEntries, mockTrialBalance, mockFunds } from '../data/mockData';
 import { PlusIcon, DownloadIcon, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function FundAccounting() {
     const [activeTab, setActiveTab] = useState('Journal Entries');
@@ -12,6 +13,17 @@ export default function FundAccounting() {
 
     const totalDebit = mockTrialBalance.reduce((s, r) => s + r.debit, 0);
     const totalCredit = mockTrialBalance.reduce((s, r) => s + r.credit, 0);
+
+    const jeCtrl = useTableControls(mockJournalEntries, 10);
+    const jeExport = mockJournalEntries.map(je => ({
+        'Journal ID': je.id, Date: je.date, Fund: je.fund, Description: je.description,
+        'Dr Account': je.drAccount, 'Cr Account': je.crAccount, 'Amount (₦)': je.amount, Source: je.sourceModule,
+    }));
+
+    const tbCtrl = useTableControls(mockTrialBalance, 15);
+    const tbExport = mockTrialBalance.map(r => ({
+        Account: r.account, Group: r.group, 'Debit (₦)': r.debit, 'Credit (₦)': r.credit,
+    }));
 
     return (
         <AppShell>
@@ -37,6 +49,10 @@ export default function FundAccounting() {
 
                 {activeTab === 'Journal Entries' && (
                     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h3 className="font-semibold text-navy-900 text-sm">Journal Entries</h3>
+                            <TableToolbar searchValue={jeCtrl.search} onSearchChange={jeCtrl.setSearch} onRefresh={() => { }} exportData={jeExport} exportFilename="journal_entries" />
+                        </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -53,9 +69,9 @@ export default function FundAccounting() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                    {mockJournalEntries.map((je, idx) => (
+                                    {jeCtrl.paged.map((je, idx) => (
                                         <tr key={je.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                            <td className="p-4 text-gray-400 text-xs font-mono">{(jeCtrl.page - 1) * jeCtrl.pageSize + idx + 1}</td>
                                             <td className="p-4 font-mono text-xs font-semibold text-navy-700">{je.id}</td>
                                             <td className="p-4 font-mono text-gray-600">{je.date}</td>
                                             <td className="p-4 text-gray-700">{je.fund}</td>
@@ -69,6 +85,7 @@ export default function FundAccounting() {
                                 </tbody>
                             </table>
                         </div>
+                        <TablePagination currentPage={jeCtrl.page} totalItems={jeCtrl.totalItems} pageSize={jeCtrl.pageSize} onPageChange={jeCtrl.setPage} />
                     </div>
                 )}
 
@@ -76,6 +93,7 @@ export default function FundAccounting() {
                     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                             <h3 className="font-semibold text-navy-900 text-sm">Trial Balance — All Funds — 21 Feb 2026</h3>
+                            <TableToolbar searchValue={tbCtrl.search} onSearchChange={tbCtrl.setSearch} onRefresh={() => { }} exportData={tbExport} exportFilename="trial_balance" />
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left">
@@ -89,9 +107,9 @@ export default function FundAccounting() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                    {mockTrialBalance.map((row, i) => (
+                                    {tbCtrl.paged.map((row, i) => (
                                         <tr key={i} className="hover:bg-gray-50 transition-colors">
-                                            <td className="p-4 text-gray-400 text-xs font-mono">{i + 1}</td>
+                                            <td className="p-4 text-gray-400 text-xs font-mono">{(tbCtrl.page - 1) * tbCtrl.pageSize + i + 1}</td>
                                             <td className="p-4 font-medium text-navy-900">{row.account}</td>
                                             <td className="p-4"><span className={cn("text-xs font-medium px-2 py-0.5 rounded",
                                                 row.group === 'Assets' ? 'bg-navy-100 text-navy-700' :
@@ -113,6 +131,7 @@ export default function FundAccounting() {
                                 </tfoot>
                             </table>
                         </div>
+                        <TablePagination currentPage={tbCtrl.page} totalItems={tbCtrl.totalItems} pageSize={tbCtrl.pageSize} onPageChange={tbCtrl.setPage} />
                     </div>
                 )}
 

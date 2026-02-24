@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockDocuments } from '../data/mockData';
-import { PlusIcon, DownloadIcon, EyeIcon, DocumentIcon, cn } from '../components/icons/Icons';
+import { PlusIcon, EyeIcon, DocumentIcon, DownloadIcon, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function Documents() {
     const [filter, setFilter] = useState('All');
     const [isUploadOpen, setIsUploadOpen] = useState(false);
     const types = ['All', 'Mandate', 'Client Statement', 'Regulatory Filing', 'Trade Confirmation'];
-    const filtered = filter === 'All' ? mockDocuments : mockDocuments.filter(d => d.type === filter);
+    const baseFiltered = filter === 'All' ? mockDocuments : mockDocuments.filter(d => d.type === filter);
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+
+    const exportData = baseFiltered.map(d => ({
+        'Document Name': d.name, Type: d.type, Version: d.version,
+        Size: d.fileSize, 'Uploaded By': d.uploadedBy, Date: d.uploadedDate, Status: d.status,
+    }));
 
     return (
         <AppShell>
@@ -27,6 +35,10 @@ export default function Documents() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <h3 className="font-semibold text-navy-900 text-sm">Documents</h3>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="documents" />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -43,9 +55,9 @@ export default function Documents() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filtered.map((doc, idx) => (
+                                {paged.map((doc, idx) => (
                                     <tr key={doc.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 bg-navy-100 rounded flex items-center justify-center mr-3 shrink-0">
@@ -75,6 +87,7 @@ export default function Documents() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
             </div>
 

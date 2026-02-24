@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockUsers } from '../data/mockData';
-import { PlusIcon, FilterIcon, cn } from '../components/icons/Icons';
+import { PlusIcon, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function UserManagement() {
     const [isAddUserOpen, setIsAddUserOpen] = useState(false);
     const [isRbacOpen, setIsRbacOpen] = useState(false);
     const [filterRole, setFilterRole] = useState('All');
     const roles = ['All', ...new Set(mockUsers.map(u => u.role))];
-    const filteredUsers = filterRole === 'All' ? mockUsers : mockUsers.filter(u => u.role === filterRole);
+    const baseFiltered = filterRole === 'All' ? mockUsers : mockUsers.filter(u => u.role === filterRole);
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+    const exportData = baseFiltered.map(u => ({
+        Name: u.name, Role: u.role, Department: u.department, Email: u.email,
+        MFA: u.mfaEnabled ? 'Enabled' : 'Disabled', 'Last Login': u.lastLogin, Status: u.status,
+    }));
 
     return (
         <AppShell>
@@ -25,13 +32,16 @@ export default function UserManagement() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 className="font-semibold text-navy-900 text-sm">Active Users</h3>
-                        <div className="flex space-x-1">
-                            {roles.map(r => (
-                                <button key={r} onClick={() => setFilterRole(r)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterRole === r ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{r}</button>
-                            ))}
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                        <div className="flex items-center gap-3">
+                            <h3 className="font-semibold text-navy-900 text-sm">Active Users</h3>
+                            <div className="flex space-x-1">
+                                {roles.map(r => (
+                                    <button key={r} onClick={() => setFilterRole(r)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterRole === r ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{r}</button>
+                                ))}
+                            </div>
                         </div>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="users" />
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -48,9 +58,9 @@ export default function UserManagement() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filteredUsers.map((user, idx) => (
+                                {paged.map((user, idx) => (
                                     <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 rounded-full bg-navy-900 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0">
@@ -74,6 +84,7 @@ export default function UserManagement() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
             </div>
 

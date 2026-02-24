@@ -3,6 +3,7 @@ import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { MetricCard } from '../components/ui/MetricCard';
 import { AuthorizationQueueIcon, CheckCircleIcon, AlertIcon, FilterIcon, EyeIcon, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 interface QueueItem {
     id: string;
@@ -73,6 +74,12 @@ export default function AuthorizationQueue() {
     const approvedCount = mockQueueItems.filter(i => i.status === 'Approved').length;
     const rejectedCount = mockQueueItems.filter(i => i.status === 'Rejected').length;
 
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(filteredItems, 10);
+    const exportData = filteredItems.map(i => ({
+        'Request ID': i.id, Type: i.type, Module: i.module, Description: i.description,
+        'Submitted By': i.submittedBy, Date: i.submittedDate, 'Amount (₦)': i.amount || '', Priority: i.priority, Status: i.status,
+    }));
+
     return (
         <AppShell>
             <div className="space-y-6">
@@ -109,6 +116,10 @@ export default function AuthorizationQueue() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <h3 className="font-semibold text-navy-900 text-sm">Authorization Requests</h3>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="authorization_queue" />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -127,9 +138,9 @@ export default function AuthorizationQueue() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filteredItems.map((item, idx) => (
+                                {paged.map((item, idx) => (
                                     <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{item.id}</td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{item.type}</span></td>
                                         <td className="p-4 text-gray-600">{item.module}</td>
@@ -163,6 +174,7 @@ export default function AuthorizationQueue() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
 
                 {/* Detail Side Panel */}

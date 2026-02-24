@@ -1,8 +1,9 @@
 import React from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { mockPerformance } from '../data/mockData';
-import { DownloadIcon, cn } from '../components/icons/Icons';
+import { cn } from '../components/icons/Icons';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function Performance() {
     const benchmarkChartData = mockPerformance.map(p => ({
@@ -13,18 +14,30 @@ export default function Performance() {
         'Benchmark YTD': p.returns.ytd.benchmark,
     }));
 
+    const exportData = mockPerformance.map(p => ({
+        Portfolio: p.portfolioName,
+        'MTD Port.': p.returns.mtd.portfolio, 'MTD Bench.': p.returns.mtd.benchmark,
+        'QTD Port.': p.returns.qtd.portfolio, 'QTD Bench.': p.returns.qtd.benchmark,
+        'YTD Port.': p.returns.ytd.portfolio, 'YTD Bench.': p.returns.ytd.benchmark,
+        '1Y Port.': p.returns.oneYear.portfolio, '1Y Bench.': p.returns.oneYear.benchmark,
+        '3Y Port.': p.returns.threeYear.portfolio, '3Y Bench.': p.returns.threeYear.benchmark,
+    }));
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(mockPerformance, 10);
+
     return (
         <AppShell>
             <div className="space-y-6">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-navy-900">Performance Measurement</h1>
-                    <button className="px-3 py-2 bg-white border border-gray-200 rounded text-gray-600 hover:bg-gray-50 flex items-center text-sm shadow-sm">
-                        <DownloadIcon className="w-4 h-4 mr-2" /> Export Report
-                    </button>
                 </div>
 
                 {/* Performance Table */}
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <h3 className="font-semibold text-navy-900 text-sm">Portfolio Returns</h3>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="performance" />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -47,9 +60,9 @@ export default function Performance() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockPerformance.map((p, idx) => (
+                                {paged.map((p, idx) => (
                                     <tr key={p.portfolioId} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-medium text-navy-900">{p.portfolioName}</td>
                                         {Object.values(p.returns).map((ret, i) => (
                                             <React.Fragment key={i}>
@@ -66,6 +79,7 @@ export default function Performance() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

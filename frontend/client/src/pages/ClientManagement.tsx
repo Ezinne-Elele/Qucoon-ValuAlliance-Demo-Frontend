@@ -11,6 +11,7 @@ import {
     PortfolioIcon, TradeIcon, FeeIcon, DocumentIcon, EyeIcon, cn,
 } from '../components/icons/Icons';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 const PIE_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A', '#3B8266'];
 
@@ -20,7 +21,13 @@ export default function ClientManagement() {
     const [detailTab, setDetailTab] = useState('Overview');
     const totalAum = mockClients.reduce((s, c) => s + c.aum, 0);
     const types = ['All', 'Institutional', 'Corporate', 'Individual'];
-    const filteredClients = filterType === 'All' ? mockClients : mockClients.filter(c => c.type === filterType);
+    const baseFiltered = filterType === 'All' ? mockClients : mockClients.filter(c => c.type === filterType);
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+    const clientExport = baseFiltered.map(c => ({
+        Client: c.name, Type: c.type, Category: c.category,
+        'AUM (₦)': c.aum, KYC: c.kyc, Location: `${c.city}, ${c.state}`, Relationship: c.relationship,
+    }));
 
     const selectedClient = mockClients.find(c => c.id === selectedClientId);
 
@@ -72,13 +79,16 @@ export default function ClientManagement() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 className="font-semibold text-navy-900 text-sm">Client Directory</h3>
-                        <div className="flex space-x-1">
-                            {types.map(type => (
-                                <button key={type} onClick={() => setFilterType(type)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterType === type ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{type}</button>
-                            ))}
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                        <div className="flex items-center gap-3">
+                            <h3 className="font-semibold text-navy-900 text-sm">Client Directory</h3>
+                            <div className="flex space-x-1">
+                                {types.map(type => (
+                                    <button key={type} onClick={() => setFilterType(type)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterType === type ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{type}</button>
+                                ))}
+                            </div>
                         </div>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={clientExport} exportFilename="clients" />
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -96,9 +106,9 @@ export default function ClientManagement() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filteredClients.map((c, idx) => (
+                                {paged.map((c, idx) => (
                                     <tr key={c.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelectedClientId(c.id)}>
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 rounded-full bg-navy-900 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0">{c.name.split(' ').map(n => n[0]).slice(0, 2).join('')}</div>
@@ -124,6 +134,7 @@ export default function ClientManagement() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
             </div>
         </AppShell>
@@ -366,7 +377,10 @@ function PortfoliosTab({ portfolios, positions }: any) {
         <div className="space-y-6">
             {/* Portfolios */}
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                <div className="p-4 border-b border-gray-100 bg-gray-50"><h3 className="font-semibold text-navy-900 text-sm">Portfolios</h3></div>
+                <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <h3 className="font-semibold text-navy-900 text-sm">Portfolios</h3>
+                    <TableToolbar searchValue="" onSearchChange={() => { }} onRefresh={() => { }} exportData={portfolios} exportFilename="client_portfolios" />
+                </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left">
                         <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -401,7 +415,10 @@ function PortfoliosTab({ portfolios, positions }: any) {
 
             {/* Holdings */}
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                <div className="p-4 border-b border-gray-100 bg-gray-50"><h3 className="font-semibold text-navy-900 text-sm">Holdings</h3></div>
+                <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <h3 className="font-semibold text-navy-900 text-sm">Holdings</h3>
+                    <TableToolbar searchValue="" onSearchChange={() => { }} onRefresh={() => { }} exportData={positions} exportFilename="client_holdings" />
+                </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left">
                         <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -444,9 +461,14 @@ function PortfoliosTab({ portfolios, positions }: any) {
 }
 
 function TradesTab({ trades }: any) {
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(trades, 10, ['ticker', 'id']);
+
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-gray-100 bg-gray-50"><h3 className="font-semibold text-navy-900 text-sm">Trade History</h3></div>
+            <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                <h3 className="font-semibold text-navy-900 text-sm">Trade History</h3>
+                <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={trades} exportFilename="client_trades" />
+            </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                     <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -464,9 +486,9 @@ function TradesTab({ trades }: any) {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {trades.map((t: any, idx: number) => (
+                        {paged.map((t: any, idx: number) => (
                             <tr key={t.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                 <td className="p-4 font-mono text-xs font-semibold text-navy-700">{t.id}</td>
                                 <td className="p-4 font-mono text-gray-600">{t.tradeDate}</td>
                                 <td className="p-4 font-bold text-navy-900">{t.ticker}</td>
@@ -481,15 +503,21 @@ function TradesTab({ trades }: any) {
                     </tbody>
                 </table>
             </div>
+            {trades.length > 0 && <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />}
             {trades.length === 0 && <p className="text-gray-400 text-sm p-8 text-center">No trades found for this client.</p>}
         </div>
     );
 }
 
 function FeesTab({ fees }: any) {
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(fees, 10, ['fundName', 'id', 'invoiceNo']);
+
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-gray-100 bg-gray-50"><h3 className="font-semibold text-navy-900 text-sm">Fee Records</h3></div>
+            <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                <h3 className="font-semibold text-navy-900 text-sm">Fee Records</h3>
+                <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={fees} exportFilename="client_fees" />
+            </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                     <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -506,9 +534,9 @@ function FeesTab({ fees }: any) {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {fees.map((f: any, idx: number) => (
+                        {paged.map((f: any, idx: number) => (
                             <tr key={f.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                 <td className="p-4 font-mono text-xs font-semibold text-navy-700">{f.id}</td>
                                 <td className="p-4 text-gray-700">{f.fundName.replace('ValuAlliance ', '')}</td>
                                 <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{f.feeType}</span></td>
@@ -522,15 +550,21 @@ function FeesTab({ fees }: any) {
                     </tbody>
                 </table>
             </div>
+            {fees.length > 0 && <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />}
             {fees.length === 0 && <p className="text-gray-400 text-sm p-8 text-center">No fee records found for this client.</p>}
         </div>
     );
 }
 
 function DocumentsTab({ docs }: any) {
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(docs, 10, ['name']);
+
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-gray-100 bg-gray-50"><h3 className="font-semibold text-navy-900 text-sm">Client Documents</h3></div>
+            <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                <h3 className="font-semibold text-navy-900 text-sm">Client Documents</h3>
+                <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={docs} exportFilename="client_documents" />
+            </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                     <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -546,9 +580,9 @@ function DocumentsTab({ docs }: any) {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {docs.map((d: any, idx: number) => (
+                        {paged.map((d: any, idx: number) => (
                             <tr key={d.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                 <td className="p-4">
                                     <div className="flex items-center">
                                         <div className="w-8 h-8 bg-navy-100 rounded flex items-center justify-center mr-3 shrink-0"><DocumentIcon className="w-4 h-4 text-navy-700" /></div>
@@ -571,6 +605,7 @@ function DocumentsTab({ docs }: any) {
                     </tbody>
                 </table>
             </div>
+            {docs.length > 0 && <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />}
             {docs.length === 0 && <p className="text-gray-400 text-sm p-8 text-center">No documents found for this client.</p>}
         </div>
     );

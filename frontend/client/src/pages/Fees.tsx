@@ -2,20 +2,28 @@ import React, { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockFees, mockFunds, mockClients } from '../data/mockData';
-import { FeeIcon, DownloadIcon, NairaIcon, FilterIcon, PlusIcon } from '../components/icons/Icons';
+import { FeeIcon, NairaIcon, PlusIcon } from '../components/icons/Icons';
 import { MetricCard } from '../components/ui/MetricCard';
 import { cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function Fees() {
     const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
-    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     const [filterStatus, setFilterStatus] = useState('All');
-    const totalFeeRevenue = mockFees.reduce((s, f) => s + (f.monthlyFee || f.feeAmount || 0), 0);
     const paid = mockFees.filter(f => f.status === 'Paid').length;
     const invoiced = mockFees.filter(f => f.status === 'Invoiced').length;
 
     const statuses = ['All', 'Paid', 'Invoiced', 'Calculated'];
-    const filteredFees = filterStatus === 'All' ? mockFees : mockFees.filter(f => f.status === filterStatus);
+    const baseFiltered = filterStatus === 'All' ? mockFees : mockFees.filter(f => f.status === filterStatus);
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+
+    const exportData = baseFiltered.map(f => ({
+        'Fee ID': f.id, Fund: f.fundName, Client: f.clientName, 'Fee Type': f.feeType,
+        Period: f.period, 'Rate (%)': f.rate,
+        'Fee Amount (₦)': f.monthlyFee || f.feeAmount || 0,
+        Invoice: f.invoiceNo, Status: f.status,
+    }));
 
     return (
         <AppShell>
@@ -25,9 +33,6 @@ export default function Fees() {
                     <div className="flex space-x-3">
                         <button onClick={() => setIsInvoiceModalOpen(true)} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 shadow-sm flex items-center">
                             <PlusIcon className="w-4 h-4 mr-2" /> Generate Invoice
-                        </button>
-                        <button onClick={() => setIsExportModalOpen(true)} className="px-3 py-2 bg-white border border-gray-200 rounded text-gray-600 hover:bg-gray-50 flex items-center text-sm shadow-sm">
-                            <DownloadIcon className="w-4 h-4 mr-2" /> Export
                         </button>
                     </div>
                 </div>
@@ -39,13 +44,16 @@ export default function Fees() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 className="font-semibold text-navy-900 text-sm">Fee Records</h3>
-                        <div className="flex space-x-1">
-                            {statuses.map(s => (
-                                <button key={s} onClick={() => setFilterStatus(s)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterStatus === s ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{s}</button>
-                            ))}
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                        <div className="flex items-center gap-3">
+                            <h3 className="font-semibold text-navy-900 text-sm">Fee Records</h3>
+                            <div className="flex space-x-1">
+                                {statuses.map(s => (
+                                    <button key={s} onClick={() => setFilterStatus(s)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterStatus === s ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{s}</button>
+                                ))}
+                            </div>
                         </div>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="fee_records" />
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -64,9 +72,9 @@ export default function Fees() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filteredFees.map((fee, idx) => (
+                                {paged.map((fee, idx) => (
                                     <tr key={fee.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{fee.id}</td>
                                         <td className="p-4 text-gray-700 truncate max-w-[160px]">{fee.fundName.replace('ValuAlliance ', '')}</td>
                                         <td className="p-4 text-gray-700 truncate max-w-[160px]">{fee.clientName}</td>
@@ -83,6 +91,7 @@ export default function Fees() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
             </div>
 
@@ -131,33 +140,6 @@ export default function Fees() {
                         <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
                             <button onClick={() => setIsInvoiceModalOpen(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
                             <button onClick={() => { setIsInvoiceModalOpen(false); alert('Invoice generated and submitted for approval!'); }} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium shadow hover:bg-navy-800">Generate & Submit</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Export Modal */}
-            {isExportModalOpen && (
-                <div className="fixed inset-0 bg-navy-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
-                        <h3 className="text-lg font-bold text-navy-900 mb-4">Export Fee Records</h3>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Format</label>
-                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
-                                    <option>Excel (.xlsx)</option><option>CSV</option><option>PDF</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
-                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
-                                    <option>Current Month</option><option>Last Quarter</option><option>Year to Date</option><option>Custom</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="flex justify-end space-x-3 mt-6">
-                            <button onClick={() => setIsExportModalOpen(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
-                            <button onClick={() => { setIsExportModalOpen(false); alert('Export started! File will be downloaded shortly.'); }} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium shadow hover:bg-navy-800">Export</button>
                         </div>
                     </div>
                 </div>

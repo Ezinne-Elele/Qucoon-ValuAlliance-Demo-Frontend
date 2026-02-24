@@ -4,6 +4,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { MetricCard } from '../components/ui/MetricCard';
 import { mockRegulatorySubmissions } from '../data/mockData';
 import { RegulatoryIcon, AlertIcon, CheckCircleIcon, DownloadIcon, SECLogo, EyeIcon, cn } from '../components/icons/Icons';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function RegulatoryReturns() {
     const [showNewSubmission, setShowNewSubmission] = useState(false);
@@ -20,6 +21,13 @@ export default function RegulatoryReturns() {
 
     // For View Submission — default to first in-progress item
     const urgentSubmission = mockRegulatorySubmissions.find(s => s.status === 'In Progress');
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(mockRegulatorySubmissions, 10);
+    const exportData = mockRegulatorySubmissions.map(rs => ({
+        'Return ID': rs.id, 'Report Name': rs.name, Regulator: rs.regulator,
+        Period: rs.period, 'Due Date': rs.dueDate, Submitted: rs.submittedDate || '',
+        'Prepared By': rs.preparedBy || '', Status: rs.status,
+    }));
 
     return (
         <AppShell>
@@ -53,6 +61,10 @@ export default function RegulatoryReturns() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <h3 className="font-semibold text-navy-900 text-sm">Regulatory Submissions</h3>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="regulatory_returns" />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -70,9 +82,9 @@ export default function RegulatoryReturns() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {mockRegulatorySubmissions.map((rs, idx) => (
+                                {paged.map((rs, idx) => (
                                     <tr key={rs.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{rs.id}</td>
                                         <td className="p-4 font-medium text-navy-900">{rs.name}</td>
                                         <td className="p-4">
@@ -95,6 +107,7 @@ export default function RegulatoryReturns() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
             </div>
 

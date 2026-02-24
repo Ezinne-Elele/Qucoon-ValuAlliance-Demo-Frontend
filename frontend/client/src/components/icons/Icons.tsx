@@ -211,6 +211,27 @@ export const ChevronDownIcon = (props: IconProps) => (
   </BaseIcon>
 );
 
+export const ArrowLeftIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <line x1="19" y1="12" x2="5" y2="12" />
+    <polyline points="12,19 5,12 12,5" />
+  </BaseIcon>
+);
+
+export const TrendingUpIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+    <polyline points="17 6 23 6 23 12" />
+  </BaseIcon>
+);
+
+export const PieChartIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+    <path d="M22 12A10 10 0 0 0 12 2v10z" />
+  </BaseIcon>
+);
+
 export const ArrowUpIcon = (props: IconProps) => (
   <BaseIcon {...props}>
     <line x1="12" y1="19" x2="12" y2="5" />

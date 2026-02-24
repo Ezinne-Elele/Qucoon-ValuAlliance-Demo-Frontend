@@ -5,6 +5,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { mockReconciliationBreaks, mockReconSummary } from '../data/mockData';
 import { ReconciliationIcon, CheckCircleIcon, AlertIcon, RefreshIcon, cn } from '../components/icons/Icons';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
 export default function Reconciliation() {
     const [filterStatus, setFilterStatus] = useState('All');
@@ -13,7 +14,15 @@ export default function Reconciliation() {
     const resolved = mockReconciliationBreaks.filter(b => b.status === 'Resolved').length;
 
     const statuses = ['All', 'Open', 'Under Investigation', 'Resolved'];
-    const filteredBreaks = filterStatus === 'All' ? mockReconciliationBreaks : mockReconciliationBreaks.filter(b => b.status === filterStatus);
+    const baseFiltered = filterStatus === 'All' ? mockReconciliationBreaks : mockReconciliationBreaks.filter(b => b.status === filterStatus);
+
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+
+    const exportData = baseFiltered.map(b => ({
+        'Break ID': b.id, Date: b.date, Portfolio: b.portfolioId, Security: b.security,
+        'Break Type': b.breakType, Difference: b.difference, 'Assigned To': b.assignedTo,
+        'Age (days)': b.ageDays, Priority: b.priority, Status: b.status,
+    }));
 
     return (
         <AppShell>
@@ -36,13 +45,16 @@ export default function Reconciliation() {
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 className="font-semibold text-navy-900 text-sm">Reconciliation Breaks</h3>
-                        <div className="flex space-x-1">
-                            {statuses.map(s => (
-                                <button key={s} onClick={() => setFilterStatus(s)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterStatus === s ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{s}</button>
-                            ))}
+                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                        <div className="flex items-center gap-3">
+                            <h3 className="font-semibold text-navy-900 text-sm">Reconciliation Breaks</h3>
+                            <div className="flex space-x-1">
+                                {statuses.map(s => (
+                                    <button key={s} onClick={() => setFilterStatus(s)} className={cn("px-3 py-1 text-xs font-medium rounded transition-colors", filterStatus === s ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200")}>{s}</button>
+                                ))}
+                            </div>
                         </div>
+                        <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="reconciliation_breaks" />
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
@@ -62,9 +74,9 @@ export default function Reconciliation() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filteredBreaks.map((b, idx) => (
+                                {paged.map((b, idx) => (
                                     <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{b.id}</td>
                                         <td className="p-4 font-mono text-gray-600">{b.date}</td>
                                         <td className="p-4 text-gray-700">{b.portfolioId}</td>
@@ -86,6 +98,7 @@ export default function Reconciliation() {
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
 
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
