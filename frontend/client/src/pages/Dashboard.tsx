@@ -8,40 +8,40 @@ import { PortfolioIcon, UsersIcon, NairaIcon, FundAccountingIcon, AlertIcon, Arr
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export default function Dashboard() {
-  const PIE_COLORS = ['#0C1E35', '#C9A84C', '#254D7A', '#6B7A94'];
+  const PIE_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A'];
 
   return (
     <AppShell>
       <div className="space-y-6">
         {/* Metric Cards Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <MetricCard 
-            label="Assets Under Management" 
-            value={formatNaira(mockDashboardMetrics.totalAum)} 
-            isCurrency 
-            trend={`+₦3.30B MTD (${formatPercent(mockDashboardMetrics.aumGrowthPct)})`} 
-            icon={<PortfolioIcon />} 
+          <MetricCard
+            label="Assets Under Management"
+            value={formatNaira(mockDashboardMetrics.totalAum)}
+            isCurrency
+            trend={`+₦3.30B MTD (${formatPercent(mockDashboardMetrics.aumGrowthPct)})`}
+            icon={<PortfolioIcon />}
           />
-          <MetricCard 
-            label="Active Clients" 
-            value={mockDashboardMetrics.totalClients.toString()} 
-            trend="+2 this quarter" 
-            icon={<UsersIcon />} 
+          <MetricCard
+            label="Active Clients"
+            value={mockDashboardMetrics.totalClients.toString()}
+            trend="+2 this quarter"
+            icon={<UsersIcon />}
           />
-          <MetricCard 
-            label="Year-to-Date Fee Revenue" 
-            value={formatNaira(mockDashboardMetrics.ytdRevenue)} 
-            isCurrency 
-            trend="+18.4% vs prior year" 
-            icon={<NairaIcon />} 
+          <MetricCard
+            label="Year-to-Date Fee Revenue"
+            value={formatNaira(mockDashboardMetrics.ytdRevenue)}
+            isCurrency
+            trend="+18.4% vs prior year"
+            icon={<NairaIcon />}
             iconBg="bg-gold-100 text-gold-600"
           />
-          <MetricCard 
-            label="Active Portfolios" 
-            value={mockDashboardMetrics.activePortfolios.toString()} 
-            trend="Across 4 Funds" 
+          <MetricCard
+            label="Active Portfolios"
+            value={mockDashboardMetrics.activePortfolios.toString()}
+            trend="Across 4 Funds"
             trendPositive={true}
-            icon={<FundAccountingIcon />} 
+            icon={<FundAccountingIcon />}
           />
         </div>
 
@@ -70,23 +70,23 @@ export default function Dashboard() {
                 <AreaChart data={mockAumTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorAum" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#1E3A5F" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#1E3A5F" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#22795F" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#22795F" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dy={10} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280', fontFamily: 'JetBrains Mono' }} />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     itemStyle={{ fontFamily: 'JetBrains Mono' }}
                   />
-                  <Area type="monotone" dataKey="aum" name="AUM (₦B)" stroke="#1E3A5F" strokeWidth={3} fillOpacity={1} fill="url(#colorAum)" />
+                  <Area type="monotone" dataKey="aum" name="AUM (₦B)" stroke="#22795F" strokeWidth={3} fillOpacity={1} fill="url(#colorAum)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 flex flex-col">
             <h3 className="text-base font-semibold text-navy-900 mb-4">AUM by Fund</h3>
             <div className="flex-1 relative min-h-0">
@@ -136,14 +136,16 @@ export default function Dashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-white text-left text-gray-500 border-b border-gray-100">
+                    <th className="p-3 font-medium w-10">S/N</th>
                     <th className="p-3 font-medium">Fund</th>
                     <th className="p-3 font-medium text-right">NAV (₦)</th>
                     <th className="p-3 font-medium text-right">YTD</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {mockFunds.map(fund => (
+                  {mockFunds.map((fund, idx) => (
                     <tr key={fund.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="p-3 text-gray-400 text-xs font-mono">{idx + 1}</td>
                       <td className="p-3 font-medium text-navy-900 truncate max-w-[150px]">{fund.name.replace('ValuAlliance ', '')}</td>
                       <td className="p-3 text-right font-mono">{fund.nav.toFixed(2)}</td>
                       <td className="p-3 text-right font-mono font-medium">
@@ -168,6 +170,7 @@ export default function Dashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-white text-left text-gray-500 border-b border-gray-100">
+                    <th className="p-3 font-medium w-10">S/N</th>
                     <th className="p-3 font-medium">Trade ID</th>
                     <th className="p-3 font-medium">Security</th>
                     <th className="p-3 font-medium">Side</th>
@@ -176,8 +179,9 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {mockTrades.slice(0, 5).map(trade => (
+                  {mockTrades.slice(0, 5).map((trade, idx) => (
                     <tr key={trade.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="p-3 text-gray-400 text-xs font-mono">{idx + 1}</td>
                       <td className="p-3 font-mono text-xs text-navy-700">{trade.id}</td>
                       <td className="p-3 font-medium">{trade.ticker}</td>
                       <td className="p-3">

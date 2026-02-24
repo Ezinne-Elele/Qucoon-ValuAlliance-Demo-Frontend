@@ -6,6 +6,7 @@ import { PlusIcon, DownloadIcon, EyeIcon, DocumentIcon, cn } from '../components
 
 export default function Documents() {
     const [filter, setFilter] = useState('All');
+    const [isUploadOpen, setIsUploadOpen] = useState(false);
     const types = ['All', 'Mandate', 'Client Statement', 'Regulatory Filing', 'Trade Confirmation'];
     const filtered = filter === 'All' ? mockDocuments : mockDocuments.filter(d => d.type === filter);
 
@@ -14,7 +15,7 @@ export default function Documents() {
             <div className="space-y-6">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-navy-900">Document Management</h1>
-                    <button className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 flex items-center shadow-sm">
+                    <button onClick={() => setIsUploadOpen(true)} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 flex items-center shadow-sm">
                         <PlusIcon className="w-4 h-4 mr-2" /> Upload Document
                     </button>
                 </div>
@@ -30,6 +31,7 @@ export default function Documents() {
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">Document Name</th>
                                     <th className="p-4 font-medium">Type</th>
                                     <th className="p-4 font-medium">Version</th>
@@ -41,8 +43,9 @@ export default function Documents() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filtered.map(doc => (
+                                {filtered.map((doc, idx) => (
                                     <tr key={doc.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 bg-navy-100 rounded flex items-center justify-center mr-3 shrink-0">
@@ -74,6 +77,50 @@ export default function Documents() {
                     </div>
                 </div>
             </div>
+
+            {/* Upload Document Modal */}
+            {isUploadOpen && (
+                <div className="fixed inset-0 bg-navy-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col">
+                        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                            <h3 className="text-lg font-bold text-navy-900">Upload Document</h3>
+                            <button onClick={() => setIsUploadOpen(false)} className="text-gray-400 hover:text-gray-600 font-bold">&times;</button>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Document Type *</label>
+                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                    <option>Select Type...</option>
+                                    <option>Mandate</option><option>Client Statement</option><option>Regulatory Filing</option><option>Trade Confirmation</option><option>KYC Document</option><option>Board Resolution</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Related Module</label>
+                                <select className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none">
+                                    <option>Select Module...</option>
+                                    <option>Portfolio</option><option>Trades</option><option>Fund Accounting</option><option>Risk & Compliance</option><option>Client Management</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="Document description..." />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">File *</label>
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gold-500 transition-colors cursor-pointer">
+                                    <DocumentIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                    <p className="text-sm text-gray-500">Drag & drop or <span className="text-gold-600 font-medium">browse</span> to upload</p>
+                                    <p className="text-xs text-gray-400 mt-1">PDF, DOC, XLS, JPG up to 25MB</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
+                            <button onClick={() => setIsUploadOpen(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
+                            <button onClick={() => { setIsUploadOpen(false); alert('Document uploaded successfully!'); }} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium shadow hover:bg-navy-800">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppShell>
     );
 }

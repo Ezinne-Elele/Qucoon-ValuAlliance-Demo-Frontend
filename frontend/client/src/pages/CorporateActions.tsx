@@ -21,7 +21,7 @@ export default function CorporateActions() {
                 <div className="flex space-x-1 border-b border-gray-200 overflow-x-auto">
                     {tabs.map(tab => (
                         <button key={tab} onClick={() => setFilter(tab)} className={cn("px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap", filter === tab ? "border-gold-500 text-navy-900" : "border-transparent text-gray-500 hover:text-navy-700")}>{tab}
-                            <span className="ml-1.5 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
+                            <span className="ml-1.5 bg-gray-100 text-gray-600 py-0.5 px-2 rounded text-xs">
                                 {tab === 'All' ? mockCorporateActions.length : tab === 'Upcoming' ? mockCorporateActions.filter(a => a.status === 'Upcoming').length : mockCorporateActions.filter(a => a.status === 'Processed').length}
                             </span>
                         </button>
@@ -33,6 +33,7 @@ export default function CorporateActions() {
                         <table className="w-full text-sm text-left">
                             <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
                                 <tr>
+                                    <th className="p-4 font-medium w-12">S/N</th>
                                     <th className="p-4 font-medium">Action ID</th>
                                     <th className="p-4 font-medium">Security</th>
                                     <th className="p-4 font-medium">Type</th>
@@ -44,8 +45,9 @@ export default function CorporateActions() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {filtered.map(ca => (
+                                {filtered.map((ca, idx) => (
                                     <tr key={ca.id} className={cn("hover:bg-gray-50 transition-colors", ca.status === 'Upcoming' ? "bg-gold-100/50" : "")}>
+                                        <td className="p-4 text-gray-400 text-xs font-mono">{idx + 1}</td>
                                         <td className="p-4 font-mono text-xs font-semibold text-navy-700">{ca.id}</td>
                                         <td className="p-4 font-bold text-navy-900">{ca.ticker}</td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{ca.type}</span></td>

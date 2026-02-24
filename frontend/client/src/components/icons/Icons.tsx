@@ -275,15 +275,35 @@ export const EyeIcon = (props: IconProps) => (
   </BaseIcon>
 );
 
+export const AuthorizationQueueIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M8 8h8" />
+    <path d="M8 12h8" />
+    <path d="M8 16h5" />
+    <circle cx="17" cy="17" r="3" />
+    <polyline points="16,17 17,18 19,16" />
+  </BaseIcon>
+);
+
+export const ClientManagementIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 00-3-3.87" />
+    <path d="M16 3.13a4 4 0 010 7.75" />
+  </BaseIcon>
+);
+
 export const NairaIcon = ({ className, ...props }: IconProps) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 24 24" 
-    className={cn("w-4 h-4 shrink-0 inline-block align-text-bottom", className)} 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    className={cn("w-4 h-4 shrink-0 inline-block align-text-bottom", className)}
     {...props}
   >
-    <path d="M7 20V4m10 16V4M4 10h16M4 14h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-    <path d="M7 4L17 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    <path d="M7 20V4m10 16V4M4 10h16M4 14h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M7 4L17 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
   </svg>
 );
 
