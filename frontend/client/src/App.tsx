@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Trades from "./pages/Trades";
 import Portfolio from "./pages/Portfolio";
+import PortfolioDetail from "./pages/PortfolioDetail";
 import Settlement from "./pages/Settlement";
 import Valuation from "./pages/Valuation";
 import FundAccounting from "./pages/FundAccounting";
@@ -12,6 +13,7 @@ import RiskCompliance from "./pages/RiskCompliance";
 import RegulatoryReturns from "./pages/RegulatoryReturns";
 import Performance from "./pages/Performance";
 import ClientManagement from "./pages/ClientManagement";
+import ClientDetail from "./pages/ClientDetail";
 import UserManagement from "./pages/UserManagement";
 import AuditLog from "./pages/AuditLog";
 import Notifications from "./pages/Notifications";
@@ -26,6 +28,7 @@ function Router() {
       <Route path="/" component={() => <Redirect to="/dashboard" />} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/portfolio/:id" component={PortfolioDetail} />
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/trades" component={Trades} />
       <Route path="/settlement" component={Settlement} />
@@ -36,6 +39,7 @@ function Router() {
       <Route path="/risk-compliance" component={RiskCompliance} />
       <Route path="/regulatory-returns" component={RegulatoryReturns} />
       <Route path="/performance" component={Performance} />
+      <Route path="/client-management/:id" component={ClientDetail} />
       <Route path="/client-management" component={ClientManagement} />
       <Route path="/client-reports" component={() => <Redirect to="/client-management" />} />
       <Route path="/users" component={UserManagement} />

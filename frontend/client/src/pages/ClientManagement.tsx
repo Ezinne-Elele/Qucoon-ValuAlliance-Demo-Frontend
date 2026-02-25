@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
+import { useLocation } from 'wouter';
 import { AppShell } from '../components/layout/AppShell';
 import { StatusBadge } from '../components/ui/StatusBadge';
+import { mockClients, mockAumTrend } from '../data/mockData';
 import {
-    mockClients, mockAumTrend, mockClientContacts, mockClientMandates, mockClientAumHistory,
-    getClientPortfolios, getClientTrades, getClientPositions, getClientFees, getClientDocuments,
-} from '../data/mockData';
-import {
-    ClientManagementIcon, UsersIcon, NairaIcon, DownloadIcon,
-    PortfolioIcon, TradeIcon, FeeIcon, DocumentIcon, EyeIcon,
-    MoreVerticalIcon, ChevronRightIcon, TrendingUpIcon, PieChartIcon, cn
+    TrendingUpIcon, cn
 } from '../components/icons/Icons';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 import { ModuleHeader } from '../components/layout/ModuleHeader';
 
-const PIE_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A', '#3B8266'];
-
 export default function ClientManagement() {
+    const [, navigate] = useLocation();
     const [filterType, setFilterType] = useState('All');
-    const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
     const totalAum = mockClients.reduce((s, c) => s + c.aum, 0);
     const types = ['All', 'Institutional', 'Corporate', 'Individual'];
     const baseFiltered = filterType === 'All' ? mockClients : mockClients.filter(c => c.type === filterType);
@@ -28,8 +22,6 @@ export default function ClientManagement() {
         Client: c.name, Type: c.type, Category: c.category,
         'AUM (₦)': c.aum, KYC: c.kyc, Location: `${c.city}, ${c.state}`, Relationship: c.relationship,
     }));
-
-    const selectedClient = mockClients.find(c => c.id === selectedClientId);
 
     const clientMetrics = [
         { label: 'Total Clients', value: mockClients.length.toString(), trend: '+2', isPositive: true },
@@ -192,19 +184,11 @@ export default function ClientManagement() {
                                 {paged.map((c, idx) => (
                                     <tr
                                         key={c.id}
-                                        className={cn(
-                                            "cursor-pointer group hover:bg-gray-50/50 transition-colors",
-                                            selectedClientId === c.id && "bg-navy-50/40 is-selected"
-                                        )}
-                                        onClick={() => setSelectedClientId(c.id)}
+                                        className="cursor-pointer group hover:bg-gray-50/50 transition-colors"
+                                        onClick={() => navigate(`/client-management/${c.id}`)}
                                     >
                                         <td className="text-center">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td>
-                                            <div>
-                                                <p>{c.name}</p>
-                                                <p className="text-[10px] text-gray-400">{c.id}</p>
-                                            </div>
-                                        </td>
+                                        <td>{c.name}</td>
                                         <td>{c.type}</td>
                                         <td>{c.category}</td>
                                         <td className="text-right font-mono">{(c.aum / 1e9).toFixed(1)}B</td>
@@ -219,183 +203,6 @@ export default function ClientManagement() {
                     <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
             </div>
-
-            {/* Client Detail Drawer */}
-            {selectedClient && (
-                <ClientDetailDrawer
-                    client={selectedClient}
-                    onClose={() => setSelectedClientId(null)}
-                />
-            )}
         </AppShell>
-    );
-}
-
-function ClientDetailDrawer({ client, onClose }: { client: any, onClose: () => void }) {
-    const [detailTab, setDetailTab] = useState('Overview');
-    const tabs = ['Overview', 'Portfolios', 'Activity', 'Documents'];
-
-    const portfolios = getClientPortfolios(client.id);
-    const trades = getClientTrades(client.id);
-    const positions = getClientPositions(client.id);
-    const docs = getClientDocuments(client.id);
-    const contacts = mockClientContacts[client.id] || [];
-
-    return (
-        <div className="fixed inset-y-0 right-0 w-[720px] glass-panel shadow-2xl border-l border-white/20 z-50 flex flex-col animate-in slide-in-from-right duration-500">
-            <div className="px-8 py-6 border-b border-gray-100 bg-white/40 backdrop-blur-xl flex justify-between items-center shrink-0">
-                <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-xl bg-navy-900 text-white flex items-center justify-center font-bold text-sm mr-4 shadow-lg">{client.name.split(' ').map((n: string) => n[0]).slice(0, 2).join('')}</div>
-                    <div>
-                        <h3 className="text-xl font-bold text-navy-900 tracking-tight uppercase">{client.name}</h3>
-                        <div className="flex items-center space-x-2 mt-1">
-                            <span className="text-[10px] font-bold text-gold-600 bg-gold-50 px-1.5 py-0.5 rounded">{client.id}</span>
-                            <span className="text-gray-300 text-[10px]">|</span>
-                            <span className="text-[10px] font-bold text-navy-700 uppercase">{client.type}</span>
-                            <span className="text-gray-300 text-[10px]">|</span>
-                            <StatusBadge status={client.relationship} />
-                        </div>
-                    </div>
-                </div>
-                <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-navy-900 transition-all text-2xl font-light">&times;</button>
-            </div>
-
-            <div className="flex space-x-8 px-8 border-b border-gray-100 bg-white/30 backdrop-blur-md shrink-0">
-                {tabs.map(tab => (
-                    <button
-                        key={tab}
-                        onClick={() => setDetailTab(tab)}
-                        className={cn(
-                            "py-4 text-[11px] font-bold uppercase tracking-widest transition-all border-b-2",
-                            detailTab === tab ? "border-navy-900 text-navy-900" : "border-transparent text-gray-400 hover:text-navy-700"
-                        )}
-                    >
-                        {tab}
-                    </button>
-                ))}
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
-                {detailTab === 'Overview' && (
-                    <div className="space-y-8">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-white/60 p-5 rounded-2xl border border-white/40 shadow-sm backdrop-blur-sm">
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 flex items-center"><PortfolioIcon className="w-3.5 h-3.5 mr-2" /> Financial Status</p>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between"><span className="text-xs text-gray-500 font-medium">Aggregate AUM</span><span className="font-mono text-navy-900">₦{(client.aum / 1e9).toFixed(2)}B</span></div>
-                                    <div className="flex justify-between"><span className="text-xs text-gray-500 font-medium">YTD Contribution</span><span className="font-mono text-success">+₦245M</span></div>
-                                    <div className="flex justify-between"><span className="text-xs text-gray-500 font-medium">Mandates</span><span className="text-navy-900">{portfolios.length} Active</span></div>
-                                </div>
-                            </div>
-                            <div className="bg-white/60 p-5 rounded-2xl border border-white/40 shadow-sm backdrop-blur-sm">
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 flex items-center"><ClientManagementIcon className="w-3.5 h-3.5 mr-2" /> Risk Profile</p>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between"><span className="text-xs text-gray-500 font-medium">Risk Rating</span><StatusBadge status={client.riskRating} /></div>
-                                    <div className="flex justify-between"><span className="text-xs text-gray-500 font-medium">KYC Status</span><StatusBadge status={client.kyc} /></div>
-                                    <div className="flex justify-between"><span className="text-xs text-gray-500 font-medium">PEP Check</span><span className="text-[10px] font-bold text-success-bg px-1.5 py-0.5 rounded text-success">CLEARED</span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h4 className="text-[12px] font-bold text-navy-900 uppercase tracking-widest">Key Contacts</h4>
-                            <div className="grid grid-cols-2 gap-4">
-                                {contacts.slice(0, 2).map((c: any, i: number) => (
-                                    <div key={i} className="bg-navy-900 text-white rounded-2xl p-5 shadow-lg relative overflow-hidden group">
-                                        <div className="relative z-10">
-                                            <p className="font-bold text-sm mb-1">{c.name}</p>
-                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight mb-4">{c.role}</p>
-                                            <p className="text-[11px] font-mono opacity-80">{c.email}</p>
-                                        </div>
-                                        <div className="absolute right-0 bottom-0 p-4 opacity-10 group-hover:scale-125 transition-transform">
-                                            <UsersIcon className="w-12 h-12" />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="bg-white/40 p-6 rounded-2xl border border-white/40 backdrop-blur-md">
-                            <h4 className="text-[12px] font-bold text-navy-900 uppercase tracking-widest mb-4">AUM Attribution</h4>
-                            <div className="h-64">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={portfolios.map(p => ({ name: p.name, value: p.aum }))}
-                                            innerRadius={70}
-                                            outerRadius={90}
-                                            paddingAngle={4}
-                                            dataKey="value"
-                                        >
-                                            {portfolios.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
-                                        </Pie>
-                                        <Tooltip />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {detailTab === 'Portfolios' && (
-                    <div className="space-y-6">
-                        <h4 className="text-[12px] font-bold text-navy-900 uppercase tracking-widest">Client Portfolios</h4>
-                        <div className="table-datagrid-container border-white/20 bg-white/20">
-                            <table className="table-datagrid density-compact">
-                                <thead>
-                                    <tr>
-                                        <th>Portfolio Name</th>
-                                        <th>Asset Class</th>
-                                        <th className="text-right">AUM (₦)</th>
-                                        <th className="text-right">Return</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {portfolios.map((p, i) => (
-                                        <tr key={i} className="hover:bg-white/40">
-                                            <td>{p.name}</td>
-                                            <td>{p.assetClass}</td>
-                                            <td className="text-right font-mono">{(p.aum / 1e9).toFixed(2)}B</td>
-                                            <td className="text-right font-mono">
-                                                <span className="text-success">+{p.ytdReturn}%</span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
-
-                {detailTab === 'Documents' && (
-                    <div className="grid grid-cols-1 gap-3">
-                        {docs.map((d, i) => (
-                            <div key={i} className="flex items-center justify-between p-4 bg-white/60 rounded-xl border border-white/60 hover:border-gold-500/50 transition-all group">
-                                <div className="flex items-center">
-                                    <div className="w-10 h-10 bg-navy-900/5 rounded-lg flex items-center justify-center mr-4 group-hover:bg-navy-900 transition-colors">
-                                        <DocumentIcon className="w-5 h-5 text-navy-900 group-hover:text-white transition-colors" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-bold text-navy-900 uppercase tracking-tight">{d.name}</p>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase">{d.type} · Ver {d.version}</p>
-                                    </div>
-                                </div>
-                                <button className="p-2 text-gray-400 hover:text-navy-900 transition-colors">
-                                    <DownloadIcon className="w-5 h-5" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            <div className="p-8 border-t border-gray-100 bg-white/40 backdrop-blur-xl flex justify-between items-center shrink-0">
-                <button className="text-danger text-xs font-bold uppercase tracking-widest hover:underline transition-all">Suspend Mandate</button>
-                <div className="flex space-x-3">
-                    <button onClick={onClose} className="px-6 py-3 bg-gray-100 text-gray-600 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-all">Close</button>
-                    <button className="px-8 py-3 bg-navy-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-xl hover:shadow-2xl transition-all">Modify Relationship</button>
-                </div>
-            </div>
-        </div>
     );
 }

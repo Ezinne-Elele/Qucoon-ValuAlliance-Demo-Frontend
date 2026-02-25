@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'wouter';
 import { AppShell } from '../components/layout/AppShell';
 import { mockPortfolios, mockFunds, mockSecurities, mockClients, mockPositions } from '../data/mockData';
 import { PlusIcon, NGXLogo, FMDQLogo, CBNLogo, NairaIcon, EyeIcon, ArrowLeftIcon, PortfolioIcon, TrendingUpIcon, PieChartIcon, ChevronRightIcon } from '../components/icons/Icons';
@@ -8,15 +9,12 @@ import { TableToolbar, TablePagination, useTableControls } from '../components/u
 import { ModuleHeader } from '../components/layout/ModuleHeader';
 
 export default function Portfolio() {
+  const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState('Portfolios');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterAssetClass, setFilterAssetClass] = useState('All');
-  const [selectedPortfolioId, setSelectedPortfolioId] = useState<string | null>(null);
   const tabs = ['Portfolios', 'Funds', 'Securities Master'];
-
-  const selectedPortfolio = mockPortfolios.find(p => p.id === selectedPortfolioId);
-  const portfolioPositions = selectedPortfolioId ? mockPositions.filter(pos => pos.portfolioId === selectedPortfolioId) : [];
 
   const assetClasses = ['All', ...Array.from(new Set(mockPortfolios.map(p => p.assetClass)))];
   const statuses = ['All', 'Active', 'Inactive'];
@@ -129,7 +127,7 @@ export default function Portfolio() {
                 </thead>
                 <tbody>
                   {portCtrl.paged.map((p, idx) => (
-                    <tr key={p.id} className={cn("hover:bg-gray-50/50 transition-colors cursor-pointer group", selectedPortfolioId === p.id && "bg-navy-50/40")} onClick={() => setSelectedPortfolioId(p.id)}>
+                    <tr key={p.id} className="hover:bg-gray-50/50 transition-colors cursor-pointer group" onClick={() => navigate(`/portfolio/${p.id}`)}>
                       <td className="text-center">{(portCtrl.page - 1) * portCtrl.pageSize + idx + 1}</td>
                       <td>{p.id}</td>
                       <td>{p.name}</td>
@@ -151,14 +149,6 @@ export default function Portfolio() {
         </div>
       )}
 
-      {/* Portfolio Assets Side Panel */}
-      {selectedPortfolio && (
-        <PortfolioAssetPanel
-          portfolio={selectedPortfolio}
-          positions={portfolioPositions}
-          onClose={() => setSelectedPortfolioId(null)}
-        />
-      )}
 
       {activeTab === 'Funds' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -330,109 +320,4 @@ export default function Portfolio() {
   );
 }
 
-// =================================================================
-// PORTFOLIO ASSET PANEL
-// =================================================================
-function PortfolioAssetPanel({ portfolio, positions, onClose }: { portfolio: any, positions: any[], onClose: () => void }) {
-  const { search, setSearch, page, setPage, paged, totalItems, pageSize, density, setDensity } = useTableControls(positions, 8, ['ticker']);
-  const exportData = positions.map(p => ({
-    Ticker: p.ticker, Quantity: p.quantity || p.faceValue, 'Avg Cost': p.avgCost, 'Curr Price': p.currentPrice,
-    'Market Value': p.marketValue, 'Unrealised PnL': p.unrealisedPnL, 'Weight %': p.weight
-  }));
 
-  return (
-    <div className="fixed inset-y-0 right-0 w-[680px] glass-panel shadow-2xl border-l border-white/20 z-40 flex flex-col animate-in slide-in-from-right duration-500">
-      <div className="px-8 py-6 border-b border-gray-100 bg-white/40 flex justify-between items-center backdrop-blur-xl">
-        <div>
-          <h3 className="text-xl font-bold text-navy-900 tracking-tight">{portfolio.name}</h3>
-          <p className="text-[11px] text-gold-600 font-mono mt-1 font-bold space-x-2 uppercase">
-            <span>{portfolio.id}</span>
-            <span className="text-gray-300">|</span>
-            <span>{portfolio.assetClass}</span>
-            <span className="text-gray-300">|</span>
-            <span>PM: {portfolio.manager}</span>
-          </p>
-        </div>
-        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-navy-900 transition-all text-2xl font-light">&times;</button>
-      </div>
-
-      <div className="p-8 overflow-y-auto flex-1 space-y-8 custom-scrollbar">
-        {/* Summary Mini Cards */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/40 backdrop-blur-sm">
-            <p className="text-[10px] text-gray-400 uppercase font-bold mb-2 flex items-center tracking-widest"><PortfolioIcon className="w-3 h-3 mr-1.5" /> Mandate AUM</p>
-            <p className="font-mono font-bold text-navy-900 text-sm">₦{portfolio.aum.toLocaleString()}</p>
-          </div>
-          <div className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/40 backdrop-blur-sm">
-            <p className="text-[10px] text-gray-400 uppercase font-bold mb-2 flex items-center tracking-widest"><TrendingUpIcon className="w-3 h-3 mr-1.5" /> Return YTD</p>
-            <p className={cn("font-mono font-bold text-sm", portfolio.ytdReturn >= 0 ? "text-success" : "text-danger")}>
-              {portfolio.ytdReturn > 0 ? '+' : ''}{portfolio.ytdReturn}%
-            </p>
-          </div>
-          <div className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/40 backdrop-blur-sm">
-            <p className="text-[10px] text-gray-400 uppercase font-bold mb-2 flex items-center tracking-widest"><PieChartIcon className="w-3 h-3 mr-1.5" /> Sector Focus</p>
-            <p className="font-bold text-navy-900 text-[11px] uppercase truncate">{portfolio.assetClass}</p>
-          </div>
-        </div>
-
-        {/* Assets Table */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center px-1">
-            <h4 className="text-sm font-bold text-navy-900 uppercase tracking-widest">Holdings Blotter</h4>
-            <TableToolbar
-              searchValue={search}
-              onSearchChange={setSearch}
-              onRefresh={() => { }}
-              exportData={exportData}
-              exportFilename={`${portfolio.id}_holdings`}
-              density={density}
-              onDensityChange={setDensity}
-            />
-          </div>
-
-          <div className="table-datagrid-container border-white/30 bg-white/30">
-            <table className={cn("table-datagrid", `density-${density}`)}>
-              <thead>
-                <tr>
-                  <th>Asset</th>
-                  <th className="text-right w-32">Qty</th>
-                  <th className="text-right w-36">Mkt Value</th>
-                  <th className="text-right w-32">P&L</th>
-                  <th className="text-right w-32">Weight</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paged.length > 0 ? paged.map((pos) => (
-                  <tr key={pos.id} className="hover:bg-white/50 transition-colors">
-                    <td>{pos.ticker}</td>
-                    <td className="text-right font-mono">{(pos.quantity || pos.faceValue).toLocaleString()}</td>
-                    <td className="text-right font-mono">₦{pos.marketValue.toLocaleString()}</td>
-                    <td className="text-right font-mono">
-                      <span className={pos.unrealisedPnL >= 0 ? "text-success" : "text-danger"}>
-                        {pos.unrealisedPnL > 0 ? '+' : ''}{pos.unrealisedPnL.toLocaleString()}
-                      </span>
-                    </td>
-                    <td className="text-right font-mono">{pos.weight}%</td>
-                  </tr>
-                )) : (
-                  <tr><td colSpan={5} className="p-8 text-center text-gray-400 italic font-medium">No active holdings found</td></tr>
-                )}
-              </tbody>
-            </table>
-            <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
-          </div>
-        </div>
-
-        {/* Mandate Notes */}
-        <div className="bg-navy-900/5 rounded-2xl p-6 border border-navy-900/10 backdrop-blur-sm">
-          <h4 className="text-[10px] font-bold text-navy-900 uppercase tracking-widest mb-3">Portfolio Mandate</h4>
-          <p className="text-[12px] text-navy-800 leading-relaxed font-medium italic opacity-80">"Investment mandate focuses on {portfolio.assetClass} assets with a long-term capital appreciation objective. Execution restricted to approved broker lists and risk limits. Benchmark: {portfolio.benchmark}."</p>
-        </div>
-      </div>
-
-      <div className="p-6 border-t border-gray-100 bg-white/40 backdrop-blur-xl flex justify-end">
-        <button onClick={onClose} className="px-8 py-3 bg-navy-900 text-white rounded-xl text-[13px] font-bold shadow-xl hover:shadow-2xl hover:translate-y-[-1px] transition-all">Dismiss Details</button>
-      </div>
-    </div>
-  );
-}
