@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SearchIcon, RefreshIcon, DownloadIcon, cn } from '../icons/Icons';
+import {
+    SearchIcon, RefreshIcon, DownloadIcon, FilterIcon,
+    ArrowUpDownIcon, ColumnsIcon, MaximizeIcon, cn
+} from '../icons/Icons';
 
 /* ───────────────────────────────────────────────
-   TableToolbar — search, refresh, export
+   TableToolbar — search, refresh, export, filters
    ─────────────────────────────────────────────── */
 interface TableToolbarProps {
     searchValue: string;
@@ -12,19 +15,28 @@ interface TableToolbarProps {
     exportData: Record<string, any>[];
     /** Filename without extension */
     exportFilename?: string;
+    /** Density state */
+    density?: 'compact' | 'default' | 'tall';
+    onDensityChange?: (d: 'compact' | 'default' | 'tall') => void;
     /** Optional slot for extra left-side content */
     children?: React.ReactNode;
 }
 
-export function TableToolbar({ searchValue, onSearchChange, onRefresh, exportData, exportFilename = 'export', children }: TableToolbarProps) {
+export function TableToolbar({
+    searchValue, onSearchChange, onRefresh, exportData,
+    exportFilename = 'export', density = 'default', onDensityChange, children
+}: TableToolbarProps) {
     const [spinning, setSpinning] = useState(false);
     const [exportOpen, setExportOpen] = useState(false);
+    const [densityOpen, setDensityOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const densityRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown on outside click
     useEffect(() => {
         const handler = (e: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setExportOpen(false);
+            if (densityRef.current && !densityRef.current.contains(e.target as Node)) setDensityOpen(false);
         };
         document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
@@ -59,9 +71,7 @@ export function TableToolbar({ searchValue, onSearchChange, onRefresh, exportDat
         let xml = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>';
         xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
         xml += '<Worksheet ss:Name="Sheet1"><Table>';
-        // Header row
         xml += '<Row>' + headers.map(h => `<Cell><Data ss:Type="String">${escXml(h)}</Data></Cell>`).join('') + '</Row>';
-        // Data rows
         exportData.forEach(row => {
             xml += '<Row>' + headers.map(h => {
                 const val = row[h] ?? '';
@@ -78,18 +88,7 @@ export function TableToolbar({ searchValue, onSearchChange, onRefresh, exportDat
     const exportPDF = () => {
         if (!exportData.length) return;
         const headers = Object.keys(exportData[0]);
-        let html = `<html><head><title>${exportFilename}</title>
-        <style>body{font-family:Arial,sans-serif;padding:20px;font-size:11px}
-        table{width:100%;border-collapse:collapse}
-        th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}
-        th{background:#0E4535;color:#fff;font-weight:600}
-        tr:nth-child(even){background:#f9f9f9}
-        h2{color:#0E4535;margin-bottom:4px}
-        .meta{color:#666;font-size:10px;margin-bottom:16px}
-        </style></head><body>
-        <h2>${exportFilename.replace(/_/g, ' ')}</h2>
-        <p class="meta">Generated: ${new Date().toLocaleString()} • ${exportData.length} records</p>
-        <table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+        let html = `<html><head><title>${exportFilename}</title><style>body{font-family:Arial,sans-serif;padding:20px;font-size:11px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}th{background:#0E4535;color:#fff;font-weight:600}tr:nth-child(even){background:#f9f9f9}h2{color:#0E4535;margin-bottom:4px}.meta{color:#666;font-size:10px;margin-bottom:16px}</style></head><body><h2>${exportFilename.replace(/_/g, ' ')}</h2><p class="meta">Generated: ${new Date().toLocaleString()} • ${exportData.length} records</p><table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
         exportData.forEach(row => {
             html += '<tr>' + headers.map(h => {
                 const val = row[h] ?? '';
@@ -98,66 +97,105 @@ export function TableToolbar({ searchValue, onSearchChange, onRefresh, exportDat
         });
         html += '</tbody></table></body></html>';
         const win = window.open('', '_blank');
-        if (win) {
-            win.document.write(html);
-            win.document.close();
-            setTimeout(() => { win.print(); }, 400);
-        }
+        if (win) { win.document.write(html); win.document.close(); setTimeout(() => { win.print(); }, 400); }
         setExportOpen(false);
     };
 
     return (
         <div className="flex items-center gap-2 flex-wrap">
             {children}
-            {/* Search */}
-            <div className="relative flex-1 min-w-[180px] max-w-xs">
-                <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+
+            {/* Search — Refined to look like tablecn */}
+            <div className="relative flex-1 min-w-[200px] max-w-xs group">
+                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 group-focus-within:text-navy-900 transition-colors" />
                 <input
                     type="text"
                     value={searchValue}
                     onChange={e => onSearchChange(e.target.value)}
-                    placeholder="Search…"
-                    className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-navy-500 focus:border-navy-500 transition-shadow placeholder-gray-400"
+                    placeholder="Filter records..."
+                    className="w-full pl-9 pr-8 py-2 text-[13px] border border-gray-100 rounded-lg bg-gray-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-navy-900/5 focus:border-navy-900 transition-all placeholder:text-gray-400 font-medium"
                 />
                 {searchValue && (
-                    <button onClick={() => onSearchChange('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs">✕</button>
+                    <button onClick={() => onSearchChange('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-600">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
                 )}
             </div>
 
-            {/* Refresh */}
-            <button
-                onClick={handleRefresh}
-                title="Refresh"
-                className="p-1.5 rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-navy-700 transition-colors"
-            >
-                <RefreshIcon className={cn("w-3.5 h-3.5 transition-transform", spinning && "animate-spin")} />
-            </button>
-
-            {/* Export dropdown */}
-            <div className="relative" ref={dropdownRef}>
-                <button
-                    onClick={() => setExportOpen(!exportOpen)}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium border border-gray-200 rounded bg-white text-gray-600 hover:bg-gray-50 transition-colors"
-                >
-                    <DownloadIcon className="w-3.5 h-3.5" /> Export
-                    <svg className={cn("w-3 h-3 transition-transform", exportOpen && "rotate-180")} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
+            {/* Functional Triggers (Grouped) */}
+            <div className="flex bg-white border border-gray-100 p-0.5 rounded-lg shadow-sm">
+                <button title="Filter" className="p-2 text-gray-400 hover:text-navy-900 hover:bg-gray-50 rounded-md transition-all">
+                    <FilterIcon className="w-3.5 h-3.5" />
                 </button>
-                {exportOpen && (
-                    <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 animate-in fade-in slide-in-from-top-1 duration-150">
-                        <button onClick={exportCSV} className="w-full px-3 py-2 text-left text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                            <span className="w-5 h-5 rounded bg-green-100 text-green-700 flex items-center justify-center text-[10px] font-bold">CSV</span>
-                            Export as CSV
-                        </button>
-                        <button onClick={exportXLSX} className="w-full px-3 py-2 text-left text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                            <span className="w-5 h-5 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">XLS</span>
-                            Export as Excel
-                        </button>
-                        <button onClick={exportPDF} className="w-full px-3 py-2 text-left text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                            <span className="w-5 h-5 rounded bg-red-100 text-red-700 flex items-center justify-center text-[10px] font-bold">PDF</span>
-                            Export as PDF
-                        </button>
-                    </div>
-                )}
+                <button title="Sort" className="p-2 text-gray-400 hover:text-navy-900 hover:bg-gray-50 rounded-md transition-all">
+                    <ArrowUpDownIcon className="w-3.5 h-3.5" />
+                </button>
+                <button title="Columns" className="p-2 text-gray-400 hover:text-navy-900 hover:bg-gray-50 rounded-md transition-all">
+                    <ColumnsIcon className="w-3.5 h-3.5" />
+                </button>
+
+                {/* Density Toggle */}
+                <div className="relative" ref={densityRef}>
+                    <button
+                        onClick={() => setDensityOpen(!densityOpen)}
+                        title="Density"
+                        className={cn(
+                            "p-2 rounded-md transition-all",
+                            densityOpen ? "bg-navy-900 text-white shadow-md scale-105" : "text-gray-400 hover:text-navy-900 hover:bg-gray-50"
+                        )}
+                    >
+                        <MaximizeIcon className="w-3.5 h-3.5" />
+                    </button>
+                    {densityOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-32 bg-white border border-gray-100 rounded-xl shadow-xl z-50 py-1.5 animate-in slide-in-from-top-1 duration-200">
+                            {(['compact', 'default', 'tall'] as const).map(d => (
+                                <button
+                                    key={d}
+                                    onClick={() => { onDensityChange?.(d); setDensityOpen(false); }}
+                                    className={cn(
+                                        "w-full px-3 py-1.5 text-left text-[11px] font-bold uppercase tracking-widest hover:bg-gray-50",
+                                        density === d ? "text-gold-600" : "text-gray-500"
+                                    )}
+                                >
+                                    {d}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Export & Actions */}
+            <div className="flex items-center space-x-1.5 ml-2">
+                <button
+                    onClick={handleRefresh}
+                    title="Refresh"
+                    className="p-2.5 rounded-lg border border-gray-100 bg-white text-gray-400 hover:text-navy-900 shadow-sm transition-all active:scale-95"
+                >
+                    <RefreshIcon className={cn("w-3.5 h-3.5 transition-transform", spinning && "animate-spin")} />
+                </button>
+
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        onClick={() => setExportOpen(!exportOpen)}
+                        className="flex items-center gap-2 px-4 py-2 text-[13px] font-bold border border-gray-100 rounded-lg bg-navy-900 text-white shadow-lg shadow-navy-900/10 hover:shadow-xl hover:translate-y-[-1px] transition-all"
+                    >
+                        <DownloadIcon className="w-3.5 h-3.5" /> Export
+                    </button>
+                    {exportOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-2xl z-50 py-1.5 animate-in zoom-in-95 duration-200 origin-top-right">
+                            <button onClick={exportCSV} className="w-full px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:bg-gray-50 flex items-center gap-3">
+                                <span className="w-6 h-6 rounded bg-green-50 text-green-600 flex items-center justify-center font-mono">CSV</span> Export as CSV
+                            </button>
+                            <button onClick={exportXLSX} className="w-full px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:bg-gray-50 flex items-center gap-3">
+                                <span className="w-6 h-6 rounded bg-blue-50 text-blue-600 flex items-center justify-center font-mono">XLS</span> Excel Spreadsheet
+                            </button>
+                            <button onClick={exportPDF} className="w-full px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:bg-gray-50 flex items-center gap-3">
+                                <span className="w-6 h-6 rounded bg-red-50 text-red-600 flex items-center justify-center font-mono">PDF</span> Portable Document
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
@@ -166,14 +204,7 @@ export function TableToolbar({ searchValue, onSearchChange, onRefresh, exportDat
 /* ───────────────────────────────────────────────
    TablePagination
    ─────────────────────────────────────────────── */
-interface TablePaginationProps {
-    currentPage: number;
-    totalItems: number;
-    pageSize: number;
-    onPageChange: (page: number) => void;
-}
-
-export function TablePagination({ currentPage, totalItems, pageSize, onPageChange }: TablePaginationProps) {
+export function TablePagination({ currentPage, totalItems, pageSize, onPageChange }: any) {
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
     const start = (currentPage - 1) * pageSize + 1;
     const end = Math.min(currentPage * pageSize, totalItems);
@@ -181,14 +212,11 @@ export function TablePagination({ currentPage, totalItems, pageSize, onPageChang
     // Generate page numbers with ellipsis
     const getPages = () => {
         const pages: (number | '...')[] = [];
-        if (totalPages <= 7) {
-            for (let i = 1; i <= totalPages; i++) pages.push(i);
-        } else {
-            pages.push(1);
-            if (currentPage > 3) pages.push('...');
+        if (totalPages <= 7) { for (let i = 1; i <= totalPages; i++) pages.push(i); }
+        else {
+            pages.push(1); if (currentPage > 3) pages.push('...');
             for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
-            if (currentPage < totalPages - 2) pages.push('...');
-            pages.push(totalPages);
+            if (currentPage < totalPages - 2) pages.push('...'); pages.push(totalPages);
         }
         return pages;
     };
@@ -196,31 +224,26 @@ export function TablePagination({ currentPage, totalItems, pageSize, onPageChang
     if (totalItems === 0) return null;
 
     return (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
-            <span className="text-xs text-gray-500">
-                Showing <span className="font-medium text-gray-700">{start}</span>–<span className="font-medium text-gray-700">{end}</span> of <span className="font-medium text-gray-700">{totalItems}</span>
+        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-gray-50/30 backdrop-blur-sm shrink-0">
+            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                Showing <span className="text-navy-900">{start}</span>–<span className="text-navy-900">{end}</span> of <span className="text-navy-900">{totalItems}</span>
             </span>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5 focus-within:ring-0">
                 <button
                     disabled={currentPage === 1}
                     onClick={() => onPageChange(currentPage - 1)}
-                    className="px-2 py-1 text-xs rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="p-2 text-[10px] font-bold uppercase border border-gray-100 bg-white rounded-lg hover:bg-gray-50 disabled:opacity-30 transition-all shrink-0"
                 >
                     ‹ Prev
                 </button>
                 {getPages().map((p, i) =>
                     p === '...' ? (
-                        <span key={`e${i}`} className="px-1 text-xs text-gray-400">…</span>
+                        <span key={i} className="text-gray-300 px-1">…</span>
                     ) : (
                         <button
                             key={p}
                             onClick={() => onPageChange(p as number)}
-                            className={cn(
-                                "w-7 h-7 text-xs rounded border transition-colors",
-                                currentPage === p
-                                    ? "bg-navy-900 text-white border-navy-900"
-                                    : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
-                            )}
+                            className={cn("w-8 h-8 text-[11px] font-bold rounded-lg transition-all", currentPage === p ? "bg-navy-900 text-white shadow-lg" : "bg-white text-gray-500 border border-gray-100 hover:border-navy-900/20")}
                         >
                             {p}
                         </button>
@@ -229,7 +252,7 @@ export function TablePagination({ currentPage, totalItems, pageSize, onPageChang
                 <button
                     disabled={currentPage === totalPages}
                     onClick={() => onPageChange(currentPage + 1)}
-                    className="px-2 py-1 text-xs rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="p-2 text-[10px] font-bold uppercase border border-gray-100 bg-white rounded-lg hover:bg-gray-50 disabled:opacity-30 transition-all shrink-0"
                 >
                     Next ›
                 </button>
@@ -244,11 +267,7 @@ function escXml(s: string) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;
 function download(content: string, filename: string, mime: string) {
     const blob = new Blob([content], { type: mime + ';charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url);
 }
 
 /* ── Hook for table search + pagination ── */
@@ -259,16 +278,13 @@ export function useTableControls<T extends Record<string, any>>(
 ) {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
+    const [density, setDensity] = useState<'compact' | 'default' | 'tall'>('default');
 
     const filtered = search.trim()
         ? data.filter(row => {
             const q = search.toLowerCase();
             const fields = searchableFields || (Object.keys(row) as (keyof T)[]);
-            return fields.some(f => {
-                const v = row[f];
-                if (v == null) return false;
-                return String(v).toLowerCase().includes(q);
-            });
+            return fields.some(f => String(row[f] ?? '').toLowerCase().includes(q));
         })
         : data;
 
@@ -284,6 +300,8 @@ export function useTableControls<T extends Record<string, any>>(
         setSearch: handleSearch,
         page: safePage,
         setPage,
+        density,
+        setDensity,
         filtered,
         paged,
         totalItems: filtered.length,

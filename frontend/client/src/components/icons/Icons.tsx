@@ -225,6 +225,13 @@ export const TrendingUpIcon = (props: IconProps) => (
   </BaseIcon>
 );
 
+export const TrendingDownIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+    <polyline points="17 18 23 18 23 12" />
+  </BaseIcon>
+);
+
 export const PieChartIcon = (props: IconProps) => (
   <BaseIcon {...props}>
     <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
@@ -304,6 +311,52 @@ export const AuthorizationQueueIcon = (props: IconProps) => (
     <path d="M8 16h5" />
     <circle cx="17" cy="17" r="3" />
     <polyline points="16,17 17,18 19,16" />
+  </BaseIcon>
+);
+
+export const MoreVerticalIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="12" cy="5" r="1" />
+    <circle cx="12" cy="19" r="1" />
+  </BaseIcon>
+);
+
+export const ChevronRightIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <polyline points="9 18 15 12 9 6" />
+  </BaseIcon>
+);
+
+export const ColumnsIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M12 3h7a2 2 0 012 2v14a2 2 0 01-2 2h-7m0-18H5a2 2 0 00-2 2v14a2 2 0 002 2h7m0-18v18" />
+  </BaseIcon>
+);
+
+export const MaximizeIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+  </BaseIcon>
+);
+
+export const ArrowUpDownIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M11 5l-3-3-3 3m3-3v16m5-5l3 3 3-3m-3 3V2" />
+  </BaseIcon>
+);
+
+export const PanelLeftIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <rect width="18" height="18" x="3" y="3" rx="2" />
+    <path d="M9 3v18" />
+  </BaseIcon>
+);
+
+export const PanelRightIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <rect width="18" height="18" x="3" y="3" rx="2" />
+    <path d="M15 3v18" />
   </BaseIcon>
 );
 

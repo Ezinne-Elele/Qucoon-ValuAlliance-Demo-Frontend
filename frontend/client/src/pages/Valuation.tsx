@@ -30,7 +30,7 @@ export default function Valuation() {
         setSelectedFundsForNav(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
     };
 
-    const secCtrl = useTableControls(mockSecurities, 10);
+    const { search, setSearch, page, setPage, paged, totalItems, pageSize, density, setDensity } = useTableControls(mockSecurities, 10);
     const secExport = mockSecurities.map(s => ({
         Ticker: s.ticker, Security: s.name, Source: s.exchange,
         'Price (₦)': s.price, 'Change %': s.changePct, 'Last Updated': s.priceDate,
@@ -38,16 +38,16 @@ export default function Valuation() {
 
     return (
         <AppShell>
-            <div className="space-y-6">
+            <div className="space-y-8">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-2xl font-bold text-navy-900">Valuation & Pricing Engine</h1>
-                        <p className="text-sm text-gray-500 mt-1">Prices as at: 21 February 2026 | Next pricing run: 24 February 2026</p>
+                        <h1 className="text-2xl font-bold text-navy-900 tracking-tight">Valuation & Pricing Engine</h1>
+                        <p className="text-[13px] text-gray-500 font-medium">Monitoring real-market asset pricing and Fund NAV calculations.</p>
                     </div>
                     <div className="flex space-x-3">
-                        <button onClick={() => setShowRunPricing(true)} className="px-4 py-2 bg-navy-900 text-white rounded text-sm font-medium hover:bg-navy-800 shadow-sm">Run Pricing</button>
-                        <button onClick={() => setShowApproveNav(true)} className="px-4 py-2 bg-gold-500 text-navy-900 rounded text-sm font-medium hover:bg-gold-400 shadow-sm">Approve NAV</button>
-                        <button onClick={() => setShowExport(true)} className="px-3 py-2 bg-white border border-gray-200 rounded text-gray-600 hover:bg-gray-50 flex items-center text-sm shadow-sm">
+                        <button onClick={() => setShowRunPricing(true)} className="px-5 py-2.5 bg-navy-900 text-white rounded-lg text-[13px] font-bold hover:bg-navy-800 shadow-lg shadow-navy-900/10 transition-all">Run Pricing Run</button>
+                        <button onClick={() => setShowApproveNav(true)} className="px-5 py-2.5 bg-white border border-gray-100 text-navy-900 rounded-lg text-[13px] font-bold hover:bg-gray-50 shadow-sm transition-all">Approve NAV</button>
+                        <button onClick={() => setShowExport(true)} className="px-5 py-2.5 bg-white border border-gray-100 rounded-lg text-gray-500 hover:bg-gray-50 flex items-center text-[13px] font-bold shadow-sm transition-all">
                             <DownloadIcon className="w-4 h-4 mr-2" /> Export
                         </button>
                     </div>
@@ -56,73 +56,79 @@ export default function Valuation() {
                 {/* NAV Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {mockFunds.map(fund => (
-                        <div key={fund.id} className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
-                            <div className="flex justify-between items-start mb-3">
-                                <h3 className="text-sm font-semibold text-navy-900 leading-tight">{fund.name.replace('ValuAlliance ', '')}</h3>
+                        <div key={fund.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all hover:translate-y-[-2px] group">
+                            <div className="flex justify-between items-start mb-4">
+                                <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight group-hover:text-navy-900 transition-colors">{fund.name.replace('ValuAlliance ', '')}</h3>
                                 <StatusBadge status="Published" />
                             </div>
-                            <div className="flex items-baseline mb-1">
-                                <NairaIcon className="w-5 h-5 text-navy-900 mr-1" />
-                                <span className="text-2xl font-bold text-navy-900 font-mono">{fund.nav.toFixed(2)}</span>
+                            <div className="flex items-baseline mb-2">
+                                <span className="text-3xl font-bold text-navy-900 font-mono tracking-tighter">₦{fund.nav.toFixed(2)}</span>
                             </div>
-                            <p className="text-xs text-gray-500 font-mono">NAV Date: {fund.navDate}</p>
-                            <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-xs">
-                                <span className="text-gray-500">AUM</span>
-                                <span className="font-mono font-medium text-navy-900">₦{(fund.aum / 1000000000).toFixed(1)}B</span>
+                            <p className="text-[10px] text-gray-400 font-mono font-medium">VALUATION AS AT: {fund.navDate}</p>
+                            <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between text-[11px] font-bold">
+                                <span className="text-gray-400 uppercase tracking-wider">AUM</span>
+                                <span className="text-navy-900">₦{(fund.aum / 1e9).toFixed(1)}B</span>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {/* Securities Pricing Table */}
-                <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 className="font-semibold text-navy-900 text-sm">Securities Pricing</h3>
-                        <TableToolbar searchValue={secCtrl.search} onSearchChange={secCtrl.setSearch} onRefresh={() => { }} exportData={secExport} exportFilename="securities_pricing" />
+                <div className="table-datagrid-container">
+                    <div className="p-5 border-b border-gray-100 bg-white/50 flex justify-between items-center">
+                        <div>
+                            <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Securities Market Pricing</h3>
+                            <p className="text-[11px] text-gray-400 font-medium">Live data feeds from NGX, FMDQ, and CBN</p>
+                        </div>
+                        <TableToolbar
+                            searchValue={search}
+                            onSearchChange={setSearch}
+                            onRefresh={() => { }}
+                            exportData={secExport}
+                            exportFilename="securities_pricing"
+                            density={density}
+                            onDensityChange={setDensity}
+                        />
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
+                        <table className={cn("table-datagrid", `density-${density}`)}>
+                            <thead>
                                 <tr>
-                                    <th className="p-4 font-medium w-12">S/N</th>
-                                    <th className="p-4 font-medium">Ticker</th>
-                                    <th className="p-4 font-medium">Security</th>
-                                    <th className="p-4 font-medium">Source</th>
-                                    <th className="p-4 font-medium text-right">Price (₦)</th>
-                                    <th className="p-4 font-medium text-right">Change %</th>
-                                    <th className="p-4 font-medium">Tolerance</th>
-                                    <th className="p-4 font-medium">Last Updated</th>
+                                    <th className="w-12 text-center text-[10px] text-gray-300">#</th>
+                                    <th className="w-28">Ticker</th>
+                                    <th>Security</th>
+                                    <th className="w-32">Source</th>
+                                    <th className="text-right w-32">Price</th>
+                                    <th className="text-right w-28">Change</th>
+                                    <th className="w-40">Tolerance</th>
+                                    <th className="w-32">Updated</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {secCtrl.paged.map((s, idx) => (
-                                    <tr key={s.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(secCtrl.page - 1) * secCtrl.pageSize + idx + 1}</td>
-                                        <td className="p-4 font-bold text-navy-900">{s.ticker}</td>
-                                        <td className="p-4 text-gray-700">{s.name}</td>
-                                        <td className="p-4">
-                                            {s.exchange === 'NGX' && <NGXLogo />}
-                                            {s.exchange === 'FMDQ' && <FMDQLogo />}
-                                            {s.exchange === 'CBN' && <CBNLogo />}
-                                        </td>
-                                        <td className="p-4 text-right font-mono font-medium text-navy-900">{s.price.toFixed(2)}</td>
-                                        <td className="p-4 text-right font-mono font-medium">
+                            <tbody>
+                                {paged.map((s, idx) => (
+                                    <tr key={s.id} className="hover:bg-gray-50/50 transition-colors">
+                                        <td className="text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td>{s.ticker}</td>
+                                        <td>{s.name}</td>
+                                        <td>{s.exchange}</td>
+                                        <td className="text-right font-mono">{s.price.toFixed(2)}</td>
+                                        <td className="text-right font-mono">
                                             {s.changePct !== undefined ? (
                                                 <span className={s.changePct >= 0 ? "text-success" : "text-danger"}>
                                                     {s.changePct > 0 ? '+' : ''}{s.changePct}%
                                                 </span>
-                                            ) : <span className="text-gray-400">--</span>}
+                                            ) : <span>--</span>}
                                         </td>
-                                        <td className="p-4">
-                                            <span className="bg-success-bg text-success text-xs font-medium px-2 py-0.5 rounded">Within Tolerance</span>
+                                        <td>
+                                            <span className="bg-success/10 text-success text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border border-success/20">Within tolerance</span>
                                         </td>
-                                        <td className="p-4 font-mono text-xs text-gray-500">{s.priceDate}</td>
+                                        <td>{s.priceDate}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-                    <TablePagination currentPage={secCtrl.page} totalItems={secCtrl.totalItems} pageSize={secCtrl.pageSize} onPageChange={secCtrl.setPage} />
+                    <TablePagination currentPage={page} totalItems={totalItems} pageSize={pageSize} onPageChange={setPage} />
                 </div>
 
                 {/* NAV History Chart */}

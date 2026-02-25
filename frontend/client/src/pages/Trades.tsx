@@ -19,7 +19,7 @@ export default function Trades() {
   const tabs = ['All', 'Draft', 'Submitted', 'Approved', 'Executed', 'Settled', 'Failed'];
   const baseFiltered = activeTab === 'All' ? mockTrades : mockTrades.filter(t => t.status === activeTab);
 
-  const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
+  const { search, setSearch, page, setPage, paged, totalItems, pageSize, density, setDensity } = useTableControls(baseFiltered, 10);
 
   const grossValue = (parseFloat(tradeQty) || 0) * (parseFloat(tradePrice) || 0);
 
@@ -43,81 +43,99 @@ export default function Trades() {
     <AppShell>
       <div className="flex flex-col h-full">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-navy-900">Trade Capture & Lifecycle</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-navy-900 tracking-tight">Trade Execution</h1>
+            <p className="text-[13px] text-gray-500 font-medium">Capture mandates, monitor lifecycle, and manage settlement blotters.</p>
+          </div>
           <div className="flex space-x-3">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-navy-900 text-white rounded-md hover:bg-navy-800 flex items-center text-sm font-medium shadow-md shadow-navy-900/20 transition-all"
+              className="px-5 py-2.5 bg-navy-900 text-white rounded-lg hover:bg-navy-800 flex items-center text-[13px] font-bold shadow-lg shadow-navy-900/10 hover:shadow-xl hover:translate-y-[-1px] transition-all"
             >
-              <PlusIcon className="w-4 h-4 mr-2" /> New Trade
+              <PlusIcon className="w-4 h-4 mr-2" /> New Trade mandate
             </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-1 border-b border-gray-200 mb-6 overflow-x-auto">
+        <div className="flex space-x-1 border-b border-gray-100 mb-6 overflow-x-auto">
           {tabs.map(tab => {
             const count = tab === 'All' ? mockTrades.length : mockTrades.filter(t => t.status === tab).length;
+            const isActive = activeTab === tab;
             return (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  "px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap",
-                  activeTab === tab
-                    ? "border-gold-500 text-navy-900"
-                    : "border-transparent text-gray-500 hover:text-navy-700 hover:border-gray-300"
+                  "px-5 py-3 text-[11px] font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap",
+                  isActive
+                    ? "border-navy-900 text-navy-900"
+                    : "border-transparent text-gray-400 hover:text-navy-700 hover:border-gray-200"
                 )}
               >
-                {tab} <span className="ml-1.5 bg-gray-100 text-gray-600 py-0.5 px-2 rounded text-xs">{count}</span>
+                {tab} <span className={cn("ml-2 px-1.5 py-0.5 rounded-md text-[9px] font-bold", isActive ? "bg-navy-900 text-white" : "bg-gray-100 text-gray-500")}>{count}</span>
               </button>
             )
           })}
         </div>
 
         {/* Table Area */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm flex-1 overflow-hidden flex flex-col">
-          <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-            <h3 className="font-semibold text-navy-900 text-sm">Trade Blotter</h3>
-            <TableToolbar searchValue={search} onSearchChange={setSearch} onRefresh={() => { }} exportData={exportData} exportFilename="trades" />
+        <div className="table-datagrid-container flex-1">
+          <div className="p-4 border-b border-gray-100 bg-white/50 flex justify-between items-center">
+            <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Trading Blotter</h3>
+            <TableToolbar
+              searchValue={search}
+              onSearchChange={setSearch}
+              onRefresh={() => { }}
+              exportData={exportData}
+              exportFilename="trades"
+              density={density}
+              onDensityChange={setDensity}
+            />
           </div>
           <div className="overflow-x-auto flex-1">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-500 border-b border-gray-200 sticky top-0 z-10">
+            <table className={cn("table-datagrid", `density-${density}`)}>
+              <thead>
                 <tr>
-                  <th className="p-4 font-medium w-12">S/N</th>
-                  <th className="p-4 font-medium">Trade ID</th>
-                  <th className="p-4 font-medium">Date</th>
-                  <th className="p-4 font-medium">Security</th>
-                  <th className="p-4 font-medium">Portfolio</th>
-                  <th className="p-4 font-medium">Side</th>
-                  <th className="p-4 font-medium text-right">Quantity</th>
-                  <th className="p-4 font-medium text-right">Price (₦)</th>
-                  <th className="p-4 font-medium text-right">Gross Value (₦)</th>
-                  <th className="p-4 font-medium">Status</th>
+                  <th className="w-12 text-center text-[10px] text-gray-300">#</th>
+                  <th className="w-28">ID</th>
+                  <th className="w-28">Date</th>
+                  <th>Security</th>
+                  <th>Portfolio</th>
+                  <th className="w-24">Side</th>
+                  <th className="text-right w-28">Qty</th>
+                  <th className="text-right w-32">Price</th>
+                  <th className="text-right w-36">Value</th>
+                  <th className="w-32">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody>
                 {paged.map((trade, idx) => (
                   <tr
                     key={trade.id}
                     onClick={() => setSelectedTrade(trade)}
-                    className="hover:bg-navy-50/50 transition-colors cursor-pointer"
+                    className={cn(
+                      "hover:bg-gray-50/50 transition-colors cursor-pointer",
+                      selectedTrade?.id === trade.id && "bg-navy-50/30"
+                    )}
                   >
-                    <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                    <td className="p-4 font-mono text-xs font-semibold text-navy-700">{trade.id}</td>
-                    <td className="p-4 font-mono text-gray-600">{trade.tradeDate}</td>
-                    <td className="p-4 font-medium text-navy-900">{trade.ticker}</td>
-                    <td className="p-4 text-gray-600">{trade.portfolioId}</td>
-                    <td className="p-4">
-                      <span className={cn("text-xs font-bold px-2 py-0.5 rounded", trade.side === 'Buy' ? "bg-navy-100 text-navy-700" : "bg-red-100 text-danger")}>
+                    <td className="text-center">{(page - 1) * pageSize + idx + 1}</td>
+                    <td>{trade.id}</td>
+                    <td>{trade.tradeDate}</td>
+                    <td>{trade.ticker}</td>
+                    <td>{trade.portfolioId}</td>
+                    <td>
+                      <span className={cn(
+                        "px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider",
+                        trade.side === 'Buy' ? "bg-success-bg text-success" : "bg-danger-bg text-danger"
+                      )}>
                         {trade.side}
                       </span>
                     </td>
-                    <td className="p-4 text-right font-mono">{trade.quantity.toLocaleString()}</td>
-                    <td className="p-4 text-right font-mono">{trade.price.toFixed(2)}</td>
-                    <td className="p-4 text-right font-mono font-medium">{trade.grossValue.toLocaleString()}</td>
-                    <td className="p-4"><StatusBadge status={trade.status} /></td>
+                    <td className="text-right font-mono">{trade.quantity.toLocaleString()}</td>
+                    <td className="text-right font-mono">{trade.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                    <td className="text-right font-mono">₦{trade.grossValue.toLocaleString()}</td>
+                    <td><StatusBadge status={trade.status} /></td>
                   </tr>
                 ))}
               </tbody>
