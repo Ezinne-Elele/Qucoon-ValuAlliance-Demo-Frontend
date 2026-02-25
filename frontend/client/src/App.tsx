@@ -25,7 +25,7 @@ import { Toaster } from "@/components/ui/toaster";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={() => <Redirect to="/dashboard" />} />
+      <Route path="/" component={() => <Redirect to="/login" />} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/portfolio/:id" component={PortfolioDetail} />
