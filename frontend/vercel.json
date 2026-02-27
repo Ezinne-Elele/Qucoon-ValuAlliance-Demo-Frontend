@@ -1,8 +1,9 @@
 {
+    "version": 2,
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://your-backend-url.onrender.com/api/:path*"
+            "destination": "https://qucoon-valualliance-demo-backend.onrender.com/api/:path*"
         },
         {
             "source": "/(.*)",

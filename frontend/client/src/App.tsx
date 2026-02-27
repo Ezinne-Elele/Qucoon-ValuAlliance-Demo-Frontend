@@ -7,6 +7,7 @@ import PortfolioDetail from "./pages/PortfolioDetail";
 import Settlement from "./pages/Settlement";
 import Valuation from "./pages/Valuation";
 import FundAccounting from "./pages/FundAccounting";
+import FundDetail from "./pages/FundDetail";
 import Fees from "./pages/Fees";
 import Reconciliation from "./pages/Reconciliation";
 import RiskCompliance from "./pages/RiskCompliance";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/portfolio/:id" component={PortfolioDetail} />
       <Route path="/portfolio" component={Portfolio} />
+      <Route path="/fund/:id" component={FundDetail} />
       <Route path="/trades" component={Trades} />
       <Route path="/settlement" component={Settlement} />
       <Route path="/valuation" component={Valuation} />

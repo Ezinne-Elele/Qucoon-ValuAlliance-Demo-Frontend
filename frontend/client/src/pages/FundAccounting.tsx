@@ -3,8 +3,10 @@ import { AppShell } from '../components/layout/AppShell';
 import { mockJournalEntries, mockTrialBalance, mockFunds } from '../data/mockData';
 import { PlusIcon, DownloadIcon, cn } from '../components/icons/Icons';
 import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
+import { useLocation } from 'wouter';
 
 export default function FundAccounting() {
+    const [, navigate] = useLocation();
     const [activeTab, setActiveTab] = useState('Journal Entries');
     const [isPostJournalOpen, setIsPostJournalOpen] = useState(false);
     const [isPeriodCloseOpen, setIsPeriodCloseOpen] = useState(false);
@@ -74,7 +76,17 @@ export default function FundAccounting() {
                                             <td className="p-4 text-gray-400 text-xs font-mono">{(jeCtrl.page - 1) * jeCtrl.pageSize + idx + 1}</td>
                                             <td className="p-4 font-mono text-xs font-semibold text-navy-700">{je.id}</td>
                                             <td className="p-4 font-mono text-gray-600">{je.date}</td>
-                                            <td className="p-4 text-gray-700">{je.fund}</td>
+                                            <td className="p-4">
+                                                <button
+                                                    onClick={() => {
+                                                        const fundObj = mockFunds.find(f => f.name === je.fund);
+                                                        if (fundObj) navigate(`/fund/${fundObj.id}`);
+                                                    }}
+                                                    className="text-gold-600 font-bold hover:underline"
+                                                >
+                                                    {je.fund}
+                                                </button>
+                                            </td>
                                             <td className="p-4 text-gray-700 max-w-[250px] truncate">{je.description}</td>
                                             <td className="p-4 text-xs text-navy-700 font-medium">{je.drAccount}</td>
                                             <td className="p-4 text-xs text-navy-700 font-medium">{je.crAccount}</td>

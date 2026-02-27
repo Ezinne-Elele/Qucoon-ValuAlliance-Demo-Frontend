@@ -46,8 +46,9 @@ router.get("/ngx/quote/:ticker", (req: Request, res: Response) => {
         MTNN: { ticker: "MTNN", name: "MTN Nigeria", open: 195.00, high: 199.50, low: 194.50, close: 198.00, prevClose: 195.00, volume: 3200000, vwap: 197.20, trades: 425 },
         SEPLAT: { ticker: "SEPLAT", name: "Seplat Energy PLC", open: 4100.00, high: 4280.00, low: 4080.00, close: 4250.00, prevClose: 4100.00, volume: 185000, vwap: 4200.00, trades: 89 },
     };
-    const q = quotes[req.params.ticker.toUpperCase()];
-    if (!q) { res.status(404).json({ message: `Ticker ${req.params.ticker} not found` }); return; }
+    const ticker = req.params.ticker as string;
+    const q = quotes[ticker.toUpperCase()];
+    if (!q) { res.status(404).json({ message: `Ticker ${ticker} not found` }); return; }
     res.json({ source: "NGX (Mock)", asOf: "2026-02-23 16:00:00 WAT", ...q });
 });
 
@@ -90,8 +91,9 @@ router.get("/cscs/settlement-status/:tradeRef", (req: Request, res: Response) =>
         "TRD-2026-0247": { tradeRef: "TRD-2026-0247", cscsRef: "CSCS-2026-88415", status: "Pending", dvpStatus: "Awaiting Match", settledDate: null, shares: 500000000, consideration: 492496125, custodianBank: "HSBC Nigeria" },
         "TRD-2026-0242": { tradeRef: "TRD-2026-0242", cscsRef: "CSCS-2026-88390", status: "Failed", dvpStatus: "Rejected", settledDate: null, failureReason: "Insufficient bond allocation", shares: 250000000, consideration: 256378125 },
     };
-    const s = statuses[req.params.tradeRef];
-    if (!s) { res.json({ tradeRef: req.params.tradeRef, status: "Not Found at CSCS" }); return; }
+    const tradeRef = req.params.tradeRef as string;
+    const s = statuses[tradeRef];
+    if (!s) { res.json({ tradeRef: tradeRef, status: "Not Found at CSCS" }); return; }
     res.json({ source: "CSCS (Mock)", asOf: new Date().toISOString(), ...s });
 });
 

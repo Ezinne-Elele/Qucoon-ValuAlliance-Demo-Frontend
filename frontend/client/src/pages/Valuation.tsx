@@ -5,10 +5,12 @@ import { mockFunds, mockSecurities, mockNavHistory } from '../data/mockData';
 import { DownloadIcon, CheckCircleIcon, NairaIcon, NGXLogo, FMDQLogo, CBNLogo, AlertIcon, cn } from '../components/icons/Icons';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
+import { useLocation } from 'wouter';
 
 const FUND_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A'];
 
 export default function Valuation() {
+    const [, navigate] = useLocation();
     const [showRunPricing, setShowRunPricing] = useState(false);
     const [showApproveNav, setShowApproveNav] = useState(false);
     const [showExport, setShowExport] = useState(false);
@@ -56,7 +58,11 @@ export default function Valuation() {
                 {/* NAV Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {mockFunds.map(fund => (
-                        <div key={fund.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all hover:translate-y-[-2px] group">
+                        <div
+                            key={fund.id}
+                            onClick={() => navigate(`/fund/${fund.id}`)}
+                            className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all hover:translate-y-[-2px] group cursor-pointer active:scale-[0.98]"
+                        >
                             <div className="flex justify-between items-start mb-4">
                                 <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight group-hover:text-navy-900 transition-colors">{fund.name.replace('ValuAlliance ', '')}</h3>
                                 <StatusBadge status="Published" />

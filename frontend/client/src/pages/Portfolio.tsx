@@ -153,11 +153,18 @@ export default function Portfolio() {
       {activeTab === 'Funds' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {mockFunds.map(fund => (
-            <div key={fund.id} className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div
+              key={fund.id}
+              onClick={() => navigate(`/fund/${fund.id}`)}
+              className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 hover:shadow-md transition-all cursor-pointer hover:translate-y-[-2px] group relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ChevronRightIcon className="w-5 h-5 text-gold-500" />
+              </div>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="font-bold text-lg text-navy-900 mb-1">{fund.name}</h3>
-                  <span className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded font-medium">{fund.type}</span>
+                  <h3 className="font-bold text-lg text-navy-900 mb-1 group-hover:text-gold-600 transition-colors uppercase tracking-tight">{fund.name}</h3>
+                  <span className="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">{fund.type}</span>
                 </div>
                 <StatusBadge status={fund.status} />
               </div>

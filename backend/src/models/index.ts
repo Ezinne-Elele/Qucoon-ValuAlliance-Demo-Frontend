@@ -405,3 +405,101 @@ const ReconSummarySchema = new Schema<IReconSummary>({
     matched: Number, open: Number, resolved: Number,
 }, { timestamps: true });
 export const ReconSummary = mongoose.model<IReconSummary>("ReconSummary", ReconSummarySchema);
+
+// ============================================================
+// FUND HOLDING (security position within a fund)
+// ============================================================
+export interface IFundHolding extends Document {
+    holdingId: string; fundId: string; securityId: string; ticker: string;
+    name: string; assetClass: string; sector: string;
+    quantity?: number; faceValue?: number; avgCost: number; currentPrice: number;
+    costBasis: number; marketValue: number; unrealisedPnL: number;
+    unrealisedPnLPct: number; percentOfNav: number;
+    priceSource: string; creditRating?: string;
+    maturityDate?: string; duration?: number;
+}
+const FundHoldingSchema = new Schema<IFundHolding>({
+    holdingId: { type: String, required: true, unique: true },
+    fundId: { type: String, required: true }, securityId: String, ticker: String,
+    name: String, assetClass: String, sector: String,
+    quantity: Number, faceValue: Number, avgCost: Number, currentPrice: Number,
+    costBasis: Number, marketValue: Number, unrealisedPnL: Number,
+    unrealisedPnLPct: Number, percentOfNav: Number,
+    priceSource: String, creditRating: String,
+    maturityDate: String, duration: Number,
+}, { timestamps: true });
+FundHoldingSchema.index({ fundId: 1 });
+export const FundHolding = mongoose.model<IFundHolding>("FundHolding", FundHoldingSchema);
+
+// ============================================================
+// UNIT HOLDER (investor/participant in a fund)
+// ============================================================
+export interface IUnitHolder extends Document {
+    holderId: string; fundId: string; name: string;
+    type: string; kycStatus: string;
+    unitsHeld: number; holdingValue: number; percentOfFund: number;
+    avgHoldingPeriodMonths: number; lastTransactionDate: string;
+    taxResidency: string; email: string; phone: string;
+    isBeneficialOwner: boolean; isLargeHolder: boolean;
+}
+const UnitHolderSchema = new Schema<IUnitHolder>({
+    holderId: { type: String, required: true, unique: true },
+    fundId: { type: String, required: true }, name: String,
+    type: { type: String, default: "Individual" },
+    kycStatus: { type: String, default: "Verified" },
+    unitsHeld: Number, holdingValue: Number, percentOfFund: Number,
+    avgHoldingPeriodMonths: Number, lastTransactionDate: String,
+    taxResidency: { type: String, default: "Nigeria" },
+    email: String, phone: String,
+    isBeneficialOwner: { type: Boolean, default: false },
+    isLargeHolder: { type: Boolean, default: false },
+}, { timestamps: true });
+UnitHolderSchema.index({ fundId: 1 });
+export const UnitHolder = mongoose.model<IUnitHolder>("UnitHolder", UnitHolderSchema);
+
+// ============================================================
+// FUND TRANSACTION (subscription, redemption, distribution)
+// ============================================================
+export interface IFundTransaction extends Document {
+    transactionId: string; fundId: string; holderId: string; holderName: string;
+    type: string; units: number; navPerUnit: number; amount: number;
+    date: string; status: string;
+}
+const FundTransactionSchema = new Schema<IFundTransaction>({
+    transactionId: { type: String, required: true, unique: true },
+    fundId: { type: String, required: true }, holderId: String, holderName: String,
+    type: String, units: Number, navPerUnit: Number, amount: Number,
+    date: String, status: { type: String, default: "Completed" },
+}, { timestamps: true });
+FundTransactionSchema.index({ fundId: 1, date: -1 });
+export const FundTransaction = mongoose.model<IFundTransaction>("FundTransaction", FundTransactionSchema);
+
+// ============================================================
+// NAV COMPUTATION (immutable NAV calculation record)
+// ============================================================
+export interface INavComputation extends Document {
+    computationId: string; fundId: string; date: string;
+    totalAssets: number; totalLiabilities: number; totalNav: number;
+    unitsOutstanding: number; navPerUnit: number;
+    previousNav: number; navChange: number; navChangePct: number;
+    status: string; computedBy: string;
+    approvedBy?: string; approvalComment?: string; approvalDate?: string;
+    assetBreakdown: Record<string, number>;
+    liabilityBreakdown: Record<string, number>;
+    toleranceFlags: string[];
+}
+const NavComputationSchema = new Schema<INavComputation>({
+    computationId: { type: String, required: true, unique: true },
+    fundId: { type: String, required: true }, date: String,
+    totalAssets: Number, totalLiabilities: Number, totalNav: Number,
+    unitsOutstanding: Number, navPerUnit: Number,
+    previousNav: Number, navChange: Number, navChangePct: Number,
+    status: { type: String, default: "Pending" },
+    computedBy: String, approvedBy: String,
+    approvalComment: String, approvalDate: String,
+    assetBreakdown: { type: Schema.Types.Mixed, default: {} },
+    liabilityBreakdown: { type: Schema.Types.Mixed, default: {} },
+    toleranceFlags: [String],
+}, { timestamps: true });
+NavComputationSchema.index({ fundId: 1, date: -1 });
+export const NavComputation = mongoose.model<INavComputation>("NavComputation", NavComputationSchema);
