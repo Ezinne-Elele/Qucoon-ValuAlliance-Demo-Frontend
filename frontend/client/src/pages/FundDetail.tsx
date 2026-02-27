@@ -5,7 +5,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import {
     mockFunds, mockNavHistory, mockPerformance, mockTrades, mockFees,
     mockComplianceEvents, mockDocuments, getFundHoldings, getFundUnitHolders,
-    getFundTransactions, getFundNavComputations, mockAumTrend
+    getFundTransactions, getFundNavComputations, mockAumTrend, mockUnitHistory
 } from '../data/mockData';
 import {
     ArrowLeftIcon, TrendingUpIcon, TrendingDownIcon, PieChartIcon,
@@ -90,7 +90,7 @@ export default function FundDetail() {
                     <div className="flex justify-between items-start">
                         <div>
                             <div className="flex items-center space-x-3 mb-1">
-                                <h1 className="text-2xl font-extrabold text-navy-900 tracking-tight">{fund.name}</h1>
+                                <h1 className="text-2xl font-bold text-navy-900 tracking-tight">{fund.name}</h1>
                                 <StatusBadge status={fund.status} />
                             </div>
                             <div className="flex items-center space-x-4">
@@ -135,11 +135,10 @@ export default function FundDetail() {
                         icon={<UsersIcon className="w-4 h-4 text-gold-500" />}
                     />
                     <MetricCard
-                        label="Compliance Score"
-                        value="98.5%"
-                        subValue="No Open Critical Breaches"
-                        trend="Compliant"
-                        trendUp={true}
+                        label="Units Outstanding"
+                        value={(fund.totalUnitsOutstanding || fund.units).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        subValue={`Updated: ${new Date(fund.totalUnitsOutstandingAsOf || fund.navDate).toLocaleDateString()}`}
+                        icon={<PieChartIcon className="w-4 h-4 text-gold-500" />}
                     />
                 </div>
 
@@ -165,7 +164,7 @@ export default function FundDetail() {
                 <div className="min-h-[500px]">
                     {activeTab === 'Overview' && <OverviewTab fund={fund} navHistory={navHistory} allocationData={allocationData} />}
                     {activeTab === 'Holdings' && <HoldingsTab holdings={holdings} />}
-                    {activeTab === 'Unit Holders' && <UnitHoldersTab holders={unitHolders} />}
+                    {activeTab === 'Unit Holders' && <UnitHoldersTab holders={unitHolders} fundId={fundId} />}
                     {activeTab === 'Performance' && <PerformanceTab perf={perfData} navHistory={navHistory} />}
                     {activeTab === 'Liquidity' && <LiquidityTab fund={fund} holdings={holdings} transactions={transactions} />}
                     {activeTab === 'Fees' && <FeesTab fees={fundFees} fund={fund} />}
@@ -191,7 +190,7 @@ function MetricCard({ label, value, subValue, trend, trendUp, icon }: any) {
                 {icon || <TrendingUpIcon className="w-8 h-8" />}
             </div>
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">{label}</p>
-            <p className="text-2xl font-extrabold text-navy-900 tracking-tight font-mono mb-1 relative z-10">{value}</p>
+            <p className="text-2xl font-bold text-navy-900 tracking-tight font-mono mb-1 relative z-10">{value}</p>
             <div className="flex items-center justify-between relative z-10">
                 <span className="text-[12px] text-gray-500 font-medium">{subValue}</span>
                 {trend && (
@@ -212,7 +211,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
                 {/* NAV Growth Chart */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+                <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-8">
                     <div className="flex justify-between items-center mb-8">
                         <div>
                             <h3 className="text-base font-bold text-navy-900 mb-1">NAV Performance History</h3>
@@ -245,7 +244,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Fund Master Card */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
                         <h3 className="text-[12px] font-bold text-navy-900 tracking-widest uppercase mb-4 opacity-50">Fund Register Details</h3>
                         <div className="space-y-3">
                             {[
@@ -267,7 +266,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                     </div>
 
                     {/* Quick Stats */}
-                    <div className="bg-navy-900 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+                    <div className="bg-navy-900 rounded-lg p-6 text-white shadow-xl relative overflow-hidden">
                         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gold-500/10 rounded-full blur-3xl"></div>
                         <h3 className="text-[11px] font-bold text-gold-500 tracking-widest uppercase mb-6">Investment Strategy</h3>
                         <p className="text-[14px] leading-relaxed font-medium opacity-90 italic">
@@ -290,7 +289,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
             {/* Side Column */}
             <div className="space-y-8">
                 {/* Allocation Pie */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 overflow-hidden">
+                <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 overflow-hidden">
                     <h3 className="text-[12px] font-bold text-navy-900 tracking-widest uppercase mb-6 text-center">Current Allocation</h3>
                     <div className="h-56 relative flex items-center justify-center">
                         <ResponsiveContainer width="100%" height="100%">
@@ -308,7 +307,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                             </PieChart>
                         </ResponsiveContainer>
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <span className="text-2xl font-black text-navy-900 font-mono">100%</span>
+                            <span className="text-2xl font-bold text-navy-900 font-mono">100%</span>
                             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Allocated</span>
                         </div>
                     </div>
@@ -326,12 +325,12 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                 </div>
 
                 {/* Performance Box */}
-                <div className="bg-success/5 border border-success/10 rounded-2xl p-6">
+                <div className="bg-success/5 border border-success/10 rounded-lg p-6">
                     <div className="flex items-center mb-4">
                         <div className="p-2 bg-success-bg rounded-lg mr-3">
                             <TrendingUpIcon className="w-5 h-5 text-success" />
                         </div>
-                        <h3 className="text-[13px] font-black text-navy-900 uppercase">Return Summary</h3>
+                        <h3 className="text-[13px] font-bold text-navy-900 uppercase">Return Summary</h3>
                     </div>
                     <div className="space-y-4">
                         {[
@@ -358,7 +357,7 @@ function HoldingsTab({ holdings }: any) {
         <div className="table-datagrid-container">
             <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
                 <div>
-                    <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Holdings Register</h3>
+                    <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Holdings Register</h3>
                     <p className="text-[11px] text-gray-400 font-bold uppercase mt-1">Live valuation and weighting report</p>
                 </div>
                 <TableToolbar searchValue={ctrl.search} onSearchChange={ctrl.setSearch} onRefresh={() => { }} exportData={holdings} exportFilename="fund_holdings" />
@@ -400,29 +399,29 @@ function HoldingsTab({ holdings }: any) {
     );
 }
 
-function UnitHoldersTab({ holders }: any) {
+function UnitHoldersTab({ holders, fundId }: { holders: any[], fundId: string }) {
     const ctrl = useTableControls(holders, 10, ['name', 'id']);
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-navy-900 rounded-2xl p-6 text-white text-center shadow-lg">
+                <div className="bg-navy-900 rounded-lg p-6 text-white text-center shadow-lg">
                     <p className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Total Capital Base</p>
-                    <p className="text-2xl font-black font-mono">₦{holders.reduce((s: number, h: any) => s + h.holdingValue, 0).toLocaleString()}</p>
+                    <p className="text-2xl font-bold font-mono">₦{holders.reduce((s: number, h: any) => s + h.holdingValue, 0).toLocaleString()}</p>
                 </div>
-                <div className="bg-white rounded-2xl p-6 border border-gray-100 text-center shadow-sm">
+                <div className="bg-white rounded-lg p-6 border border-gray-100 text-center shadow-sm">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Institutional Share</p>
-                    <p className="text-2xl font-black text-navy-900">72.4%</p>
+                    <p className="text-2xl font-bold text-navy-900">72.4%</p>
                 </div>
-                <div className="bg-white rounded-2xl p-6 border border-gray-100 text-center shadow-sm">
+                <div className="bg-white rounded-lg p-6 border border-gray-100 text-center shadow-sm">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">KYC Compliance</p>
-                    <p className="text-2xl font-black text-success">100%</p>
+                    <p className="text-2xl font-bold text-success">100%</p>
                 </div>
             </div>
 
             <div className="table-datagrid-container overflow-hidden">
                 <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
                     <div>
-                        <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Unit Holder Register</h3>
+                        <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Unit Holder Register</h3>
                         <p className="text-[11px] text-gray-400 font-bold uppercase mt-1">Beneficial ownership and unitholding status</p>
                     </div>
                     <TableToolbar searchValue={ctrl.search} onSearchChange={ctrl.setSearch} onRefresh={() => { }} exportData={holders} exportFilename="unit_holders" />
@@ -445,7 +444,7 @@ function UnitHoldersTab({ holders }: any) {
                                 <td className="font-bold text-navy-900">
                                     <div className="flex items-center">
                                         {h.id} — {h.name}
-                                        {h.isLargeHolder && <span className="ml-2 text-[8px] bg-gold-500 text-navy-900 px-1 rounded uppercase font-black">Strategic</span>}
+                                        {h.isLargeHolder && <span className="ml-2 text-[8px] bg-gold-500 text-navy-900 px-1 rounded uppercase font-bold">Strategic</span>}
                                     </div>
                                 </td>
                                 <td className="text-gray-500 text-[12px] font-semibold">{h.type}</td>
@@ -460,6 +459,56 @@ function UnitHoldersTab({ holders }: any) {
                 </table>
                 <TablePagination currentPage={ctrl.page} totalItems={ctrl.totalItems} pageSize={ctrl.pageSize} onPageChange={ctrl.setPage} />
             </div>
+
+            {/* Unit History Timeline */}
+            <div className="bg-white rounded-xl border border-gray-100 p-8 shadow-sm">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 className="text-sm font-bold text-navy-900 uppercase tracking-widest">Unit History & Capital Events</h3>
+                        <p className="text-[11px] text-gray-400 font-bold uppercase mt-1 italic">Approved unit changes and net capital flows</p>
+                    </div>
+                    <div className="px-3 py-1 bg-navy-50 rounded text-[9px] font-bold text-navy-900 uppercase tracking-tighter shadow-sm border border-navy-100 flex items-center">
+                        <AlertIcon className="w-3 h-3 mr-1.5 text-gold-600" />
+                        Updated daily at 4:00 PM WAT
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="border-b border-gray-50">
+                                <th className="pb-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Date</th>
+                                <th className="pb-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Type</th>
+                                <th className="pb-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Units Change</th>
+                                <th className="pb-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">New Total Units</th>
+                                <th className="pb-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Approved By</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-50">
+                            {(mockUnitHistory[fundId] || []).map((h, i) => (
+                                <tr key={i} className="group hover:bg-gray-50/50 transition-colors">
+                                    <td className="py-4 text-[11px] font-bold text-navy-900 font-mono">{h.date}</td>
+                                    <td className="py-4">
+                                        <span className={cn(
+                                            "text-[9px] font-bold px-2 py-0.5 rounded uppercase",
+                                            h.type === 'Subscription' ? "bg-success-bg text-success" : "bg-danger-bg text-danger"
+                                        )}>
+                                            {h.type}
+                                        </span>
+                                    </td>
+                                    <td className={cn(
+                                        "py-4 text-[11px] font-mono font-bold text-right",
+                                        h.netChange >= 0 ? "text-success" : "text-danger"
+                                    )}>
+                                        {h.netChange >= 0 ? '+' : ''}{h.units.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                    </td>
+                                    <td className="py-4 text-[11px] font-mono font-bold text-navy-900 text-right">{h.newTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                    <td className="py-4 text-[10px] font-bold text-gray-500 text-right uppercase tracking-tighter">{h.approvedBy}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 }
@@ -469,7 +518,7 @@ function TransactionsTab({ txns }: any) {
     return (
         <div className="table-datagrid-container">
             <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
-                <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Fund Flows & Activity</h3>
+                <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Fund Flows & Activity</h3>
                 <TableToolbar searchValue={ctrl.search} onSearchChange={ctrl.setSearch} onRefresh={() => { }} exportData={txns} exportFilename="fund_transactions" />
             </div>
             <table className="table-datagrid">
@@ -493,7 +542,7 @@ function TransactionsTab({ txns }: any) {
                             <td className="text-gray-700 font-medium text-[13px]">{t.holderName}</td>
                             <td>
                                 <span className={cn(
-                                    "px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider",
+                                    "px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider",
                                     t.type === 'Subscription' ? "bg-success-bg text-success" :
                                         t.type === 'Redemption' ? "bg-danger-bg text-danger" : "bg-navy-50 text-navy-700"
                                 )}>
@@ -517,30 +566,30 @@ function NavEngineTab({ fund, computations, onViewBreakdown }: any) {
     return (
         <div className="space-y-8 animate-in slide-in-from-bottom duration-500">
             {/* Run Engine Card */}
-            <div className="bg-navy-900 rounded-3xl p-10 text-white relative overflow-hidden shadow-2xl flex flex-col md:flex-row items-center gap-10">
+            <div className="bg-navy-900 rounded-xl p-10 text-white relative overflow-hidden shadow-2xl flex flex-col md:flex-row items-center gap-10">
                 <div className="absolute top-0 right-0 p-8 opacity-5">
                     <NairaIcon className="w-64 h-64" />
                 </div>
                 <div className="flex-1 space-y-4">
                     <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-gold-500 rounded-full animate-pulse" />
-                        <span className="text-[12px] font-black uppercase tracking-[0.2em] text-gold-500">Official Computation Engine</span>
+                        <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-gold-500">Official Computation Engine</span>
                     </div>
-                    <h2 className="text-4xl font-black tracking-tight">Net Asset Value (NAV) Calculation</h2>
+                    <h2 className="text-4xl font-bold tracking-tight">Net Asset Value (NAV) Calculation</h2>
                     <p className="text-lg opacity-70 font-medium max-w-xl">
                         Submit a daily valuation run to calculate the NAV per unit. Our engine follows SEC Nigeria CIS rules with automated asset pricing and liability accruals.
                     </p>
                     <div className="flex space-x-4 pt-4">
-                        <button className="px-8 py-4 bg-gold-500 text-navy-900 rounded-2xl font-black text-[14px] hover:bg-gold-400 transition-all flex items-center group">
+                        <button className="px-8 py-4 bg-gold-500 text-navy-900 rounded-lg font-bold text-[14px] hover:bg-gold-400 transition-all flex items-center group">
                             Compute Daily NAV <RefreshIcon className="ml-2 w-5 h-5 group-hover:rotate-180 transition-all duration-700" />
                         </button>
                     </div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/10 min-w-[300px] text-center">
+                <div className="bg-white/10 backdrop-blur-md rounded-lg p-8 border border-white/10 min-w-[300px] text-center">
                     <p className="text-[11px] font-bold uppercase tracking-widest text-gold-500 mb-4">Latest Computation</p>
-                    <p className="text-5xl font-black font-mono mb-2">₦{fund.nav.toFixed(2)}</p>
+                    <p className="text-5xl font-bold font-mono mb-2">₦{fund.nav.toFixed(2)}</p>
                     <p className="text-[12px] opacity-60 font-bold mb-6">Status: PUBLISHED</p>
-                    <div className="flex justify-between text-[11px] font-black opacity-80 pt-4 border-t border-white/10 uppercase">
+                    <div className="flex justify-between text-[11px] font-bold opacity-80 pt-4 border-t border-white/10 uppercase">
                         <span>Computed: Babatunde</span>
                         <span className="text-gold-500">Approved: Emeka</span>
                     </div>
@@ -550,7 +599,7 @@ function NavEngineTab({ fund, computations, onViewBreakdown }: any) {
             {/* Computation History */}
             <div className="table-datagrid-container overflow-hidden">
                 <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
-                    <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">NAV Computation Log (SEC Compliant)</h3>
+                    <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">NAV Computation Log (SEC Compliant)</h3>
                 </div>
                 <table className="table-datagrid">
                     <thead>
@@ -574,7 +623,7 @@ function NavEngineTab({ fund, computations, onViewBreakdown }: any) {
                                 <td className="text-right font-mono">₦{c.totalAssets.toLocaleString()}</td>
                                 <td className="text-right font-mono">₦{c.totalLiabilities.toLocaleString()}</td>
                                 <td className="text-right font-mono font-bold">₦{c.totalNav.toLocaleString()}</td>
-                                <td className="text-right font-mono text-navy-900 font-black">₦{c.navPerUnit.toFixed(4)}</td>
+                                <td className="text-right font-mono text-navy-900 font-bold">₦{c.navPerUnit.toFixed(4)}</td>
                                 <td className="text-right font-mono">
                                     <span className={cn(c.navChangePct >= 0 ? "text-success" : "text-danger")}>
                                         {c.navChangePct > 0 ? '+' : ''}{c.navChangePct.toFixed(3)}%
@@ -584,7 +633,7 @@ function NavEngineTab({ fund, computations, onViewBreakdown }: any) {
                                 <td>
                                     <button
                                         onClick={() => onViewBreakdown(c)}
-                                        className="text-navy-900 font-black text-[10px] uppercase hover:underline"
+                                        className="text-navy-900 font-bold text-[10px] uppercase hover:underline"
                                     >
                                         View Breakdown
                                     </button>
@@ -616,10 +665,10 @@ function NavBreakdownModal({ run, onClose }: any) {
 
     return (
         <div className="fixed inset-0 bg-navy-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
                 <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <div>
-                        <h2 className="text-xl font-black text-navy-900 uppercase tracking-tight">NAV Computation Breakdown</h2>
+                        <h2 className="text-xl font-bold text-navy-900 uppercase tracking-tight">NAV Computation Breakdown</h2>
                         <p className="text-[11px] text-gray-500 font-bold uppercase mt-1">Computation ID: {run.id} • VAL DATE: {run.date}</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors font-bold text-lg">&times;</button>
@@ -630,7 +679,7 @@ function NavBreakdownModal({ run, onClose }: any) {
                         {/* Assets Side */}
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-sm font-black text-navy-900 uppercase tracking-widest border-l-4 border-success pl-3">Total Assets</h3>
+                                <h3 className="text-sm font-bold text-navy-900 uppercase tracking-widest border-l-4 border-success pl-3">Total Assets</h3>
                                 <span className="font-mono font-bold text-navy-900">₦{run.totalAssets.toLocaleString()}</span>
                             </div>
                             <div className="space-y-3">
@@ -646,7 +695,7 @@ function NavBreakdownModal({ run, onClose }: any) {
                         {/* Liabilities Side */}
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-sm font-black text-navy-900 uppercase tracking-widest border-l-4 border-danger pl-3">Total Liabilities</h3>
+                                <h3 className="text-sm font-bold text-navy-900 uppercase tracking-widest border-l-4 border-danger pl-3">Total Liabilities</h3>
                                 <span className="font-mono font-bold text-navy-900">₦{run.totalLiabilities.toLocaleString()}</span>
                             </div>
                             <div className="space-y-3">
@@ -658,14 +707,46 @@ function NavBreakdownModal({ run, onClose }: any) {
                                 ))}
                             </div>
 
-                            <div className="mt-12 pt-8 border-t border-gray-100 bg-navy-50/50 p-6 rounded-2xl">
-                                <div className="flex justify-between items-center mb-4">
-                                    <span className="text-[13px] font-black text-navy-700 uppercase">Net Asset Value</span>
-                                    <span className="text-lg font-black font-mono text-navy-900">₦{run.totalNav.toLocaleString()}</span>
-                                </div>
-                                <div className="flex justify-between items-center border-t border-navy-100 pt-4">
-                                    <span className="text-[13px] font-black text-gold-600 uppercase">NAV per Unit</span>
-                                    <span className="text-2xl font-black font-mono text-navy-900">₦{run.navPerUnit.toFixed(4)}</span>
+                            <div className="mt-12 pt-8 border-t border-gray-100 bg-navy-50/50 p-6 rounded-lg">
+                                <div className="mt-8 pt-6 border-t border-gray-100">
+                                    <div className="bg-navy-900 rounded-lg p-6 text-white overflow-hidden relative group">
+                                        <div className="relative z-10">
+                                            <div className="flex justify-between items-center mb-6">
+                                                <span className="text-[10px] font-bold text-gold-500 uppercase tracking-[0.2em]">NAV Per Unit Formula</span>
+                                                <div className="group/tip relative cursor-help">
+                                                    <AlertIcon className="w-3.5 h-3.5 text-gold-500/50" />
+                                                    <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-white text-navy-900 text-[10px] font-bold rounded-xl shadow-2xl invisible group-hover/tip:visible transform transition-all duration-200 uppercase tracking-wider leading-relaxed border border-gray-100 z-50">
+                                                        Total units outstanding is dynamically updated daily based on approved subscriptions and redemptions.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="text-[11px] font-bold text-navy-200 uppercase mb-4 tracking-wider leading-relaxed italic opacity-80">
+                                                NAV Per Unit = (Total Assets - Total Liabilities) ÷ Units Outstanding
+                                            </div>
+                                            <div className="space-y-3 font-mono">
+                                                <div className="flex justify-between text-[11px] opacity-70">
+                                                    <span>(₦{run.totalAssets.toLocaleString()} - ₦{run.totalLiabilities.toLocaleString()})</span>
+                                                    <span>= ₦{run.totalNav.toLocaleString()}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center pt-3 border-t border-white/10">
+                                                    <span className="text-[10px] font-bold uppercase text-gold-400">÷ Units Outstanding</span>
+                                                    <span className="text-sm font-bold">{(run.unitsOutstanding || 680512345.67).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center pt-4 border-t border-gold-500/30">
+                                                    <span className="text-xs font-bold uppercase text-gold-500">Resulting NAV</span>
+                                                    <span className="text-2xl font-bold text-white">₦{run.navPerUnit.toFixed(4)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-gold-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-gold-500/20 transition-all duration-500" />
+                                    </div>
+
+                                    <div className="mt-4 p-4 bg-amber-50 rounded-xl border border-amber-100 flex items-start">
+                                        <AlertIcon className="w-3.5 h-3.5 text-amber-600 mr-2.5 shrink-0 mt-0.5" />
+                                        <p className="text-[10px] leading-relaxed text-amber-900 font-bold uppercase tracking-tight">
+                                            Subscriptions & redemptions received before 4:00 PM WAT are included in today's calculation. Units update only after approval.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -699,8 +780,8 @@ function PerformanceTab({ perf, navHistory }: any) {
                 <MetricCard label="Tracking Error" value="1.15%" subValue="Annualised Volatility" trend="Low" trendUp={true} icon={<ShieldIconLocal className="w-5 h-5 text-navy-400" />} />
             </div>
 
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
-                <h3 className="text-base font-black text-navy-900 uppercase mb-8">Calendar Year Performance (%)</h3>
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8">
+                <h3 className="text-base font-bold text-navy-900 uppercase mb-8">Calendar Year Performance (%)</h3>
                 <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={annualReturns}>
@@ -718,7 +799,7 @@ function PerformanceTab({ perf, navHistory }: any) {
 
             <div className="table-datagrid-container">
                 <div className="p-6 border-b border-gray-100 bg-white">
-                    <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Performance Attribution</h3>
+                    <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Performance Attribution</h3>
                 </div>
                 <table className="table-datagrid">
                     <thead>
@@ -757,13 +838,13 @@ function LiquidityTab({ fund, holdings, transactions }: any) {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
-                    <h3 className="text-[12px] font-black text-navy-900 uppercase tracking-widest mb-6">Liquidity Profile</h3>
+                <div className="bg-white rounded-xl border border-gray-100 p-8 shadow-sm">
+                    <h3 className="text-[12px] font-bold text-navy-900 uppercase tracking-widest mb-6">Liquidity Profile</h3>
                     <div className="space-y-6">
                         <div>
                             <div className="flex justify-between items-end mb-2">
                                 <span className="text-[13px] font-bold text-gray-600">Liquid Assets Ratio</span>
-                                <span className="text-lg font-black text-navy-900">{liquidRatio.toFixed(1)}%</span>
+                                <span className="text-lg font-bold text-navy-900">{liquidRatio.toFixed(1)}%</span>
                             </div>
                             <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                 <div className="h-full bg-success rounded-full" style={{ width: `${liquidRatio}%` }} />
@@ -774,21 +855,21 @@ function LiquidityTab({ fund, holdings, transactions }: any) {
                         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
                             <div>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Cash & Equiv.</p>
-                                <p className="text-sm font-black text-navy-900">₦{(totalLiquid / 1e9).toFixed(2)}B</p>
+                                <p className="text-sm font-bold text-navy-900">₦{(totalLiquid / 1e9).toFixed(2)}B</p>
                             </div>
                             <div>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Average Payout (30D)</p>
-                                <p className="text-sm font-black text-navy-900">₦420.5M</p>
+                                <p className="text-sm font-bold text-navy-900">₦420.5M</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-navy-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-lg">
+                <div className="bg-navy-900 rounded-xl p-8 text-white relative overflow-hidden shadow-lg">
                     <div className="absolute top-0 right-0 p-8 opacity-10">
                         <ClockIcon className="w-24 h-24" />
                     </div>
-                    <h3 className="text-[11px] font-black text-gold-500 uppercase tracking-widest mb-6">Settlement Readiness</h3>
+                    <h3 className="text-[11px] font-bold text-gold-500 uppercase tracking-widest mb-6">Settlement Readiness</h3>
                     <div className="space-y-4">
                         <div className="flex justify-between items-center py-2 border-b border-white/5">
                             <span className="text-[13px] opacity-70">Redemption Notice Period</span>
@@ -808,7 +889,7 @@ function LiquidityTab({ fund, holdings, transactions }: any) {
 
             <div className="table-datagrid-container">
                 <div className="p-6 border-b border-gray-100 bg-white">
-                    <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Uninvested Cash Accounts</h3>
+                    <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Uninvested Cash Accounts</h3>
                 </div>
                 <table className="table-datagrid">
                     <thead>
@@ -846,23 +927,23 @@ function FeesTab({ fees, fund }: any) {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-sm">
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">Management Fee Rate</p>
-                    <p className="text-2xl font-black text-navy-900">{fund.managementFee}% <span className="text-[10px] font-medium text-gray-400">p.a.</span></p>
+                    <p className="text-2xl font-bold text-navy-900">{fund.managementFee}% <span className="text-[10px] font-medium text-gray-400">p.a.</span></p>
                 </div>
-                <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-sm">
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">MTD Accrued Fee</p>
-                    <p className="text-2xl font-black text-navy-900">₦40.1M</p>
+                    <p className="text-2xl font-bold text-navy-900">₦40.1M</p>
                 </div>
-                <div className="bg-navy-900 rounded-2xl p-6 shadow-lg text-white">
+                <div className="bg-navy-900 rounded-lg p-6 shadow-lg text-white">
                     <p className="text-[10px] text-gold-500 font-bold uppercase tracking-widest mb-2">Total Paid (YTD)</p>
-                    <p className="text-2xl font-black">₦486.2M</p>
+                    <p className="text-2xl font-bold">₦486.2M</p>
                 </div>
             </div>
 
             <div className="table-datagrid-container">
                 <div className="p-6 border-b border-gray-100 bg-white">
-                    <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Fee Invoices & Accruals</h3>
+                    <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Fee Invoices & Accruals</h3>
                 </div>
                 <table className="table-datagrid">
                     <thead>
@@ -881,7 +962,7 @@ function FeesTab({ fees, fund }: any) {
                             <tr key={f.id}>
                                 <td className="font-bold text-navy-900">{f.invoiceNo}</td>
                                 <td className="text-gray-500 font-semibold">{f.period}</td>
-                                <td><span className="text-[10px] font-black uppercase tracking-tight bg-gray-100 px-2 py-0.5 rounded text-gray-600">{f.feeType}</span></td>
+                                <td><span className="text-[10px] font-bold uppercase tracking-tight bg-gray-100 px-2 py-0.5 rounded text-gray-600">{f.feeType}</span></td>
                                 <td className="text-right font-mono">₦{f.aum.toLocaleString()}</td>
                                 <td className="text-right font-mono font-bold text-navy-900">₦{f.monthlyFee ? f.monthlyFee.toLocaleString() : f.feeAmount.toLocaleString()}</td>
                                 <td><StatusBadge status={f.status} /></td>
@@ -899,8 +980,8 @@ function ComplianceTab({ events }: any) {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
-                    <h3 className="text-[12px] font-black text-navy-900 uppercase tracking-widest mb-8">Asset Concentration Monitor</h3>
+                <div className="bg-white rounded-xl border border-gray-100 p-8 shadow-sm">
+                    <h3 className="text-[12px] font-bold text-navy-900 uppercase tracking-widest mb-8">Asset Concentration Monitor</h3>
                     <div className="space-y-6">
                         {[
                             { label: 'Single Issuer (Max 10%)', val: 7.2, ticker: 'DANGCEM' },
@@ -910,7 +991,7 @@ function ComplianceTab({ events }: any) {
                             <div key={i}>
                                 <div className="flex justify-between items-end mb-2">
                                     <span className="text-[12px] font-bold text-gray-500">{rule.label}</span>
-                                    <span className="font-mono text-xs font-black text-navy-900">{rule.val}%</span>
+                                    <span className="font-mono text-xs font-bold text-navy-900">{rule.val}%</span>
                                 </div>
                                 <div className="h-1.5 bg-gray-100 rounded-full">
                                     <div
@@ -923,11 +1004,11 @@ function ComplianceTab({ events }: any) {
                     </div>
                 </div>
 
-                <div className="bg-success/5 border border-success/10 rounded-3xl p-8 flex flex-col items-center justify-center text-center">
+                <div className="bg-success/5 border border-success/10 rounded-xl p-8 flex flex-col items-center justify-center text-center">
                     <div className="w-16 h-16 bg-success rounded-full flex items-center justify-center mb-6 shadow-lg shadow-success/20 animate-pulse">
                         <CheckCircleIcon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-black text-navy-900 uppercase">Audit Verified</h3>
+                    <h3 className="text-xl font-bold text-navy-900 uppercase">Audit Verified</h3>
                     <p className="text-[13px] text-gray-500 font-medium max-w-sm mt-3">
                         The fund's holdings and valuations have been cross-checked against independent pricing sources. No critical rule breaches detected in the last 24 hours.
                     </p>
@@ -936,7 +1017,7 @@ function ComplianceTab({ events }: any) {
 
             <div className="table-datagrid-container">
                 <div className="p-6 border-b border-gray-100 bg-white">
-                    <h3 className="font-black text-navy-900 text-sm uppercase tracking-wider">Compliance Event History</h3>
+                    <h3 className="font-bold text-navy-900 text-sm uppercase tracking-wider">Compliance Event History</h3>
                 </div>
                 <table className="table-datagrid">
                     <thead>
@@ -973,22 +1054,22 @@ function DocumentsTab({ docs }: { docs: any[] }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
             {docs.map((doc: any) => (
-                <div key={doc.id} className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all group overflow-hidden">
+                <div key={doc.id} className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all group overflow-hidden">
                     <div className="flex items-start justify-between mb-6">
-                        <div className="p-4 bg-navy-50 rounded-2xl group-hover:bg-gold-50 transition-colors">
+                        <div className="p-4 bg-navy-50 rounded-lg group-hover:bg-gold-50 transition-colors">
                             <FileIcon className="w-8 h-8 text-navy-900 group-hover:text-gold-600 transition-colors" />
                         </div>
                         <StatusBadge status={doc.status} />
                     </div>
-                    <h3 className="font-black text-navy-900 text-sm mb-1 leading-tight group-hover:text-gold-600 transition-colors">{doc.name}</h3>
+                    <h3 className="font-bold text-navy-900 text-sm mb-1 leading-tight group-hover:text-gold-600 transition-colors">{doc.name}</h3>
                     <div className="flex items-center space-x-3 mt-3 mb-6">
-                        <span className="text-[10px] font-black uppercase opacity-40">{doc.format}</span>
-                        <span className="text-[10px] font-black uppercase opacity-40">•</span>
-                        <span className="text-[10px] font-black uppercase opacity-40">{doc.fileSize}</span>
+                        <span className="text-[10px] font-bold uppercase opacity-40">{doc.format}</span>
+                        <span className="text-[10px] font-bold uppercase opacity-40">•</span>
+                        <span className="text-[10px] font-bold uppercase opacity-40">{doc.fileSize}</span>
                     </div>
                     <div className="pt-6 border-t border-gray-50 flex justify-between items-center mt-auto">
                         <div>
-                            <p className="text-[9px] font-black uppercase text-gray-400">Modified</p>
+                            <p className="text-[9px] font-bold uppercase text-gray-400">Modified</p>
                             <p className="text-[11px] font-bold text-navy-700">{doc.uploadedDate}</p>
                         </div>
                         <button className="p-2.5 bg-navy-900 text-white rounded-xl shadow-lg hover:bg-gold-500 hover:text-navy-900 transition-all">
@@ -999,11 +1080,11 @@ function DocumentsTab({ docs }: { docs: any[] }) {
             ))}
 
             {/* Template Add Box */}
-            <div className="bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-200 p-6 flex flex-col items-center justify-center text-center group hover:border-navy-200 transition-all cursor-pointer">
+            <div className="bg-gray-50/50 rounded-xl border-2 border-dashed border-gray-200 p-6 flex flex-col items-center justify-center text-center group hover:border-navy-200 transition-all cursor-pointer">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
                     <PlusIcon className="w-6 h-6 text-gray-400" />
                 </div>
-                <p className="text-[11px] font-black uppercase text-gray-400 group-hover:text-navy-900 transition-colors">Upload New Document</p>
+                <p className="text-[11px] font-bold uppercase text-gray-400 group-hover:text-navy-900 transition-colors">Upload New Document</p>
                 <p className="text-[9px] text-gray-400 mt-1">Factsheets, Reports, Mandates</p>
             </div>
         </div>

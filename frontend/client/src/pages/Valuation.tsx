@@ -71,9 +71,18 @@ export default function Valuation() {
                                 <span className="text-3xl font-bold text-navy-900 font-mono tracking-tighter">₦{fund.nav.toFixed(2)}</span>
                             </div>
                             <p className="text-[10px] text-gray-400 font-mono font-medium">VALUATION AS AT: {fund.navDate}</p>
-                            <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between text-[11px] font-bold">
-                                <span className="text-gray-400 uppercase tracking-wider">AUM</span>
-                                <span className="text-navy-900">₦{(fund.aum / 1e9).toFixed(1)}B</span>
+                            <div className="mt-4 pt-4 border-t border-gray-50 space-y-2">
+                                <div className="flex justify-between text-[11px] font-bold">
+                                    <span className="text-gray-400 uppercase tracking-wider">AUM</span>
+                                    <span className="text-navy-900">₦{(fund.aum / 1e9).toFixed(1)}B</span>
+                                </div>
+                                <div className="flex justify-between text-[10px]">
+                                    <span className="text-gray-400 font-medium">Total Units Outstanding</span>
+                                    <span className="text-navy-700 font-mono font-bold">{(fund.totalUnitsOutstanding || fund.units).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                </div>
+                                <div className="text-[9px] text-right text-gray-400 italic">
+                                    As of: {new Date(fund.totalUnitsOutstandingAsOf || fund.navDate).toLocaleDateString()}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -167,6 +176,16 @@ export default function Valuation() {
                             <button onClick={() => setShowRunPricing(false)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
                         </div>
                         <div className="p-6 space-y-5">
+                            <div className="bg-navy-50 border border-navy-100 rounded-lg p-3 flex items-start">
+                                <AlertIcon className="w-4 h-4 text-navy-600 mr-2 shrink-0 mt-0.5" />
+                                <div>
+                                    <p className="text-[11px] text-navy-900 font-bold uppercase tracking-wider mb-1">Pricing Workflow Note</p>
+                                    <p className="text-[10px] text-gray-600 leading-relaxed font-medium">
+                                        Subscriptions & redemptions received before <span className="text-gold-600 font-bold">4:00 PM WAT</span> are included in today's unit count and NAV.
+                                        Unit updates are applied only after NAV approval.
+                                    </p>
+                                </div>
+                            </div>
                             <div className="bg-warning-bg border border-warning/20 rounded p-3 flex items-start">
                                 <AlertIcon className="w-4 h-4 text-warning mr-2 shrink-0 mt-0.5" />
                                 <p className="text-xs text-warning-700 font-medium">This will refresh all security prices and recalculate NAV for all active funds.</p>
@@ -224,17 +243,31 @@ export default function Valuation() {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Select Funds for NAV Approval</label>
                                 <div className="space-y-3">
                                     {mockFunds.map(fund => (
-                                        <label key={fund.id} className={cn("flex items-center justify-between p-3 border rounded cursor-pointer transition-colors", selectedFundsForNav.includes(fund.id) ? "border-gold-500 bg-gold-50" : "border-gray-200 hover:border-gray-300")}>
-                                            <div className="flex items-center">
-                                                <input type="checkbox" checked={selectedFundsForNav.includes(fund.id)} onChange={() => toggleNavFund(fund.id)} className="h-4 w-4 text-gold-500 focus:ring-gold-500 border-gray-300 rounded mr-3" />
-                                                <div>
-                                                    <p className="text-sm font-medium text-navy-900">{fund.name.replace('ValuAlliance ', '')}</p>
-                                                    <p className="text-xs text-gray-500">NAV Date: {fund.navDate}</p>
+                                        <label key={fund.id} className={cn("flex flex-col p-3 border rounded cursor-pointer transition-colors", selectedFundsForNav.includes(fund.id) ? "border-gold-500 bg-gold-50" : "border-gray-200 hover:border-gray-300")}>
+                                            <div className="flex items-center justify-between w-full mb-3">
+                                                <div className="flex items-center">
+                                                    <input type="checkbox" checked={selectedFundsForNav.includes(fund.id)} onChange={() => toggleNavFund(fund.id)} className="h-4 w-4 text-gold-500 focus:ring-gold-500 border-gray-300 rounded mr-3" />
+                                                    <div>
+                                                        <p className="text-sm font-medium text-navy-900">{fund.name.replace('ValuAlliance ', '')}</p>
+                                                        <p className="text-xs text-gray-500">NAV Date: {fund.navDate}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="font-mono font-bold text-navy-900">₦{fund.nav.toFixed(2)}</p>
+                                                    <p className="text-xs font-mono text-gray-500">AUM: ₦{(fund.aum / 1e9).toFixed(1)}B</p>
                                                 </div>
                                             </div>
-                                            <div className="text-right">
-                                                <p className="font-mono font-bold text-navy-900">₦{fund.nav.toFixed(2)}</p>
-                                                <p className="text-xs font-mono text-gray-500">AUM: ₦{(fund.aum / 1e9).toFixed(1)}B</p>
+                                            <div className="pt-3 border-t border-dashed border-gray-200 grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <p className="text-[9px] text-gray-400 font-bold uppercase">Incoming Total Units</p>
+                                                    <p className="text-[11px] font-mono font-bold text-navy-700">
+                                                        {(fund.totalUnitsOutstanding || fund.units).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-[9px] text-gray-400 font-bold uppercase">Approval Status</p>
+                                                    <span className="text-[9px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-black uppercase tracking-tighter">Pending Approval</span>
+                                                </div>
                                             </div>
                                         </label>
                                     ))}
@@ -249,7 +282,12 @@ export default function Valuation() {
                             <span className="text-xs text-gray-500">{selectedFundsForNav.length} fund(s) selected</span>
                             <div className="flex gap-3">
                                 <button onClick={() => setShowApproveNav(false)} className="px-4 py-2 border border-gray-300 rounded text-gray-700 text-sm font-medium hover:bg-gray-100">Cancel</button>
-                                <button onClick={() => { setShowApproveNav(false); alert(selectedFundsForNav.length + ' fund NAV(s) approved and submitted for publication.'); }} className="px-4 py-2 bg-gold-500 text-navy-900 rounded text-sm font-medium shadow hover:bg-gold-400" disabled={selectedFundsForNav.length === 0}>Approve & Publish</button>
+                                <button onClick={() => {
+                                    setShowApproveNav(false);
+                                    const fund = mockFunds.find(f => selectedFundsForNav.includes(f.id)) || mockFunds[0];
+                                    const formattedUnits = (fund.totalUnitsOutstanding || fund.units).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                    alert(`NAV approved. Total units outstanding updated to ${formattedUnits}`);
+                                }} className="px-4 py-2 bg-gold-500 text-navy-900 rounded text-sm font-medium shadow hover:bg-gold-400" disabled={selectedFundsForNav.length === 0}>Approve & Publish</button>
                             </div>
                         </div>
                     </div>

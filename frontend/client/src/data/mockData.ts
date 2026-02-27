@@ -35,11 +35,19 @@ export const mockPortfolios = [
 ];
 
 export const mockFunds = [
-  { id: "F001", name: "ValuAlliance Growth Fund", type: "Equity", currency: "NGN", nav: 125.48, navDate: "2026-02-21", aum: 32400000000, units: 258250000, benchmark: "NSE All-Share Index", inceptionDate: "2015-01-05", ytdReturn: 18.42, oneYearReturn: 31.85, managementFee: 1.5, performanceFee: 20, status: "Active" },
-  { id: "F002", name: "ValuAlliance Fixed Income Fund", type: "Fixed Income", currency: "NGN", nav: 108.74, navDate: "2026-02-21", aum: 28700000000, units: 263940000, benchmark: "FMDQ Bond Index", inceptionDate: "2016-06-12", ytdReturn: 4.82, oneYearReturn: 14.93, managementFee: 1.0, performanceFee: 0, status: "Active" },
-  { id: "F003", name: "ValuAlliance Money Market Fund", type: "Money Market", currency: "NGN", nav: 100.00, navDate: "2026-02-21", aum: 14600000000, units: 146000000, benchmark: "CBN Overnight Rate", inceptionDate: "2017-03-20", ytdReturn: 2.85, oneYearReturn: 22.40, managementFee: 0.5, performanceFee: 0, status: "Active" },
-  { id: "F004", name: "ValuAlliance Balanced Fund", type: "Balanced", currency: "NGN", nav: 115.22, navDate: "2026-02-21", aum: 9700000000, units: 84190000, benchmark: "Composite (60% NSE / 40% FMDQ)", inceptionDate: "2018-10-01", ytdReturn: 11.64, oneYearReturn: 24.18, managementFee: 1.25, performanceFee: 15, status: "Active" },
+  { id: "F001", name: "ValuAlliance Growth Fund", type: "Equity", currency: "NGN", nav: 125.48, navDate: "2026-02-21", aum: 32400000000, units: 258250000, totalUnitsOutstanding: 680512345.67, totalUnitsOutstandingAsOf: "2026-02-21T16:00:00Z", benchmark: "NSE All-Share Index", inceptionDate: "2015-01-05", ytdReturn: 18.42, oneYearReturn: 31.85, managementFee: 1.5, performanceFee: 20, status: "Active" },
+  { id: "F002", name: "ValuAlliance Fixed Income Fund", type: "Fixed Income", currency: "NGN", nav: 108.74, navDate: "2026-02-21", aum: 28700000000, units: 263940000, totalUnitsOutstanding: 263940000.00, totalUnitsOutstandingAsOf: "2026-02-21T16:00:00Z", benchmark: "FMDQ Bond Index", inceptionDate: "2016-06-12", ytdReturn: 4.82, oneYearReturn: 14.93, managementFee: 1.0, performanceFee: 0, status: "Active" },
+  { id: "F003", name: "ValuAlliance Money Market Fund", type: "Money Market", currency: "NGN", nav: 100.00, navDate: "2026-02-21", aum: 14600000000, units: 146000000, totalUnitsOutstanding: 146000000.00, totalUnitsOutstandingAsOf: "2026-02-21T16:00:00Z", benchmark: "CBN Overnight Rate", inceptionDate: "2017-03-20", ytdReturn: 2.85, oneYearReturn: 22.40, managementFee: 0.5, performanceFee: 0, status: "Active" },
+  { id: "F004", name: "ValuAlliance Balanced Fund", type: "Balanced", currency: "NGN", nav: 115.22, navDate: "2026-02-21", aum: 9700000000, units: 84190000, totalUnitsOutstanding: 84190000.00, totalUnitsOutstandingAsOf: "2026-02-21T16:00:00Z", benchmark: "Composite (60% NSE / 40% FMDQ)", inceptionDate: "2018-10-01", ytdReturn: 11.64, oneYearReturn: 24.18, managementFee: 1.25, performanceFee: 15, status: "Active" },
 ];
+
+export const mockUnitHistory: Record<string, any[]> = {
+  F001: [
+    { date: "2026-02-21", type: "Subscription", units: 1540250.25, netChange: 1540250.25, newTotal: 680512345.67, approvedBy: "Emeka Nwachukwu" },
+    { date: "2026-02-20", type: "Redemption", units: 420500.00, netChange: -420500.00, newTotal: 678972095.42, approvedBy: "Adaeze Okonkwo" },
+    { date: "2026-02-19", type: "Subscription", units: 850000.00, netChange: 850000.00, newTotal: 679392595.42, approvedBy: "Emeka Nwachukwu" },
+  ]
+};
 
 export const mockSecurities: any[] = [
   { id: "S001", ticker: "DANGCEM", name: "Dangote Cement PLC", exchange: "NGX", assetClass: "Equity", sector: "Materials", price: 510.00, priceDate: "2026-02-21", currency: "NGN", change: 12.50, changePct: 2.51, volume: 4820000 },
@@ -204,16 +212,21 @@ export const mockCorporateActions = [
 ];
 
 export const mockJournalEntries = [
-  { id: "JE-2026-0501", date: "2026-02-21", fund: "Growth Fund", description: "Trade Settlement — DANGCEM Buy 50,000 units", drAccount: "Securities at Cost", crAccount: "Cash — NGN", amount: 25678500, sourceModule: "Trade Capture", postedBy: "System" },
-  { id: "JE-2026-0500", date: "2026-02-21", fund: "Growth Fund", description: "Broker Fee — TRD-2026-0248", drAccount: "Brokerage Expense", crAccount: "Cash — NGN", amount: 127500, sourceModule: "Trade Capture", postedBy: "System" },
-  { id: "JE-2026-0499", date: "2026-02-21", fund: "Growth Fund", description: "Management Fee Accrual — February 2026", drAccount: "Management Fee Expense", crAccount: "Fee Payable — Management", amount: 1350000, sourceModule: "Fee Calculation", postedBy: "System" },
-  { id: "JE-2026-0498", date: "2026-02-20", fund: "Fixed Income Fund", description: "Bond Coupon Income — FGN-APR-27", drAccount: "Cash — NGN", crAccount: "Interest Income", amount: 20970000, sourceModule: "Corporate Actions", postedBy: "System" },
-  { id: "JE-2026-0497", date: "2026-02-20", fund: "Growth Fund", description: "Dividend Income — GTCO Interim Div", drAccount: "Cash — NGN", crAccount: "Dividend Income", amount: 600000, sourceModule: "Corporate Actions", postedBy: "System" },
-  { id: "JE-2026-0496", date: "2026-02-21", fund: "Growth Fund", description: "MTM Adjustment — Equities", drAccount: "Unrealised Gain on Investments", crAccount: "Securities Revaluation Reserve", amount: 10075000, sourceModule: "Valuation", postedBy: "System" },
-  { id: "JE-2026-0495", date: "2026-02-19", fund: "Money Market Fund", description: "T-Bill Settlement — CBN-TB-91", drAccount: "Short-Term Investments", crAccount: "Cash — NGN", amount: 943600000, sourceModule: "Trade Capture", postedBy: "System" },
-  { id: "JE-2026-0494", date: "2026-02-18", fund: "Growth Fund", description: "Trade Settlement — SEPLAT Buy 5,000", drAccount: "Securities at Cost", crAccount: "Cash — NGN", amount: 21398750, sourceModule: "Trade Capture", postedBy: "System" },
-  { id: "JE-2026-0493", date: "2026-02-18", fund: "Fixed Income Fund", description: "Bond Interest Accrual — Daily", drAccount: "Accrued Interest Receivable", crAccount: "Interest Income Accrued", amount: 4850000, sourceModule: "Fund Accounting", postedBy: "System" },
-  { id: "JE-2026-0492", date: "2026-02-17", fund: "Fixed Income Fund", description: "Trade Settlement — FGN-FEB-29 Buy", drAccount: "Government Bonds at Cost", crAccount: "Cash — NGN", amount: 291745800, sourceModule: "Trade Capture", postedBy: "System" },
+  { id: "JE-2026-0501", date: "2026-02-21", fund: "Growth Fund", description: "Trade Settlement — DANGCEM Buy 50,000 units", drAccount: "Securities at Cost", crAccount: "Cash — NGN", amount: 25678500, sourceModule: "Trade Capture", postedBy: "System", status: "Posted", type: "Trade Purchase" },
+  { id: "JE-2026-0500", date: "2026-02-21", fund: "Growth Fund", description: "Broker Fee — TRD-2026-0248", drAccount: "Brokerage Expense", crAccount: "Cash — NGN", amount: 127500, sourceModule: "Trade Capture", postedBy: "System", status: "Posted", type: "Adjustment" },
+  { id: "JE-2026-0499", date: "2026-02-21", fund: "Growth Fund", description: "Management Fee Accrual — February 2026", drAccount: "Management Fee Expense", crAccount: "Fee Payable — Management", amount: 1350000, sourceModule: "Fee Calculation", postedBy: "System", status: "Posted", type: "Fee Accrual" },
+  { id: "JE-2026-0498", date: "2026-02-20", fund: "Fixed Income Fund", description: "Bond Coupon Income — FGN-APR-27", drAccount: "Cash — NGN", crAccount: "Interest Income", amount: 20970000, sourceModule: "Corporate Actions", postedBy: "System", status: "Posted", type: "Coupon Receipt" },
+  { id: "JE-2026-0497", date: "2026-02-20", fund: "Growth Fund", description: "Dividend Income — GTCO Interim Div", drAccount: "Cash — NGN", crAccount: "Dividend Income", amount: 600000, sourceModule: "Corporate Actions", postedBy: "System", status: "Posted", type: "Dividend Receipt" },
+  { id: "JE-2026-0496", date: "2026-02-21", fund: "Growth Fund", description: "MTM Adjustment — Equities", drAccount: "Unrealised Gain on Investments", crAccount: "Securities Revaluation Reserve", amount: 10075000, sourceModule: "Valuation", postedBy: "System", status: "Posted", type: "Adjustment" },
+  { id: "JE-2026-0495", date: "2026-02-19", fund: "Money Market Fund", description: "T-Bill Settlement — CBN-TB-91", drAccount: "Short-Term Investments", crAccount: "Cash — NGN", amount: 943600000, sourceModule: "Trade Capture", postedBy: "System", status: "Posted", type: "Trade Purchase" },
+  { id: "JE-2026-0494", date: "2026-02-18", fund: "Growth Fund", description: "Trade Settlement — SEPLAT Buy 5,000", drAccount: "Securities at Cost", crAccount: "Cash — NGN", amount: 21398750, sourceModule: "Trade Capture", postedBy: "System", status: "Posted", type: "Trade Purchase" },
+  { id: "JE-2026-0493", date: "2026-02-18", fund: "Fixed Income Fund", description: "Bond Interest Accrual — Daily", drAccount: "Accrued Interest Receivable", crAccount: "Interest Income Accrued", amount: 4850000, sourceModule: "Fund Accounting", postedBy: "System", status: "Posted", type: "Fee Accrual" },
+  { id: "JE-2026-0492", date: "2026-02-17", fund: "Fixed Income Fund", description: "Trade Settlement — FGN-FEB-29 Buy", drAccount: "Government Bonds at Cost", crAccount: "Cash — NGN", amount: 291745800, sourceModule: "Trade Capture", postedBy: "System", status: "Posted", type: "Trade Purchase" },
+  { id: "JE-2026-0491", date: "2026-02-25", fund: "Growth Fund", description: "Manual Adjustment — Correction of Fee Calculation", drAccount: "Retained Earnings", crAccount: "Accrued Expenses", amount: 450000, sourceModule: "Manual", postedBy: "Babatunde Adeyemi", status: "Pending Approval", type: "Adjustment" },
+  { id: "JE-2026-0490", date: "2026-02-25", fund: "Value Fund", description: "Subscription Entry — Corporate Client A", drAccount: "Subscriptions Receivable", crAccount: "Unitholders Capital", amount: 15000000, sourceModule: "Manual", postedBy: "Abioro Adeyemi", status: "Pending Approval", type: "Manual" },
+  { id: "JE-2026-0489", date: "2026-02-24", fund: "Money Market Fund", description: "Redemption Payment — Institutional Investor B", drAccount: "Unitholders Capital", crAccount: "Cash — NGN", amount: 8500000, sourceModule: "Manual", postedBy: "Abioro Adeyemi", status: "Pending Approval", type: "Manual" },
+  { id: "JE-2026-0488", date: "2026-02-24", fund: "Growth Fund", description: "Bank Charges — Feb 2026", drAccount: "Other Operating Expenses", crAccount: "Cash — NGN", amount: 12500, sourceModule: "Manual", postedBy: "Babatunde Adeyemi", status: "Pending Approval", type: "Manual" },
+  { id: "JE-2026-0487", date: "2026-02-23", fund: "Fixed Income Fund", description: "Interest Income Reversal — Error Correction", drAccount: "Interest Income", crAccount: "Accrued Interest Receivable", amount: 215000, sourceModule: "Manual", postedBy: "Babatunde Adeyemi", status: "Draft", type: "Manual" },
 ];
 
 export const mockTrialBalance = [
