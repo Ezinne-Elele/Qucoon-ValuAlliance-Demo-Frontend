@@ -1,6 +1,15 @@
 import dotenv from "dotenv";
 import { resolve } from "path";
-dotenv.config({ path: resolve(import.meta.dirname, "../../.env") });
+import { existsSync } from "fs";
+
+// Load .env file
+// Supports both monorepo root and standalone repo root
+const rootEnv = resolve(process.cwd(), ".env");
+const parentEnv = resolve(import.meta.dirname, "../../.env");
+
+if (existsSync(rootEnv)) dotenv.config({ path: rootEnv });
+else if (existsSync(parentEnv)) dotenv.config({ path: parentEnv });
+else dotenv.config();
 
 import express from "express";
 import cors from "cors";
@@ -13,7 +22,13 @@ const app = express();
 const PORT = parseInt(process.env.BACKEND_PORT || "4000", 10);
 
 // ── Middleware ──
-app.use(cors({ origin: ["http://localhost:5000", "http://localhost:3000", "http://localhost:5173"], credentials: true }));
+const allowedOrigins = [
+    "http://localhost:5000",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // ── Request logging ──
@@ -44,7 +59,8 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 // ── Start ──
 async function start() {
     await connectDB();
-    app.listen(PORT, "localhost", () => {
+    const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+    app.listen(PORT, HOST, () => {
         console.log(`\n🚀 ValuAlliance Backend API running at http://localhost:${PORT}`);
         console.log(`   📦 Database API:  /api/*`);
         console.log(`   🔐 Auth API:      /api/auth/*`);
