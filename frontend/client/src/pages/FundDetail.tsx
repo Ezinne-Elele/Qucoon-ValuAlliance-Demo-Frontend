@@ -13,8 +13,8 @@ import {
     RefreshIcon, CheckCircleIcon, PlusIcon, AlertIcon, cn
 } from '../components/icons/Icons';
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-    ResponsiveContainer, Legend, PieChart, Pie, Cell, AreaChart, Area
+    LineChart, Line, XAxis, YAxis, CartesianGrid,
+    ResponsiveContainer, Legend, PieChart, Pie, Cell, AreaChart, Area, Tooltip
 } from 'recharts';
 import { TableToolbar, TablePagination, useTableControls } from '../components/ui/TableControls';
 
@@ -190,7 +190,7 @@ function MetricCard({ label, value, subValue, trend, trendUp, icon }: any) {
                 {icon || <TrendingUpIcon className="w-8 h-8" />}
             </div>
             <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">{label}</p>
-            <p className="text-2xl font-bold text-navy-900 tracking-tight font-mono mb-1 relative z-10">{value}</p>
+            <p className="text-2xl font-bold text-navy-900 tracking-tight mb-1 relative z-10">{value}</p>
             <div className="flex items-center justify-between relative z-10">
                 <span className="text-[12px] text-gray-500 font-medium">{subValue}</span>
                 {trend && (
@@ -234,8 +234,8 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f1f1" />
                                 <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600 }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600, fontFamily: 'JetBrains Mono' }} />
-                                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', padding: '12px' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600 }} />
+                                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
                                 <Area type="monotone" dataKey="nav" stroke="#0E4535" strokeWidth={3} fillOpacity={1} fill="url(#colorNav)" />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -307,7 +307,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                             </PieChart>
                         </ResponsiveContainer>
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <span className="text-2xl font-bold text-navy-900 font-mono">100%</span>
+                            <span className="text-2xl font-bold text-navy-900">100%</span>
                             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Allocated</span>
                         </div>
                     </div>
@@ -318,7 +318,7 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                                     <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
                                     <span className="font-semibold text-gray-700">{item.name}</span>
                                 </div>
-                                <span className="font-mono font-bold text-navy-900">{item.value.toFixed(1)}%</span>
+                                <span className="font-bold text-navy-900">{item.value.toFixed(1)}%</span>
                             </div>
                         ))}
                     </div>
@@ -341,13 +341,13 @@ function OverviewTab({ fund, navHistory, allocationData }: any) {
                         ].map((item, i) => (
                             <div key={i} className="flex justify-between items-center group">
                                 <span className="text-[13px] text-gray-500 font-medium">{item.label}</span>
-                                <span className="text-[13px] font-bold text-success font-mono">{item.value}</span>
+                                <span className="text-[13px] font-bold text-success">{item.value}</span>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
@@ -381,11 +381,11 @@ function HoldingsTab({ holdings }: any) {
                             <td><span className="text-[11px] font-bold text-navy-700 bg-navy-50 px-2 py-0.5 rounded">{h.assetClass}</span></td>
                             <td className="font-bold text-navy-900">{h.ticker}</td>
                             <td className="text-gray-600 font-medium">{h.name}</td>
-                            <td className="text-right font-mono">{(h.quantity || h.faceValue).toLocaleString()}</td>
-                            <td className="text-right font-mono">₦{h.currentPrice.toLocaleString()}</td>
-                            <td className="text-right font-mono font-bold">₦{h.marketValue.toLocaleString()}</td>
-                            <td className="text-right font-mono text-navy-900">{h.percentOfNav}%</td>
-                            <td className="text-right font-mono">
+                            <td className="text-right">{(h.quantity || h.faceValue).toLocaleString()}</td>
+                            <td className="text-right">₦{h.currentPrice.toLocaleString()}</td>
+                            <td className="text-right font-bold">₦{h.marketValue.toLocaleString()}</td>
+                            <td className="text-right text-navy-900">{h.percentOfNav}%</td>
+                            <td className="text-right">
                                 <span className={cn(h.unrealisedPnLPct >= 0 ? "text-success" : "text-danger")}>
                                     {h.unrealisedPnLPct >= 0 ? '+' : ''}{h.unrealisedPnLPct}%
                                 </span>
@@ -406,7 +406,7 @@ function UnitHoldersTab({ holders, fundId }: { holders: any[], fundId: string })
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-navy-900 rounded-lg p-6 text-white text-center shadow-lg">
                     <p className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Total Capital Base</p>
-                    <p className="text-2xl font-bold font-mono">₦{holders.reduce((s: number, h: any) => s + h.holdingValue, 0).toLocaleString()}</p>
+                    <p className="text-2xl font-bold">₦{holders.reduce((s: number, h: any) => s + h.holdingValue, 0).toLocaleString()}</p>
                 </div>
                 <div className="bg-white rounded-lg p-6 border border-gray-100 text-center shadow-sm">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Institutional Share</p>
@@ -449,10 +449,10 @@ function UnitHoldersTab({ holders, fundId }: { holders: any[], fundId: string })
                                 </td>
                                 <td className="text-gray-500 text-[12px] font-semibold">{h.type}</td>
                                 <td><StatusBadge status={h.kycStatus} /></td>
-                                <td className="text-right font-mono">{h.unitsHeld.toLocaleString()}</td>
-                                <td className="text-right font-mono font-bold">₦{h.holdingValue.toLocaleString()}</td>
-                                <td className="text-right font-mono font-bold text-navy-900">{h.percentOfFund}%</td>
-                                <td className="text-right font-mono text-gray-400 text-[11px]">{h.lastTransactionDate}</td>
+                                <td className="text-right">{h.unitsHeld.toLocaleString()}</td>
+                                <td className="text-right font-bold">₦{h.holdingValue.toLocaleString()}</td>
+                                <td className="text-right font-bold text-navy-900">{h.percentOfFund}%</td>
+                                <td className="text-right text-gray-400 text-[11px]">{h.lastTransactionDate}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -486,7 +486,7 @@ function UnitHoldersTab({ holders, fundId }: { holders: any[], fundId: string })
                         <tbody className="divide-y divide-gray-50">
                             {(mockUnitHistory[fundId] || []).map((h, i) => (
                                 <tr key={i} className="group hover:bg-gray-50/50 transition-colors">
-                                    <td className="py-4 text-[11px] font-bold text-navy-900 font-mono">{h.date}</td>
+                                    <td className="py-4 text-[11px] font-bold text-navy-900">{h.date}</td>
                                     <td className="py-4">
                                         <span className={cn(
                                             "text-[9px] font-bold px-2 py-0.5 rounded uppercase",
@@ -496,12 +496,12 @@ function UnitHoldersTab({ holders, fundId }: { holders: any[], fundId: string })
                                         </span>
                                     </td>
                                     <td className={cn(
-                                        "py-4 text-[11px] font-mono font-bold text-right",
+                                        "py-4 text-[11px] font-bold text-right",
                                         h.netChange >= 0 ? "text-success" : "text-danger"
                                     )}>
                                         {h.netChange >= 0 ? '+' : ''}{h.units.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                     </td>
-                                    <td className="py-4 text-[11px] font-mono font-bold text-navy-900 text-right">{h.newTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                    <td className="py-4 text-[11px] font-bold text-navy-900 text-right">{h.newTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                                     <td className="py-4 text-[10px] font-bold text-gray-500 text-right uppercase tracking-tighter">{h.approvedBy}</td>
                                 </tr>
                             ))}
@@ -509,7 +509,7 @@ function UnitHoldersTab({ holders, fundId }: { holders: any[], fundId: string })
                     </table>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
@@ -537,7 +537,7 @@ function TransactionsTab({ txns }: any) {
                 <tbody>
                     {ctrl.paged.map((t: any) => (
                         <tr key={t.id}>
-                            <td className="font-mono text-gray-400 text-[11px]">{t.date}</td>
+                            <td className="text-gray-400 text-[11px]">{t.date}</td>
                             <td className="font-bold text-navy-900 text-[12px]">{t.id}</td>
                             <td className="text-gray-700 font-medium text-[13px]">{t.holderName}</td>
                             <td>
@@ -549,9 +549,9 @@ function TransactionsTab({ txns }: any) {
                                     {t.type}
                                 </span>
                             </td>
-                            <td className="text-right font-mono">{t.units.toLocaleString()}</td>
-                            <td className="text-right font-mono">₦{t.navPerUnit.toFixed(2)}</td>
-                            <td className="text-right font-mono font-bold">₦{t.amount.toLocaleString()}</td>
+                            <td className="text-right">{t.units.toLocaleString()}</td>
+                            <td className="text-right">₦{t.navPerUnit.toFixed(2)}</td>
+                            <td className="text-right font-bold">₦{t.amount.toLocaleString()}</td>
                             <td><StatusBadge status={t.status} /></td>
                         </tr>
                     ))}
@@ -587,7 +587,7 @@ function NavEngineTab({ fund, computations, onViewBreakdown }: any) {
                 </div>
                 <div className="bg-white/10 backdrop-blur-md rounded-lg p-8 border border-white/10 min-w-[300px] text-center">
                     <p className="text-[11px] font-bold uppercase tracking-widest text-gold-500 mb-4">Latest Computation</p>
-                    <p className="text-5xl font-bold font-mono mb-2">₦{fund.nav.toFixed(2)}</p>
+                    <p className="text-5xl font-bold mb-2">₦{fund.nav.toFixed(2)}</p>
                     <p className="text-[12px] opacity-60 font-bold mb-6">Status: PUBLISHED</p>
                     <div className="flex justify-between text-[11px] font-bold opacity-80 pt-4 border-t border-white/10 uppercase">
                         <span>Computed: Babatunde</span>
@@ -619,12 +619,12 @@ function NavEngineTab({ fund, computations, onViewBreakdown }: any) {
                         {computations.map((c: any) => (
                             <tr key={c.id}>
                                 <td className="font-bold text-navy-900">{c.date}</td>
-                                <td className="font-mono text-gray-500 text-[11px]">{c.id}</td>
-                                <td className="text-right font-mono">₦{c.totalAssets.toLocaleString()}</td>
-                                <td className="text-right font-mono">₦{c.totalLiabilities.toLocaleString()}</td>
-                                <td className="text-right font-mono font-bold">₦{c.totalNav.toLocaleString()}</td>
-                                <td className="text-right font-mono text-navy-900 font-bold">₦{c.navPerUnit.toFixed(4)}</td>
-                                <td className="text-right font-mono">
+                                <td className="text-gray-500 text-[11px]">{c.id}</td>
+                                <td className="text-right">₦{c.totalAssets.toLocaleString()}</td>
+                                <td className="text-right">₦{c.totalLiabilities.toLocaleString()}</td>
+                                <td className="text-right font-bold">₦{c.totalNav.toLocaleString()}</td>
+                                <td className="text-right text-navy-900 font-bold">₦{c.navPerUnit.toFixed(4)}</td>
+                                <td className="text-right">
                                     <span className={cn(c.navChangePct >= 0 ? "text-success" : "text-danger")}>
                                         {c.navChangePct > 0 ? '+' : ''}{c.navChangePct.toFixed(3)}%
                                     </span>
@@ -788,8 +788,8 @@ function PerformanceTab({ perf, navHistory }: any) {
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f1f1" />
                             <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600 }} />
                             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600, fontFamily: 'JetBrains Mono' }} />
-                            <Tooltip />
-                            <Legend verticalAlign="top" align="right" />
+                            <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
+                            <Legend />
                             <Line type="monotone" name="ValuAlliance Fund" dataKey="fund" stroke="#0E4535" strokeWidth={3} dot={{ r: 6, fill: '#0E4535' }} activeDot={{ r: 8 }} />
                             <Line type="monotone" name="Benchmark" dataKey="bench" stroke="#DFA223" strokeWidth={2} strokeDasharray="5 5" />
                         </LineChart>
@@ -817,7 +817,7 @@ function PerformanceTab({ perf, navHistory }: any) {
                                 <td className="font-bold text-navy-900">{p}</td>
                                 <td className="text-right font-mono text-navy-900">{(Math.random() * 20).toFixed(2)}%</td>
                                 <td className="text-right font-mono text-gray-500">{(Math.random() * 15).toFixed(2)}%</td>
-                                <td className="text-right font-mono">
+                                <td className="text-right">
                                     <span className="text-success font-bold">+{(Math.random() * 5).toFixed(2)}%</span>
                                 </td>
                                 <td><StatusBadge status="Outperforming" /></td>

@@ -185,13 +185,13 @@ export function TableToolbar({
                     {exportOpen && (
                         <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-2xl z-50 py-1.5 animate-in zoom-in-95 duration-200 origin-top-right">
                             <button onClick={exportCSV} className="w-full px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:bg-gray-50 flex items-center gap-3">
-                                <span className="w-6 h-6 rounded bg-green-50 text-green-600 flex items-center justify-center font-mono">CSV</span> Export as CSV
+                                <span className="w-6 h-6 rounded bg-green-50 text-green-600 flex items-center justify-center">CSV</span> Export as CSV
                             </button>
                             <button onClick={exportXLSX} className="w-full px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:bg-gray-50 flex items-center gap-3">
-                                <span className="w-6 h-6 rounded bg-blue-50 text-blue-600 flex items-center justify-center font-mono">XLS</span> Excel Spreadsheet
+                                <span className="w-6 h-6 rounded bg-blue-50 text-blue-600 flex items-center justify-center">XLS</span> Excel Spreadsheet
                             </button>
                             <button onClick={exportPDF} className="w-full px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:bg-gray-50 flex items-center gap-3">
-                                <span className="w-6 h-6 rounded bg-red-50 text-red-600 flex items-center justify-center font-mono">PDF</span> Portable Document
+                                <span className="w-6 h-6 rounded bg-red-50 text-red-600 flex items-center justify-center">PDF</span> Portable Document
                             </button>
                         </div>
                     )}

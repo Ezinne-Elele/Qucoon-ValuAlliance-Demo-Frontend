@@ -76,15 +76,15 @@ export default function Reconciliation() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((b, idx) => (
                                     <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{b.id}</td>
-                                        <td className="p-4 font-mono text-gray-600">{b.date}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{b.id}</td>
+                                        <td className="p-4 text-gray-600">{b.date}</td>
                                         <td className="p-4 text-gray-700">{b.portfolioId}</td>
                                         <td className="p-4 font-medium text-navy-900">{b.security}</td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{b.breakType}</span></td>
-                                        <td className="p-4 text-right font-mono font-medium text-navy-900">{typeof b.difference === 'number' ? b.difference.toLocaleString() : b.difference}</td>
+                                        <td className="p-4 text-right font-medium text-navy-900">{typeof b.difference === 'number' ? b.difference.toLocaleString() : b.difference}</td>
                                         <td className="p-4 text-gray-700">{b.assignedTo}</td>
-                                        <td className="p-4 text-right font-mono">{b.ageDays}d</td>
+                                        <td className="p-4 text-right">{b.ageDays}d</td>
                                         <td className="p-4">
                                             <span className={cn("text-xs font-medium px-2 py-0.5 rounded",
                                                 b.priority === 'High' ? 'bg-danger-bg text-danger' :

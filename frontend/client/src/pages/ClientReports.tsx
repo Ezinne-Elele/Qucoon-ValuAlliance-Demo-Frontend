@@ -43,7 +43,7 @@ export default function ClientReports() {
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                                 <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280', fontFamily: 'JetBrains Mono' }} tickFormatter={v => `₦${v}B`} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} tickFormatter={v => `₦${v}B`} />
                                 <Tooltip formatter={(value: number) => `₦${value}B`} />
                                 <Area type="monotone" dataKey="aum" stroke="#C9A84C" strokeWidth={3} fillOpacity={1} fill="url(#colorAumClient)" />
                             </AreaChart>
@@ -84,7 +84,7 @@ export default function ClientReports() {
                                         </td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{c.type}</span></td>
                                         <td className="p-4 text-gray-600 text-xs">{c.category}</td>
-                                        <td className="p-4 text-right font-mono font-medium text-navy-900">{(c.aum / 1e9).toFixed(1)}B</td>
+                                        <td className="p-4 text-right font-medium text-navy-900">{(c.aum / 1e9).toFixed(1)}B</td>
                                         <td className="p-4"><span className="bg-success-bg text-success border border-success/20 text-xs font-medium px-2 py-0.5 rounded-full">{c.kyc}</span></td>
                                         <td className="p-4 text-gray-600">{c.city}, {c.state}</td>
                                         <td className="p-4"><span className="bg-success-bg text-success border border-success/20 text-xs font-medium px-2 py-0.5 rounded-full">{c.relationship}</span></td>

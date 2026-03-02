@@ -84,8 +84,8 @@ export default function RegulatoryReturns() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((rs, idx) => (
                                     <tr key={rs.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{rs.id}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{rs.id}</td>
                                         <td className="p-4 font-medium text-navy-900">{rs.name}</td>
                                         <td className="p-4">
                                             {rs.regulator === 'SEC Nigeria' && <SECLogo />}
@@ -93,8 +93,8 @@ export default function RegulatoryReturns() {
                                             {rs.regulator === 'NITDA' && <span className="bg-[#2E8B57] text-white px-2 py-0.5 font-bold text-[10px] tracking-wider rounded-sm inline-flex items-center">NITDA</span>}
                                         </td>
                                         <td className="p-4 text-gray-600">{rs.period}</td>
-                                        <td className="p-4 font-mono text-gray-600">{rs.dueDate}</td>
-                                        <td className="p-4 font-mono text-gray-600">{rs.submittedDate || '—'}</td>
+                                        <td className="p-4 text-gray-600">{rs.dueDate}</td>
+                                        <td className="p-4 text-gray-600">{rs.submittedDate || '—'}</td>
                                         <td className="p-4 text-gray-600">{rs.preparedBy || '—'}</td>
                                         <td className="p-4"><StatusBadge status={rs.status} /></td>
                                         <td className="p-4">
@@ -152,7 +152,7 @@ export default function RegulatoryReturns() {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                                <input type="date" defaultValue="2026-03-31" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none font-mono" />
+                                <input type="date" defaultValue="2026-03-31" className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Assign To</label>
@@ -222,7 +222,7 @@ export default function RegulatoryReturns() {
                     <div className="px-6 py-4 border-b border-gray-200 bg-navy-900 text-white flex justify-between items-center">
                         <div>
                             <h3 className="text-lg font-bold">{showViewSubmission.type}</h3>
-                            <p className="text-xs text-gold-400 font-mono">{showViewSubmission.id} · {showViewSubmission.period}</p>
+                            <p className="text-xs text-gold-400">{showViewSubmission.id} · {showViewSubmission.period}</p>
                         </div>
                         <button onClick={() => setShowViewSubmission(null)} className="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
                     </div>
@@ -243,8 +243,8 @@ export default function RegulatoryReturns() {
                                 <div><p className="text-gray-500 text-xs mb-1">Regulator</p><p className="font-medium text-navy-900">{showViewSubmission.regulator}</p></div>
                                 <div><p className="text-gray-500 text-xs mb-1">Reporting Period</p><p className="font-medium text-navy-900">{showViewSubmission.period}</p></div>
                                 <div><p className="text-gray-500 text-xs mb-1">Return Type</p><p className="font-medium text-navy-900">{showViewSubmission.type}</p></div>
-                                <div><p className="text-gray-500 text-xs mb-1">Due Date</p><p className="font-mono font-medium text-navy-900">{showViewSubmission.dueDate}</p></div>
-                                <div><p className="text-gray-500 text-xs mb-1">Submitted Date</p><p className="font-mono text-navy-900">{showViewSubmission.submittedDate || '—'}</p></div>
+                                <div><p className="text-gray-500 text-xs mb-1">Due Date</p><p className="font-medium text-navy-900">{showViewSubmission.dueDate}</p></div>
+                                <div><p className="text-gray-500 text-xs mb-1">Submitted Date</p><p className="font-medium text-navy-900">{showViewSubmission.submittedDate || '—'}</p></div>
                                 <div><p className="text-gray-500 text-xs mb-1">Prepared By</p><p className="font-medium text-navy-900">{showViewSubmission.preparedBy || 'Unassigned'}</p></div>
                             </div>
                         </div>

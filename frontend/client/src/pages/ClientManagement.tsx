@@ -191,7 +191,7 @@ export default function ClientManagement() {
                                         <td>{c.name}</td>
                                         <td>{c.type}</td>
                                         <td>{c.category}</td>
-                                        <td className="text-right font-mono">{(c.aum / 1e9).toFixed(1)}B</td>
+                                        <td className="text-right">{(c.aum / 1e9).toFixed(1)}B</td>
                                         <td>{c.city}, {c.state}</td>
                                         <td><StatusBadge status={c.relationship} /></td>
                                         <td><StatusBadge status={c.kyc} /></td>

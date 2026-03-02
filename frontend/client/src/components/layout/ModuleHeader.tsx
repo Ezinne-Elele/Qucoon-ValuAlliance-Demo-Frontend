@@ -34,7 +34,7 @@ export function ModuleHeader({ title, description, metrics, actions }: ModuleHea
                         <div key={i} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
                             <span className="text-label mb-2">{metric.label}</span>
                             <div className="flex items-baseline justify-between">
-                                <span className="text-xl font-bold text-navy-900 font-mono">{metric.value}</span>
+                                <span className="text-xl font-bold text-navy-900">{metric.value}</span>
                                 {metric.trend && (
                                     <span className={cn(
                                         "text-[10px] font-bold px-1.5 py-0.5 rounded",

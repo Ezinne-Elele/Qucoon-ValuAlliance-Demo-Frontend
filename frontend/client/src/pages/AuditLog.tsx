@@ -7,7 +7,7 @@ import { TableToolbar, TablePagination, useTableControls } from '../components/u
 
 export default function AuditLog() {
     const [filterModule, setFilterModule] = React.useState('All');
-    const modules = ['All', ...new Set(mockAuditLogs.map(l => l.module))];
+    const modules = ['All', ...Array.from(new Set(mockAuditLogs.map(l => l.module)))];
     const baseFiltered = filterModule === 'All' ? mockAuditLogs : mockAuditLogs.filter(l => l.module === filterModule);
 
     const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
@@ -61,15 +61,15 @@ export default function AuditLog() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((log, idx) => (
                                     <tr key={log.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{log.id}</td>
-                                        <td className="p-4 font-mono text-xs text-gray-600 whitespace-nowrap">{log.timestamp}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{log.id}</td>
+                                        <td className="p-4 text-xs text-gray-600 whitespace-nowrap">{log.timestamp}</td>
                                         <td className="p-4 font-medium text-navy-900 whitespace-nowrap">{log.userName}</td>
                                         <td className="p-4 text-xs text-gray-600">{log.role}</td>
-                                        <td className="p-4 font-mono text-xs text-gray-500">{log.ipAddress}</td>
+                                        <td className="p-4 text-xs text-gray-500">{log.ipAddress}</td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{log.module}</span></td>
                                         <td className="p-4 text-gray-700 whitespace-nowrap">{log.action}</td>
-                                        <td className="p-4 font-mono text-xs text-navy-700">{log.entity}</td>
+                                        <td className="p-4 text-xs text-navy-700">{log.entity}</td>
                                         <td className="p-4 text-xs text-gray-500">{log.before}</td>
                                         <td className="p-4 text-xs text-gray-700 font-medium">{log.after}</td>
                                         <td className="p-4"><StatusBadge status={log.outcome} /></td>

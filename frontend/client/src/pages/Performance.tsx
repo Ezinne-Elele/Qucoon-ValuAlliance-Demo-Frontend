@@ -25,6 +25,7 @@ export default function Performance() {
 
     const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(mockPerformance, 10);
 
+
     return (
         <AppShell>
             <div className="space-y-6">
@@ -62,16 +63,16 @@ export default function Performance() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((p, idx) => (
                                     <tr key={p.portfolioId} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-secondary">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4 font-medium text-navy-900">{p.portfolioName}</td>
                                         {Object.values(p.returns).map((ret, i) => (
                                             <React.Fragment key={i}>
-                                                <td className="p-3 text-center font-mono font-medium border-l border-gray-100">
+                                                <td className="p-3 text-center font-medium border-l border-gray-100">
                                                     <span className={ret.portfolio >= ret.benchmark ? 'text-success' : 'text-danger'}>
                                                         {ret.portfolio > 0 ? '+' : ''}{ret.portfolio.toFixed(2)}%
                                                     </span>
                                                 </td>
-                                                <td className="p-3 text-center font-mono text-gray-500">{ret.benchmark > 0 ? '+' : ''}{ret.benchmark.toFixed(2)}%</td>
+                                                <td className="p-3 text-center text-gray-500">{ret.benchmark > 0 ? '+' : ''}{ret.benchmark.toFixed(2)}%</td>
                                             </React.Fragment>
                                         ))}
                                     </tr>
@@ -107,24 +108,24 @@ export default function Performance() {
                         <div className="space-y-6">
                             {mockPerformance.map((p, idx) => (
                                 <div key={p.portfolioId} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
-                                    <h4 className="font-semibold text-navy-900 text-sm mb-3"><span className="text-gray-400 font-mono mr-2">{idx + 1}.</span>{p.portfolioName}</h4>
+                                    <h4 className="font-semibold text-navy-900 text-sm mb-3"><span className="text-gray-400 mr-2">{idx + 1}.</span>{p.portfolioName}</h4>
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="bg-gray-50 rounded p-3 text-center">
                                             <p className="text-xs text-gray-500 mb-1">Allocation Effect</p>
-                                            <p className="font-mono font-bold text-success">+{p.attribution.allocation}%</p>
+                                            <p className="font-bold text-success">+{p.attribution.allocation}%</p>
                                         </div>
                                         <div className="bg-gray-50 rounded p-3 text-center">
                                             <p className="text-xs text-gray-500 mb-1">Selection Effect</p>
-                                            <p className="font-mono font-bold text-success">+{p.attribution.selection}%</p>
+                                            <p className="font-bold text-success">+{p.attribution.selection}%</p>
                                         </div>
                                         <div className="bg-gray-50 rounded p-3 text-center">
                                             <p className="text-xs text-gray-500 mb-1">Interaction</p>
-                                            <p className="font-mono font-bold text-navy-900">+{p.attribution.interaction}%</p>
+                                            <p className="font-bold text-navy-900">+{p.attribution.interaction}%</p>
                                         </div>
                                     </div>
                                     <div className="mt-3 flex justify-between text-sm">
                                         <span className="text-gray-500">Total Alpha</span>
-                                        <span className="font-mono font-bold text-success">+{(p.attribution.allocation + p.attribution.selection + p.attribution.interaction).toFixed(2)}%</span>
+                                        <span className="font-bold text-success">+{(p.attribution.allocation + p.attribution.selection + p.attribution.interaction).toFixed(2)}%</span>
                                     </div>
                                 </div>
                             ))}

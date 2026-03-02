@@ -68,9 +68,9 @@ export default function Valuation() {
                                 <StatusBadge status="Published" />
                             </div>
                             <div className="flex items-baseline mb-2">
-                                <span className="text-3xl font-bold text-navy-900 font-mono tracking-tighter">₦{fund.nav.toFixed(2)}</span>
+                                <span className="text-3xl font-bold text-navy-900 tracking-tighter">₦{fund.nav.toFixed(2)}</span>
                             </div>
-                            <p className="text-[10px] text-gray-400 font-mono font-medium">VALUATION AS AT: {fund.navDate}</p>
+                            <p className="text-[10px] text-gray-400 font-medium">VALUATION AS AT: {fund.navDate}</p>
                             <div className="mt-4 pt-4 border-t border-gray-50 space-y-2">
                                 <div className="flex justify-between text-[11px] font-bold">
                                     <span className="text-gray-400 uppercase tracking-wider">AUM</span>
@@ -78,7 +78,7 @@ export default function Valuation() {
                                 </div>
                                 <div className="flex justify-between text-[10px]">
                                     <span className="text-gray-400 font-medium">Total Units Outstanding</span>
-                                    <span className="text-navy-700 font-mono font-bold">{(fund.totalUnitsOutstanding || fund.units).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    <span className="text-navy-700 font-bold">{(fund.totalUnitsOutstanding || fund.units).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                                 </div>
                                 <div className="text-[9px] text-right text-gray-400 italic">
                                     As of: {new Date(fund.totalUnitsOutstandingAsOf || fund.navDate).toLocaleDateString()}
@@ -126,8 +126,8 @@ export default function Valuation() {
                                         <td>{s.ticker}</td>
                                         <td>{s.name}</td>
                                         <td>{s.exchange}</td>
-                                        <td className="text-right font-mono">{s.price.toFixed(2)}</td>
-                                        <td className="text-right font-mono">
+                                        <td className="text-right">{s.price.toFixed(2)}</td>
+                                        <td className="text-right">
                                             {s.changePct !== undefined ? (
                                                 <span className={s.changePct >= 0 ? "text-success" : "text-danger"}>
                                                     {s.changePct > 0 ? '+' : ''}{s.changePct}%
@@ -192,7 +192,7 @@ export default function Valuation() {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Pricing Date</label>
-                                <input type="date" value={pricingDate} onChange={e => setPricingDate(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none font-mono" />
+                                <input type="date" value={pricingDate} onChange={e => setPricingDate(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Price Source</label>

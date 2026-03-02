@@ -74,16 +74,16 @@ export default function Settlement() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((s, idx) => (
                                     <tr key={s.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{s.id}</td>
-                                        <td className="p-4 font-mono text-xs text-gray-600">{s.tradeId}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{s.id}</td>
+                                        <td className="p-4 text-xs text-gray-600">{s.tradeId}</td>
                                         <td className="p-4 font-medium text-navy-900">{s.ticker}</td>
                                         <td className="p-4 text-gray-600 truncate max-w-[180px]">{s.clientName}</td>
                                         <td className="p-4">
                                             <span className={cn("text-xs font-bold px-2 py-0.5 rounded", s.side === 'Buy' ? "bg-navy-100 text-navy-700" : "bg-red-100 text-danger")}>{s.side}</span>
                                         </td>
-                                        <td className="p-4 text-right font-mono font-medium text-navy-900">{s.netValue.toLocaleString()}</td>
-                                        <td className="p-4 font-mono text-gray-600">{s.settlementDate}</td>
+                                        <td className="p-4 text-right font-medium text-navy-900">{s.netValue.toLocaleString()}</td>
+                                        <td className="p-4 text-gray-600">{s.settlementDate}</td>
                                         <td className="p-4">
                                             <span className={cn("text-xs font-medium px-2 py-0.5 rounded",
                                                 s.dvpStatus === 'Matched' ? "bg-success-bg text-success" :

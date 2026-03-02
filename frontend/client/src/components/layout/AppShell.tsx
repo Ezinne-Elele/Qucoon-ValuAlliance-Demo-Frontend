@@ -90,7 +90,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {isCollapsed && <div className="w-8 h-8 rounded-lg bg-gold-500 flex items-center justify-center font-bold text-navy-900 text-sm">V</div>}
         </div>
 
-        <div className="flex-1 overflow-y-auto py-4 custom-scrollbar overflow-x-hidden">
+        <div className="flex-1 overflow-y-auto py-4 custom-scrollbar overflow-x-hidden scrollbar-hide">
           {navGroups.map((group, idx) => (
             <div key={idx} className="mb-6">
               {!isCollapsed && (
@@ -130,7 +130,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           "p-4 border-t border-navy-700 bg-navy-950 transition-all",
           isCollapsed ? "items-center" : ""
         )}>
-          <div className={cn("flex items-center mb-6", isCollapsed ? "justify-center" : "")}>
+          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "")}>
             <div className="w-9 h-9 rounded-xl bg-gold-500 text-navy-900 flex items-center justify-center font-bold text-xs shrink-0 shadow-lg shadow-gold-500/10">
               AO
             </div>
@@ -140,22 +140,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter truncate">Portfolio Manager</p>
               </div>
             )}
-          </div>
-
-          <div className={cn(
-            "flex items-center text-gray-400",
-            isCollapsed ? "flex-col space-y-4" : "justify-between"
-          )}>
-            <Link href="/notifications" className="p-2 hover:text-white hover:bg-navy-800 rounded-lg transition-all relative group">
-              <BellIcon className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-danger rounded-full border border-navy-950"></span>
-            </Link>
-            <button className="p-2 hover:text-white hover:bg-navy-800 rounded-lg transition-all">
-              <SearchIcon className="w-4 h-4" />
-            </button>
-            <Link href="/login" className="p-2 hover:text-white hover:bg-navy-800 rounded-lg transition-all">
-              <LogoutIcon className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </aside>
@@ -192,25 +176,35 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-5">
             {/* Command Palette Search */}
-            <div className="relative group">
+            <div className="relative group hidden lg:block">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
                 <SearchIcon className="w-3.5 h-3.5 text-gray-400 group-focus-within:text-gold-500 transition-colors" />
               </div>
               <input
                 type="text"
                 placeholder="Search command (⌘K)"
-                className="pl-9 pr-12 py-1.5 bg-gray-100/50 border border-transparent rounded-full text-[13px] w-64 focus:bg-white focus:border-gold-500/50 focus:ring-4 focus:ring-gold-500/5 outline-none transition-all shadow-inner"
+                className="pl-9 pr-12 py-1.5 bg-gray-100/50 border border-transparent rounded-full text-[13px] w-56 focus:bg-white focus:border-gold-500/50 focus:ring-4 focus:ring-gold-500/5 outline-none transition-all shadow-inner"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-0.5">
-                <kbd className="px-1.5 py-0.5 bg-gray-200 text-gray-500 rounded text-[9px] font-mono leading-none border border-gray-300">⌘</kbd>
-                <kbd className="px-1.5 py-0.5 bg-gray-200 text-gray-500 rounded text-[9px] font-mono leading-none border border-gray-300">K</kbd>
+                <kbd className="px-1.5 py-0.5 bg-gray-200 text-gray-500 rounded text-[9px] leading-none border border-gray-300">⌘</kbd>
+                <kbd className="px-1.5 py-0.5 bg-gray-200 text-gray-500 rounded text-[9px] leading-none border border-gray-300">K</kbd>
               </div>
             </div>
 
             <div className="flex items-center space-x-4 border-l pl-4 border-gray-100">
-              <p className="text-[12px] text-gray-400 font-mono tracking-tighter">FEB 24, 2026</p>
+              <p className="text-[11px] text-gray-400 font-bold tracking-widest uppercase">FEB 24, 2026</p>
+
+              <div className="flex items-center space-x-1 border-l pl-4 border-gray-100">
+                <Link href="/notifications" className="p-2 text-gray-400 hover:text-navy-900 hover:bg-gray-50 rounded-lg transition-all relative group">
+                  <BellIcon className="w-4 h-4" />
+                  <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-danger rounded-full border-2 border-white"></span>
+                </Link>
+                <Link href="/login" className="p-2 text-gray-400 hover:text-danger hover:bg-danger/5 rounded-lg transition-all" title="Logout">
+                  <LogoutIcon className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </div>
         </header>

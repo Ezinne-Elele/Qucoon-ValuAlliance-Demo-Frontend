@@ -281,7 +281,7 @@ export default function Fees() {
                                                 <tbody>
                                                     {scheduleCtrl.paged.map((fee, idx) => (
                                                         <tr key={fee.id} className="hover:bg-gray-50/50 transition-colors">
-                                                            <td className="text-center text-[10px] font-mono text-gray-400">{(scheduleCtrl.page - 1) * scheduleCtrl.pageSize + idx + 1}</td>
+                                                            <td className="text-center text-[10px] text-gray-400">{(scheduleCtrl.page - 1) * scheduleCtrl.pageSize + idx + 1}</td>
                                                             <td>
                                                                 <div className="font-bold text-navy-900 text-[12px]">{fee.clientOrFund}</div>
                                                                 <div className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">{fee.id}</div>
@@ -305,10 +305,10 @@ export default function Fees() {
                                                                     {fee.cycle}
                                                                 </div>
                                                             </td>
-                                                            <td className="text-right font-mono font-bold text-navy-900 text-[12px]">
+                                                            <td className="text-right font-bold text-navy-900 text-[12px]">
                                                                 {fee.accruedYTD.toLocaleString()}
                                                             </td>
-                                                            <td className="text-right font-mono font-bold text-danger text-[12px]">
+                                                            <td className="text-right font-bold text-danger text-[12px]">
                                                                 {fee.outstanding > 0 ? fee.outstanding.toLocaleString() : '—'}
                                                             </td>
                                                             <td className="text-center">
@@ -362,10 +362,10 @@ export default function Fees() {
                                                 <tbody>
                                                     {invoiceCtrl.paged.map((inv) => (
                                                         <tr key={inv.id} className={cn("hover:bg-gray-50/50 transition-colors", inv.status === 'Overdue' && "bg-danger/5 hover:bg-danger/10")}>
-                                                            <td className="font-mono text-[11px] font-bold text-navy-900">{inv.id}</td>
+                                                            <td className="font-bold text-navy-900">{inv.id}</td>
                                                             <td className="font-bold text-navy-900 text-[12px]">{inv.client}</td>
                                                             <td className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">{inv.period}</td>
-                                                            <td className="text-right font-mono font-bold text-navy-900">{inv.amount.toLocaleString()}</td>
+                                                            <td className="text-right font-bold text-navy-900">{inv.amount.toLocaleString()}</td>
                                                             <td className="text-[11px] font-medium text-gray-500">{inv.issued}</td>
                                                             <td className="text-[11px] font-bold text-navy-700">{inv.due}</td>
                                                             <td className="text-center">
@@ -434,11 +434,11 @@ export default function Fees() {
                                         <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
                                             <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Accrual Points</p>
-                                                <p className="text-xl font-bold text-navy-900 font-mono">15,842</p>
+                                                <p className="text-xl font-bold text-navy-900">15,842</p>
                                             </div>
                                             <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">HWM Validations</p>
-                                                <p className="text-xl font-bold text-navy-900 font-mono">100%</p>
+                                                <p className="text-xl font-bold text-navy-900">100%</p>
                                             </div>
                                         </div>
                                     </div>
@@ -497,7 +497,7 @@ function FeeDetailPanel({ fee, onClose }: any) {
                         <h4 className="text-[10px] font-bold text-gold-500 uppercase tracking-[0.2em] mb-4">Calculation Formula</h4>
                         <div className="space-y-4 relative z-10">
                             <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                                <p className="text-[14px] font-mono font-bold leading-relaxed">{fee.rate}</p>
+                                <p className="text-[14px] font-bold leading-relaxed">{fee.rate}</p>
                                 <p className="text-[10px] opacity-60 mt-1 uppercase font-bold tracking-widest">Calculated on {fee.basis}</p>
                             </div>
                             <p className="text-[12px] opacity-70 font-medium leading-relaxed italic">

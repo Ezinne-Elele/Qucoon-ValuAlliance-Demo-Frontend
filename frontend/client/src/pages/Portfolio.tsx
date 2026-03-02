@@ -132,7 +132,7 @@ export default function Portfolio() {
                       <td>{p.id}</td>
                       <td>{p.name}</td>
                       <td>{p.assetClass}</td>
-                      <td className="text-right font-mono">₦{(p.aum / 1e12).toFixed(2)}T</td>
+                      <td className="text-right">₦{(p.aum / 1e12).toFixed(2)}T</td>
                       <td className="text-right font-mono">
                         <span className={p.ytdReturn >= 0 ? "text-success" : "text-danger"}>{p.ytdReturn > 0 ? '+' : ''}{p.ytdReturn}%</span>
                       </td>
@@ -170,17 +170,17 @@ export default function Portfolio() {
               </div>
               <div className="flex items-baseline mb-6">
                 <NairaIcon className="w-6 h-6 text-navy-900 mr-1" />
-                <span className="text-3xl font-bold text-navy-900 font-mono tracking-tight">{fund.nav.toFixed(2)}</span>
+                <span className="text-3xl font-bold text-navy-900 tracking-tight">{fund.nav.toFixed(2)}</span>
                 <span className="ml-2 text-sm text-gray-500">NAV / Unit</span>
               </div>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-50 rounded p-3">
                   <p className="text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">AUM</p>
-                  <p className="font-mono font-bold text-navy-900 text-sm">₦{(fund.aum / 1000000000).toFixed(2)}B</p>
+                  <p className="font-bold text-navy-900 text-sm">₦{(fund.aum / 1000000000).toFixed(2)}B</p>
                 </div>
                 <div className="bg-gray-50 rounded p-3">
                   <p className="text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">YTD Return</p>
-                  <p className={cn("font-mono font-bold text-sm", fund.ytdReturn >= 0 ? "text-success" : "text-danger")}>
+                  <p className={cn("font-bold text-sm", fund.ytdReturn >= 0 ? "text-success" : "text-danger")}>
                     {fund.ytdReturn > 0 ? '+' : ''}{fund.ytdReturn}%
                   </p>
                 </div>
@@ -239,8 +239,8 @@ export default function Portfolio() {
                       <td>{s.name}</td>
                       <td>{s.exchange}</td>
                       <td>{s.assetClass}</td>
-                      <td className="text-right font-mono">{s.price.toFixed(2)}</td>
-                      <td className="text-right font-mono">
+                      <td className="text-right">{s.price.toFixed(2)}</td>
+                      <td className="text-right">
                         {s.changePct !== undefined ? (
                           <span className={s.changePct >= 0 ? "text-success" : "text-danger"}>
                             {s.changePct > 0 ? '+' : ''}{s.changePct}%
@@ -295,7 +295,7 @@ export default function Portfolio() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Initial AUM (₦)</label>
-                  <input type="number" className="w-full border border-gray-300 rounded p-2 text-sm font-mono focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0" />
+                  <input type="number" className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Benchmark</label>

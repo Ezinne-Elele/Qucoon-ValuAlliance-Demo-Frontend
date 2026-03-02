@@ -132,9 +132,9 @@ export default function Trades() {
                         {trade.side}
                       </span>
                     </td>
-                    <td className="text-right font-mono">{trade.quantity.toLocaleString()}</td>
-                    <td className="text-right font-mono">{trade.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                    <td className="text-right font-mono">₦{trade.grossValue.toLocaleString()}</td>
+                    <td className="text-right">{trade.quantity.toLocaleString()}</td>
+                    <td className="text-right">{trade.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                    <td className="text-right">₦{trade.grossValue.toLocaleString()}</td>
                     <td><StatusBadge status={trade.status} /></td>
                   </tr>
                 ))}
@@ -177,15 +177,15 @@ export default function Trades() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Quantity *</label>
-                    <input type="number" value={tradeQty} onChange={e => setTradeQty(e.target.value)} className="w-full border border-gray-300 rounded p-2 text-sm font-mono focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0" />
+                    <input type="number" value={tradeQty} onChange={e => setTradeQty(e.target.value)} className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Price (₦)</label>
-                    <input type="number" value={tradePrice} onChange={e => setTradePrice(e.target.value)} className="w-full border border-gray-300 rounded p-2 text-sm font-mono focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0.00" />
+                    <input type="number" value={tradePrice} onChange={e => setTradePrice(e.target.value)} className="w-full border border-gray-300 rounded p-2 text-sm focus:ring-gold-500 focus:border-gold-500 outline-none" placeholder="0.00" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Gross Value (₦)</label>
-                    <div className="w-full border border-gray-300 rounded p-2 text-sm font-mono bg-gray-50 text-navy-900 font-bold">{grossValue > 0 ? `₦${grossValue.toLocaleString()}` : '—'}</div>
+                    <div className="w-full border border-gray-300 rounded p-2 text-sm bg-gray-50 text-navy-900 font-bold">{grossValue > 0 ? `₦${grossValue.toLocaleString()}` : '—'}</div>
                   </div>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function Trades() {
             <div className="px-6 py-4 border-b border-gray-200 bg-navy-900 text-white flex justify-between items-center">
               <div>
                 <h3 className="text-lg font-bold">{selectedTrade.ticker} {selectedTrade.side}</h3>
-                <p className="text-xs text-gold-400 font-mono">{selectedTrade.id}</p>
+                <p className="text-xs text-gold-400">{selectedTrade.id}</p>
               </div>
               <button onClick={() => setSelectedTrade(null)} className="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
@@ -250,11 +250,11 @@ export default function Trades() {
                   <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider border-b pb-2 mb-3">Trade Details</h4>
                   <div className="grid grid-cols-2 gap-y-4 text-sm">
                     <div><p className="text-gray-500 text-xs mb-1">Portfolio</p><p className="font-medium text-navy-900">{selectedTrade.portfolioId}</p></div>
-                    <div><p className="text-gray-500 text-xs mb-1">Trade Date</p><p className="font-mono text-navy-900">{selectedTrade.tradeDate}</p></div>
-                    <div><p className="text-gray-500 text-xs mb-1">Quantity</p><p className="font-mono text-navy-900">{selectedTrade.quantity.toLocaleString()}</p></div>
-                    <div><p className="text-gray-500 text-xs mb-1">Price</p><p className="font-mono text-navy-900">₦{selectedTrade.price.toFixed(2)}</p></div>
-                    <div><p className="text-gray-500 text-xs mb-1">Gross Value</p><p className="font-mono text-navy-900">₦{selectedTrade.grossValue.toLocaleString()}</p></div>
-                    <div><p className="text-gray-500 text-xs mb-1">Net Value</p><p className="font-mono font-bold text-navy-900">₦{selectedTrade.netValue.toLocaleString()}</p></div>
+                    <div><p className="text-gray-500 text-xs mb-1">Trade Date</p><p className="font-medium text-navy-900">{selectedTrade.tradeDate}</p></div>
+                    <div><p className="text-gray-500 text-xs mb-1">Quantity</p><p className="font-medium text-navy-900">{selectedTrade.quantity.toLocaleString()}</p></div>
+                    <div><p className="text-gray-500 text-xs mb-1">Price</p><p className="font-medium text-navy-900">₦{selectedTrade.price.toFixed(2)}</p></div>
+                    <div><p className="text-gray-500 text-xs mb-1">Gross Value</p><p className="font-medium text-navy-900">₦{selectedTrade.grossValue.toLocaleString()}</p></div>
+                    <div><p className="text-gray-500 text-xs mb-1">Net Value</p><p className="font-bold text-navy-900">₦{selectedTrade.netValue.toLocaleString()}</p></div>
                   </div>
                 </div>
 
@@ -262,7 +262,7 @@ export default function Trades() {
                   <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider border-b pb-2 mb-3">Parties & Settlement</h4>
                   <div className="grid grid-cols-2 gap-y-4 text-sm">
                     <div><p className="text-gray-500 text-xs mb-1">Broker</p><p className="font-medium text-navy-900">{selectedTrade.broker}</p></div>
-                    <div><p className="text-gray-500 text-xs mb-1">Settlement Date</p><p className="font-mono text-navy-900">{selectedTrade.settlementDate}</p></div>
+                    <div><p className="text-gray-500 text-xs mb-1">Settlement Date</p><p className="font-medium text-navy-900">{selectedTrade.settlementDate}</p></div>
                     <div><p className="text-gray-500 text-xs mb-1">Trader</p><p className="font-medium text-navy-900">{selectedTrade.trader}</p></div>
                     <div><p className="text-gray-500 text-xs mb-1">Approver</p><p className="font-medium text-navy-900">{selectedTrade.approver || '--'}</p></div>
                   </div>

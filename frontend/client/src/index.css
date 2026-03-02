@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 :root {
   /* Enterprise Typography */
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: "Google Sans", "Outfit", sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* ───── ValuAlliance Brand Palette ───── */
@@ -150,9 +150,9 @@
     font-family: var(--font-sans);
   }
 
-  /* Number columns in tables should use monospace */
+  /* Number columns in tables can use monospace for alignment */
   .font-mono {
-    font-family: var(--font-mono) !important;
+    font-family: var(--font-mono);
   }
 }
 
@@ -409,6 +409,18 @@
 
   .hover-glow:hover {
     box-shadow: 0 0 20px rgba(var(--teal-500) / 0.15);
+  }
+
+  /* Hide scrollbar utility */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 }
 

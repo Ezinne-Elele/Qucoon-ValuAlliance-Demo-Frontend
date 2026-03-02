@@ -76,14 +76,14 @@ export default function RiskCompliance() {
                             <tbody className="divide-y divide-gray-100">
                                 {breachCtrl.paged.map((b, idx) => (
                                     <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(breachCtrl.page - 1) * breachCtrl.pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{b.id}</td>
-                                        <td className="p-4 font-mono text-gray-600">{b.date}</td>
+                                        <td className="p-4 text-gray-400 text-xs">{(breachCtrl.page - 1) * breachCtrl.pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{b.id}</td>
+                                        <td className="p-4 text-gray-600">{b.date}</td>
                                         <td className="p-4 text-gray-700">{b.portfolioId}</td>
                                         <td className="p-4 font-medium text-navy-900">{b.ticker}</td>
                                         <td className="p-4 text-gray-700">{b.rule}</td>
-                                        <td className="p-4 text-right font-mono">{b.limit}%</td>
-                                        <td className="p-4 text-right font-mono font-medium text-danger">{b.actual}%</td>
+                                        <td className="p-4 text-right">{b.limit}%</td>
+                                        <td className="p-4 text-right font-medium text-danger">{b.actual}%</td>
                                         <td className="p-4"><StatusBadge status={b.severity} /></td>
                                         <td className="p-4"><StatusBadge status={b.status} /></td>
                                     </tr>
@@ -100,7 +100,7 @@ export default function RiskCompliance() {
                             <div key={alert.id} className="bg-white rounded-lg border border-danger/20 shadow-sm p-6">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center">
-                                        <span className="text-xs font-mono text-gray-400 mr-3">{idx + 1}.</span>
+                                        <span className="text-xs text-gray-400 mr-3">{idx + 1}.</span>
                                         <div className="w-10 h-10 bg-danger-bg rounded-full flex items-center justify-center mr-4">
                                             <AlertIcon className="w-5 h-5 text-danger" />
                                         </div>
@@ -112,8 +112,8 @@ export default function RiskCompliance() {
                                     <StatusBadge status={alert.status} />
                                 </div>
                                 <div className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded">
-                                    <div><p className="text-xs text-gray-500">Transaction Amount</p><p className="font-mono font-bold text-navy-900">₦{(alert.transactionAmt || 0).toLocaleString()}</p></div>
-                                    <div><p className="text-xs text-gray-500">Threshold</p><p className="font-mono font-bold text-danger">₦{(alert.threshold || 0).toLocaleString()}</p></div>
+                                    <div><p className="text-xs text-gray-500">Transaction Amount</p><p className="font-bold text-navy-900">₦{(alert.transactionAmt || 0).toLocaleString()}</p></div>
+                                    <div><p className="text-xs text-gray-500">Threshold</p><p className="font-bold text-danger">₦{(alert.threshold || 0).toLocaleString()}</p></div>
                                     <div><p className="text-xs text-gray-500">Assigned To</p><p className="font-medium text-navy-900">{alert.assignedTo}</p></div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@ export default function RiskCompliance() {
                         {deadlines.map((d, idx) => (
                             <div key={d.id} className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <span className="text-xs font-mono text-gray-400 mr-3">{idx + 1}.</span>
+                                    <span className="text-xs text-gray-400 mr-3">{idx + 1}.</span>
                                     <div className="w-14 h-14 bg-danger text-white rounded flex flex-col items-center justify-center mr-4 shrink-0">
                                         <span className="text-lg font-bold leading-none">{d.dueDate?.split('-')[2]}</span>
                                         <span className="text-[10px] uppercase">FEB</span>
@@ -166,17 +166,17 @@ export default function RiskCompliance() {
                             <tbody className="divide-y divide-gray-100">
                                 {limitsCtrl.paged.map((r, i) => (
                                     <tr key={i} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(limitsCtrl.page - 1) * limitsCtrl.pageSize + i + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs">{(limitsCtrl.page - 1) * limitsCtrl.pageSize + i + 1}</td>
                                         <td className="p-4 font-medium text-navy-900">{r.rule}</td>
                                         <td className="p-4 text-gray-600">{r.scope}</td>
-                                        <td className="p-4 text-right font-mono">{r.limit}</td>
-                                        <td className="p-4 text-right font-mono font-medium">{r.current}</td>
+                                        <td className="p-4 text-right">{r.limit}</td>
+                                        <td className="p-4 text-right font-medium">{r.current}</td>
                                         <td className="p-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
                                                 <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
                                                     <div className={cn("h-full rounded-full", r.util > 90 ? 'bg-danger' : r.util > 75 ? 'bg-warning' : 'bg-success')} style={{ width: `${r.util}%` }}></div>
                                                 </div>
-                                                <span className="font-mono text-xs text-gray-500">{r.util}%</span>
+                                                <span className="text-xs text-gray-500">{r.util}%</span>
                                             </div>
                                         </td>
                                         <td className="p-4"><StatusBadge status={r.status} /></td>

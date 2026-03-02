@@ -144,9 +144,9 @@ export default function FundAccounting() {
                                             <tbody>
                                                 {jeCtrl.paged.map((je, idx) => (
                                                     <tr key={je.id} className="hover:bg-gray-50/50 transition-colors">
-                                                        <td className="text-center text-[10px] font-mono text-gray-400">{(jeCtrl.page - 1) * jeCtrl.pageSize + idx + 1}</td>
+                                                        <td className="text-center text-[10px] text-gray-400">{(jeCtrl.page - 1) * jeCtrl.pageSize + idx + 1}</td>
                                                         <td>
-                                                            <div className="font-mono text-[11px] font-bold text-navy-900">{je.date}</div>
+                                                            <div className="text-[11px] font-bold text-navy-900">{je.date}</div>
                                                             <div className="text-[9px] text-gray-400 font-medium">{je.id}</div>
                                                         </td>
                                                         <td className="font-bold text-navy-900 text-[12px]">{je.fund}</td>
@@ -158,7 +158,7 @@ export default function FundAccounting() {
                                                         <td className="text-[11px] text-gray-600 font-medium leading-relaxed">{je.description}</td>
                                                         <td className="text-[11px] text-navy-700 font-bold">{je.drAccount}</td>
                                                         <td className="text-[11px] text-navy-700 font-bold">{je.crAccount}</td>
-                                                        <td className="text-right font-mono font-bold text-navy-900 text-[12px]">
+                                                        <td className="text-right font-bold text-navy-900 text-[12px]">
                                                             {je.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                                         </td>
                                                         <td className="text-center">
@@ -217,7 +217,7 @@ export default function FundAccounting() {
                                             <tbody>
                                                 {tbCtrl.paged.map((row, i) => (
                                                     <tr key={i} className="hover:bg-gray-50/50 transition-colors">
-                                                        <td className="text-center text-[10px] font-mono text-gray-400">{(tbCtrl.page - 1) * tbCtrl.pageSize + i + 1}</td>
+                                                        <td className="text-center text-[10px] text-gray-400">{(tbCtrl.page - 1) * tbCtrl.pageSize + i + 1}</td>
                                                         <td className="font-bold text-navy-900 text-[12px] uppercase">{row.account}</td>
                                                         <td>
                                                             <span className={cn(
@@ -229,12 +229,12 @@ export default function FundAccounting() {
                                                                 {row.group}
                                                             </span>
                                                         </td>
-                                                        <td className="text-right font-mono font-bold text-navy-900">{row.debit > 0 ? row.debit.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}</td>
-                                                        <td className="text-right font-mono font-bold text-navy-900">{row.credit > 0 ? row.credit.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}</td>
+                                                        <td className="text-right font-bold text-navy-900">{row.debit > 0 ? row.debit.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}</td>
+                                                        <td className="text-right font-bold text-navy-900">{row.credit > 0 ? row.credit.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
-                                            <tfoot className="bg-navy-900 text-white font-mono">
+                                            <tfoot className="bg-navy-900 text-white">
                                                 <tr>
                                                     <td className="p-4 font-bold uppercase text-[12px]" colSpan={3}>Consolidated Totals</td>
                                                     <td className="p-4 text-right font-bold text-lg">₦{totalDebit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
@@ -261,12 +261,12 @@ export default function FundAccounting() {
                                                     {[{ label: 'Management Fee Income', amount: 486250000 }, { label: 'Interest Income', amount: 625000000 }, { label: 'Dividend Income', amount: 185000000 }].map(item => (
                                                         <div key={item.label} className="flex justify-between items-center group">
                                                             <span className="text-[13px] text-gray-600 font-bold">{item.label}</span>
-                                                            <span className="font-mono font-bold text-navy-900 text-[14px]">₦{item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                                            <span className="font-bold text-navy-900 text-[14px]">₦{item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                                                         </div>
                                                     ))}
                                                     <div className="flex justify-between items-center font-bold border-t border-gray-100 pt-4 mt-4">
                                                         <span className="text-navy-900 text-[13px] uppercase">Gross Revenue</span>
-                                                        <span className="font-mono text-navy-900 text-lg">₦{(1296250000).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                                        <span className="text-navy-900 text-lg">₦{(1296250000).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -276,12 +276,12 @@ export default function FundAccounting() {
                                                     {[{ label: 'Brokerage Expense', amount: 42500000 }, { label: 'Custody Fees', amount: 18000000 }, { label: 'Audit & Professional', amount: 15000000 }, { label: 'Other Operating', amount: 8500000 }].map(item => (
                                                         <div key={item.label} className="flex justify-between items-center group">
                                                             <span className="text-[13px] text-gray-500 font-medium">{item.label}</span>
-                                                            <span className="font-mono font-bold text-danger/70 text-[14px]">(₦{item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })})</span>
+                                                            <span className="font-bold text-danger/70 text-[14px]">(₦{item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })})</span>
                                                         </div>
                                                     ))}
                                                     <div className="flex justify-between items-center font-bold border-t border-gray-100 pt-4 mt-4">
                                                         <span className="text-danger text-[13px] uppercase">Total Operating Expenses</span>
-                                                        <span className="font-mono text-danger text-lg">₦{(84000000).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                                        <span className="text-danger text-lg">₦{(84000000).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -291,7 +291,7 @@ export default function FundAccounting() {
                                                     <h4 className="text-xl font-bold uppercase tracking-tight">Period Net Income</h4>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="font-mono font-bold text-3xl text-success tracking-tighter">₦{(1212250000).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                                                    <p className="font-bold text-3xl text-success tracking-tighter">₦{(1212250000).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -349,11 +349,11 @@ export default function FundAccounting() {
                             <div className="space-y-2.5">
                                 <div className="flex justify-between text-[11px] font-bold">
                                     <span className="text-gray-400 uppercase tracking-wider">NAV Basis</span>
-                                    <span className="text-navy-900 font-mono tracking-tighter">₦{(fund.aum / 1e9).toFixed(2)}B</span>
+                                    <span className="text-navy-900 tracking-tighter">₦{(fund.aum / 1e9).toFixed(2)}B</span>
                                 </div>
                                 <div className="flex justify-between text-[11px] font-bold">
                                     <span className="text-gray-400 uppercase tracking-wider">YTD Surplus</span>
-                                    <span className="text-success font-mono tracking-tighter">+₦482M</span>
+                                    <span className="text-success tracking-tighter">+₦482M</span>
                                 </div>
                                 <div className="pt-3 border-t border-gray-50 flex items-center justify-between text-[10px] font-bold uppercase text-gold-600">
                                     <span className="tracking-widest">Drill-down</span>
@@ -415,7 +415,7 @@ function PostJournalModal({ onClose }: any) {
                         </div>
                         <div>
                             <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Posting Date *</label>
-                            <input type="date" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-[13px] font-mono font-bold text-navy-900 focus:ring-2 focus:ring-navy-900/10 outline-none transition-all hover:bg-white" defaultValue="2026-02-27" />
+                            <input type="date" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-[13px] font-bold text-navy-900 focus:ring-2 focus:ring-navy-900/10 outline-none transition-all hover:bg-white" defaultValue="2026-02-27" />
                         </div>
                     </div>
 
@@ -434,7 +434,7 @@ function PostJournalModal({ onClose }: any) {
                                     type="number"
                                     value={drAmount}
                                     onChange={e => setDrAmount(e.target.value)}
-                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[13px] font-mono font-bold text-navy-900 focus:ring-2 focus:ring-navy-900/10 outline-none"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[13px] font-bold text-navy-900 focus:ring-2 focus:ring-navy-900/10 outline-none"
                                     placeholder="0.00"
                                 />
                             </div>
@@ -454,7 +454,7 @@ function PostJournalModal({ onClose }: any) {
                                     type="number"
                                     value={crAmount}
                                     onChange={e => setCrAmount(e.target.value)}
-                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[13px] font-mono font-bold text-navy-900 focus:ring-2 focus:ring-navy-900/10 outline-none"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[13px] font-bold text-navy-900 focus:ring-2 focus:ring-navy-900/10 outline-none"
                                     placeholder="0.00"
                                 />
                             </div>

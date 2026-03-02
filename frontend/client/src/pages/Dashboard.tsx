@@ -11,12 +11,13 @@ import {
 } from '../components/icons/Icons';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, PieChart, Pie, Cell
+  ResponsiveContainer, PieChart, Pie, Cell, Tooltip
 } from 'recharts';
 
 export default function Dashboard() {
   const PIE_COLORS = ['#0E4535', '#DFA223', '#22795F', '#5BBD9A'];
   const { search, setSearch, paged, density, setDensity } = useTableControls(mockTrades, 5, ['ticker', 'clientName']);
+
 
   // ... (metrics and allocationData same)
 
@@ -104,11 +105,11 @@ export default function Dashboard() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-gray-50">
                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-tight">Active Fund NAV</span>
-                    <span className="text-sm font-mono text-navy-900">125.48</span>
+                    <span className="text-sm text-navy-900">125.48</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-50">
                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-tight">Daily Turnover</span>
-                    <span className="text-sm font-mono text-navy-900">₦1.2B</span>
+                    <span className="text-sm text-navy-900">₦1.2B</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-tight">System Status</span>
@@ -164,8 +165,8 @@ export default function Dashboard() {
                           {trade.side}
                         </span>
                       </td>
-                      <td className="text-right font-mono">{trade.quantity.toLocaleString()}</td>
-                      <td className="text-right font-mono">{formatNaira(trade.price)}</td>
+                      <td className="text-right">{trade.quantity.toLocaleString()}</td>
+                      <td className="text-right">{formatNaira(trade.price)}</td>
                       <td><StatusBadge status={trade.status} /></td>
                     </tr>
                   ))}
@@ -196,7 +197,7 @@ export default function Dashboard() {
                     <p className="text-[9px] text-gray-400 font-bold uppercase">Delayed 15m</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-mono font-bold text-navy-900">{item.price}</p>
+                    <p className="text-xs font-bold text-navy-900">{item.price}</p>
                     <div className={cn(
                       "flex items-center justify-end text-[10px] font-bold",
                       item.isUp ? "text-success" : "text-danger"

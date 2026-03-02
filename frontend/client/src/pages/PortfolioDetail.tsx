@@ -92,11 +92,11 @@ export default function PortfolioDetail() {
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all">
                         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">AUM</p>
-                        <p className="text-xl font-bold text-navy-900 font-mono">₦{(portfolio.aum / 1e9).toFixed(2)}B</p>
+                        <p className="text-xl font-bold text-navy-900">₦{(portfolio.aum / 1e9).toFixed(2)}B</p>
                     </div>
                     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all">
                         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">YTD Return</p>
-                        <p className={cn("text-xl font-bold font-mono", portfolio.ytdReturn >= 0 ? "text-success" : "text-danger")}>
+                        <p className={cn("text-xl font-bold", portfolio.ytdReturn >= 0 ? "text-success" : "text-danger")}>
                             {portfolio.ytdReturn > 0 ? '+' : ''}{portfolio.ytdReturn}%
                         </p>
                     </div>
@@ -110,7 +110,7 @@ export default function PortfolioDetail() {
                     </div>
                     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all">
                         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">Inception</p>
-                        <p className="text-[13px] font-bold text-navy-900 font-mono">{portfolio.inceptionDate}</p>
+                        <p className="text-[13px] font-bold text-navy-900">{portfolio.inceptionDate}</p>
                     </div>
                 </div>
 
@@ -156,7 +156,7 @@ export default function PortfolioDetail() {
                                             </PieChart>
                                         </ResponsiveContainer>
                                         <div className="absolute flex flex-col items-center">
-                                            <span className="text-2xl font-bold text-navy-900 font-mono">100%</span>
+                                            <span className="text-2xl font-bold text-navy-900">100%</span>
                                             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">Allocated</span>
                                         </div>
                                     </div>
@@ -167,7 +167,7 @@ export default function PortfolioDetail() {
                                                     <div className="w-2.5 h-2.5 rounded-full mr-2" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
                                                     <span>{item.name}</span>
                                                 </div>
-                                                <span className="font-mono font-bold">{item.value}%</span>
+                                                <span className="font-bold">{item.value}%</span>
                                             </div>
                                         ))}
                                     </div>
@@ -257,21 +257,21 @@ function HoldingsTab({ positions }: { positions: any[] }) {
                     {ctrl.paged.length > 0 ? ctrl.paged.map((pos: any) => (
                         <tr key={pos.id}>
                             <td>{pos.ticker}</td>
-                            <td className="text-right font-mono">{(pos.quantity || pos.faceValue).toLocaleString()}</td>
-                            <td className="text-right font-mono">{pos.avgCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                            <td className="text-right font-mono">{pos.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                            <td className="text-right font-mono">₦{pos.marketValue.toLocaleString()}</td>
-                            <td className="text-right font-mono">
+                            <td className="text-right">{(pos.quantity || pos.faceValue).toLocaleString()}</td>
+                            <td className="text-right">{pos.avgCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                            <td className="text-right">{pos.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                            <td className="text-right">₦{pos.marketValue.toLocaleString()}</td>
+                            <td className="text-right">
                                 <span className={pos.unrealisedPnL >= 0 ? "text-success" : "text-danger"}>
                                     {pos.unrealisedPnL > 0 ? '+' : ''}₦{pos.unrealisedPnL.toLocaleString()}
                                 </span>
                             </td>
-                            <td className="text-right font-mono">
+                            <td className="text-right">
                                 <span className={pos.unrealisedPnLPct >= 0 ? "text-success" : "text-danger"}>
                                     {pos.unrealisedPnLPct > 0 ? '+' : ''}{pos.unrealisedPnLPct}%
                                 </span>
                             </td>
-                            <td className="text-right font-mono">{pos.weight}%</td>
+                            <td className="text-right">{pos.weight}%</td>
                         </tr>
                     )) : (
                         <tr><td colSpan={8} className="p-8 text-center text-gray-400 italic">No active holdings found</td></tr>
@@ -328,10 +328,10 @@ function PortfolioTradesTab({ trades }: { trades: any[] }) {
                                     {t.side}
                                 </span>
                             </td>
-                            <td className="text-right font-mono">{t.quantity.toLocaleString()}</td>
-                            <td className="text-right font-mono">{t.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                            <td className="text-right font-mono">₦{t.grossValue.toLocaleString()}</td>
-                            <td className="text-right font-mono">₦{t.netValue.toLocaleString()}</td>
+                            <td className="text-right">{t.quantity.toLocaleString()}</td>
+                            <td className="text-right">{t.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                            <td className="text-right">₦{t.grossValue.toLocaleString()}</td>
+                            <td className="text-right">₦{t.netValue.toLocaleString()}</td>
                             <td>{t.broker}</td>
                             <td><StatusBadge status={t.status} /></td>
                         </tr>

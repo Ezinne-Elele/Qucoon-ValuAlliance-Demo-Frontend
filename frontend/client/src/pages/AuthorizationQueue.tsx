@@ -140,14 +140,14 @@ export default function AuthorizationQueue() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((item, idx) => (
                                     <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{item.id}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{item.id}</td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{item.type}</span></td>
                                         <td className="p-4 text-gray-600">{item.module}</td>
                                         <td className="p-4 text-gray-700 max-w-[250px] truncate">{item.description}</td>
                                         <td className="p-4 text-gray-700 whitespace-nowrap">{item.submittedBy}</td>
-                                        <td className="p-4 font-mono text-xs text-gray-600 whitespace-nowrap">{item.submittedDate}</td>
-                                        <td className="p-4 text-right font-mono font-medium text-navy-900">{item.amount ? item.amount.toLocaleString() : '—'}</td>
+                                        <td className="p-4 text-xs text-gray-600 whitespace-nowrap">{item.submittedDate}</td>
+                                        <td className="p-4 text-right font-medium text-navy-900">{item.amount ? item.amount.toLocaleString() : '—'}</td>
                                         <td className="p-4">
                                             <span className={cn("text-xs font-medium px-2 py-0.5 rounded",
                                                 item.priority === 'High' ? 'bg-danger-bg text-danger' :
@@ -183,7 +183,7 @@ export default function AuthorizationQueue() {
                         <div className="px-6 py-4 border-b border-gray-200 bg-navy-900 text-white flex justify-between items-center">
                             <div>
                                 <h3 className="text-lg font-bold">{selectedItem.type}</h3>
-                                <p className="text-xs text-gold-400 font-mono">{selectedItem.id} · {selectedItem.reference}</p>
+                                <p className="text-xs text-gold-400">{selectedItem.id} · {selectedItem.reference}</p>
                             </div>
                             <button onClick={() => setSelectedItem(null)} className="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
                         </div>
@@ -194,9 +194,9 @@ export default function AuthorizationQueue() {
                                     <div><p className="text-gray-500 text-xs mb-1">Module</p><p className="font-medium text-navy-900">{selectedItem.module}</p></div>
                                     <div><p className="text-gray-500 text-xs mb-1">Priority</p><StatusBadge status={selectedItem.priority} /></div>
                                     <div><p className="text-gray-500 text-xs mb-1">Submitted By</p><p className="font-medium text-navy-900">{selectedItem.submittedBy}</p></div>
-                                    <div><p className="text-gray-500 text-xs mb-1">Submitted Date</p><p className="font-mono text-navy-900">{selectedItem.submittedDate}</p></div>
-                                    {selectedItem.amount ? <div><p className="text-gray-500 text-xs mb-1">Amount</p><p className="font-mono font-bold text-navy-900">₦{selectedItem.amount.toLocaleString()}</p></div> : null}
-                                    <div><p className="text-gray-500 text-xs mb-1">Reference</p><p className="font-mono text-navy-900">{selectedItem.reference}</p></div>
+                                    <div><p className="text-gray-500 text-xs mb-1">Submitted Date</p><p className="text-navy-900">{selectedItem.submittedDate}</p></div>
+                                    {selectedItem.amount ? <div><p className="text-gray-500 text-xs mb-1">Amount</p><p className="font-bold text-navy-900">₦{selectedItem.amount.toLocaleString()}</p></div> : null}
+                                    <div><p className="text-gray-500 text-xs mb-1">Reference</p><p className="text-navy-900">{selectedItem.reference}</p></div>
                                 </div>
                             </div>
                             <div>

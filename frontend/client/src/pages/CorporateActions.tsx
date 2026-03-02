@@ -61,17 +61,17 @@ export default function CorporateActions() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((ca, idx) => (
                                     <tr key={ca.id} className={cn("hover:bg-gray-50 transition-colors", ca.status === 'Upcoming' ? "bg-gold-100/50" : "")}>
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
-                                        <td className="p-4 font-mono text-xs font-semibold text-navy-700">{ca.id}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-xs font-semibold text-navy-700">{ca.id}</td>
                                         <td className="p-4 font-bold text-navy-900">{ca.ticker}</td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{ca.type}</span></td>
-                                        <td className="p-4 font-mono text-gray-600">{ca.exDate || ca.couponDate || '—'}</td>
-                                        <td className="p-4 font-mono text-gray-600">{ca.payDate}</td>
+                                        <td className="p-4 text-gray-600">{ca.exDate || ca.couponDate || '—'}</td>
+                                        <td className="p-4 text-gray-600">{ca.payDate}</td>
                                         <td className="p-4 text-gray-700">{ca.perUnit || ca.ratio || `${ca.rate}% coupon` || '—'}</td>
                                         <td className="p-4">
                                             <div className="flex flex-wrap gap-1">
                                                 {ca.affectedPortfolios.map(p => (
-                                                    <span key={p} className="bg-gray-100 text-gray-600 text-xs font-mono px-1.5 py-0.5 rounded">{p}</span>
+                                                    <span key={p} className="bg-gray-100 text-gray-600 text-xs px-1.5 py-0.5 rounded">{p}</span>
                                                 ))}
                                             </div>
                                         </td>

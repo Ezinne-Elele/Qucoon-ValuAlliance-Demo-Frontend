@@ -57,7 +57,7 @@ export default function Documents() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((doc, idx) => (
                                     <tr key={doc.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 bg-navy-100 rounded flex items-center justify-center mr-3 shrink-0">
@@ -67,10 +67,10 @@ export default function Documents() {
                                             </div>
                                         </td>
                                         <td className="p-4"><span className="bg-navy-100 text-navy-700 text-xs font-medium px-2 py-0.5 rounded">{doc.type}</span></td>
-                                        <td className="p-4 font-mono text-xs text-gray-600">{doc.version}</td>
-                                        <td className="p-4 font-mono text-xs text-gray-600">{doc.fileSize}</td>
+                                        <td className="p-4 text-xs text-gray-600">{doc.version}</td>
+                                        <td className="p-4 text-xs text-gray-600">{doc.fileSize}</td>
                                         <td className="p-4 text-gray-700">{doc.uploadedBy}</td>
-                                        <td className="p-4 font-mono text-xs text-gray-600">{doc.uploadedDate}</td>
+                                        <td className="p-4 text-xs text-gray-600">{doc.uploadedDate}</td>
                                         <td className="p-4"><StatusBadge status={doc.status} /></td>
                                         <td className="p-4">
                                             <div className="flex space-x-2">

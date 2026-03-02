@@ -9,7 +9,7 @@ export default function UserManagement() {
     const [isAddUserOpen, setIsAddUserOpen] = useState(false);
     const [isRbacOpen, setIsRbacOpen] = useState(false);
     const [filterRole, setFilterRole] = useState('All');
-    const roles = ['All', ...new Set(mockUsers.map(u => u.role))];
+    const roles = ['All', ...Array.from(new Set(mockUsers.map(u => u.role)))];
     const baseFiltered = filterRole === 'All' ? mockUsers : mockUsers.filter(u => u.role === filterRole);
 
     const { search, setSearch, page, setPage, paged, totalItems, pageSize } = useTableControls(baseFiltered, 10);
@@ -60,7 +60,7 @@ export default function UserManagement() {
                             <tbody className="divide-y divide-gray-100">
                                 {paged.map((user, idx) => (
                                     <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="p-4 text-gray-400 text-xs font-mono">{(page - 1) * pageSize + idx + 1}</td>
+                                        <td className="p-4 text-gray-400 text-xs text-center">{(page - 1) * pageSize + idx + 1}</td>
                                         <td className="p-4">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 rounded-full bg-navy-900 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0">
@@ -77,7 +77,7 @@ export default function UserManagement() {
                                                 user.mfaEnabled ? "bg-success-bg text-success" : "bg-warning-bg text-warning"
                                             )}>{user.mfaEnabled ? 'Enabled' : 'Disabled'}</span>
                                         </td>
-                                        <td className="p-4 font-mono text-xs text-gray-500">{user.lastLogin}</td>
+                                        <td className="p-4 text-xs text-gray-500">{user.lastLogin}</td>
                                         <td className="p-4"><StatusBadge status={user.status} /></td>
                                     </tr>
                                 ))}

@@ -27,7 +27,7 @@ export function MetricCard({ label, value, isCurrency, trend, trendPositive = tr
       </div>
       <div className="flex items-baseline">
         {isCurrency && <NairaIcon className="w-6 h-6 mr-1 text-navy-900" />}
-        <span className="text-2xl font-bold text-navy-900 tracking-tight font-mono">{value}</span>
+        <span className="text-2xl font-bold text-navy-900 tracking-tight">{value}</span>
       </div>
       {trend && (
         <div className="mt-4 flex items-center text-sm">
