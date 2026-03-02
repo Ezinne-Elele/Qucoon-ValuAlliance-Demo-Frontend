@@ -403,6 +403,35 @@ export const BarChartIcon = (props: IconProps) => (
   </BaseIcon>
 );
 
+export const ClockIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 16 14" />
+  </BaseIcon>
+);
+
+export const ShieldCheckIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <polyline points="9 12 11 14 15 10" />
+  </BaseIcon>
+);
+
+export const HistoryIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+    <polyline points="12 7 12 12 15 15" />
+  </BaseIcon>
+);
+
+export const BriefcaseIcon = (props: IconProps) => (
+  <BaseIcon {...props}>
+    <rect x="2" y="7" width="20" height="14" rx="2" />
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+  </BaseIcon>
+);
+
 export const NairaIcon = ({ className, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
